@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\eugen\\Downloads\\bulkApi-master\\backend\\BulkApi\\BulkApi.csproj": {}
+    "C:\\Users\\eugen\\Codes\\bulkApi-master\\backend\\BulkApi\\BulkApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\eugen\\Downloads\\bulkApi-master\\backend\\BulkApi\\BulkApi.csproj": {
+    "C:\\Users\\eugen\\Codes\\bulkApi-master\\backend\\BulkApi\\BulkApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\eugen\\Downloads\\bulkApi-master\\backend\\BulkApi\\BulkApi.csproj",
+        "projectUniqueName": "C:\\Users\\eugen\\Codes\\bulkApi-master\\backend\\BulkApi\\BulkApi.csproj",
         "projectName": "BulkApi",
-        "projectPath": "C:\\Users\\eugen\\Downloads\\bulkApi-master\\backend\\BulkApi\\BulkApi.csproj",
+        "projectPath": "C:\\Users\\eugen\\Codes\\bulkApi-master\\backend\\BulkApi\\BulkApi.csproj",
         "packagesPath": "C:\\Users\\eugen\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\eugen\\Downloads\\bulkApi-master\\backend\\BulkApi\\obj\\",
+        "outputPath": "C:\\Users\\eugen\\Codes\\bulkApi-master\\backend\\BulkApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\eugen\\AppData\\Roaming\\NuGet\\NuGet.Config",

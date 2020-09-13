@@ -33,10 +33,13 @@ interface IProp {
   idColumnAccessorName?: string; //to hide the id column,
   pageSize?: number;
   actionIcon?: OverridableComponent<SvgIconTypeMap<{}, "svg">>;
+  enableSearch?: false;
+  enablePaging?: false;
 }
 
  
-export function MaterialTableComponent({title, data, columnNames, accessors, handleChecked=defaultHandleChecked, idColumnAccessorName="", pageSize=5, actionIcon}: IProp): JSX.Element {
+export function MaterialTableComponent({title, data, columnNames, accessors, handleChecked=defaultHandleChecked, idColumnAccessorName="", pageSize=5, actionIcon,
+  enablePaging=false, enableSearch=false}: IProp): JSX.Element {
 
   let headerDicts: any[] = [];
     for(let i = 0; i < columnNames.length; i++) {
@@ -52,20 +55,27 @@ export function MaterialTableComponent({title, data, columnNames, accessors, han
 
     return (
       <MaterialTable
-      icons={tableIcons}
-        title={title}
-        columns={headerDicts}
-        data={data}        
-        options={{
-          selection: true,
-          pageSize: pageSize
-        }} 
-        actions={[
-          {
-            tooltip: 'Remove All Selected Users',
-            icon: actionIcon ??  AddBox,
-            onClick: (evt, data) => handleChecked(returnSelectedIds(data, idColumnAccessorName))  }
-        ]}        
+      
+        icons={tableIcons}
+          title={title}
+          columns={headerDicts}
+          data={data}        
+          options={{
+            selection: true,
+            pageSize: pageSize,
+            search: enableSearch,
+            paging: enablePaging,
+            rowStyle:{
+              height: "100px"
+            },
+          
+          }} 
+          actions={[
+            {
+              tooltip: 'Remove All Selected Users',
+              icon: actionIcon ??  AddBox,
+              onClick: (evt, data) => handleChecked(returnSelectedIds(data, idColumnAccessorName))  }
+          ]} 
       />
     )
 }

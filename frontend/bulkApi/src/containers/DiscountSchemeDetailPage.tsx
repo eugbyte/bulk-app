@@ -136,7 +136,7 @@ export function DiscountSchemeDetailPage(): JSX.Element {
             title="https://acowebs.com/impact-ecommerce-society/"/>
         <br/>
         {paras}
-        <CartButtons quantity={quantity} setQuantity={setQuantity} actionTitle={"Add to Cart"} action={submitBid}/>
+        <CartButtons quantity={quantity} setQuantity={setQuantity} actionTitle={"Update Cart"} action={submitBid}/>
         <DialogueComponent open={open} setOpen={setOpen} message={"Bid successfully created"} severity={"success"}/>
     </Container>
 }

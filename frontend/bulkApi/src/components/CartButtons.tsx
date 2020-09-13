@@ -4,6 +4,7 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from "@material-ui/icons/Remove";
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { getClassSet } from "react-bootstrap/lib/utils/bootstrapUtils";
 
 
 
@@ -12,9 +13,10 @@ interface IProp {
     setQuantity: (num: number) => any;  // setQuantity is part of useState(0)
     actionTitle?: string;
     action?: (val: any) => any;
+    size?: "small" | "medium" | "large"
 }
 
-export function CartButtons({quantity, setQuantity, actionTitle, action}: IProp): JSX.Element {
+export function CartButtons({quantity, setQuantity, actionTitle, action, size="medium"}: IProp): JSX.Element {
     const classes = useStyles();
 
     const handleIncrement = () => {
@@ -29,13 +31,12 @@ export function CartButtons({quantity, setQuantity, actionTitle, action}: IProp)
     }
 
     return <div className={classes.buttonGroup}>
-        <ButtonGroup color="primary" aria-label="outlined primary button group">
+        <ButtonGroup color="primary" aria-label="outlined primary button group" size={size}>
             <Button onClick={handleIncrement}><AddIcon/></Button>
             <Button>{quantity}</Button>
             <Button onClick={handleDecrement}><RemoveIcon /></Button>
         </ButtonGroup>
-
-          <ButtonGroup>
+        <ButtonGroup size={size}>
             
             <Button  onClick={action} color="primary" variant="contained">{actionTitle}</Button>
            
@@ -52,11 +53,11 @@ const useStyles = makeStyles((theme: Theme) =>
     buttonGroup: {
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center',
+      alignItems: 'left',
       '& > *': {
         margin: theme.spacing(1),
       },
-    },
+    }
   }),
 );
  

@@ -13,14 +13,11 @@ import { Button } from "@material-ui/core";
 class Row {
     bidId: number | undefined;
     name: string | undefined;
-    quantity: number | undefined;
-    minOrderQuantity: number | undefined;
-    originalPrice: number | undefined;
-    discountedPrice: number | undefined;
+    discountedPrice: string | undefined;
+    updateCartComponent: JSX.Element | undefined;
+    deliveryCharge: string | undefined;
     collectionAddress: string | undefined;
-    expiryDate: string | undefined;
-    deliveryCharge: number | undefined;
-    actionComponent: JSX.Element | undefined;
+    viewProductComponent: JSX.Element | undefined;
 }
 
 export function CartPage(): JSX.Element {
@@ -45,6 +42,10 @@ export function CartPage(): JSX.Element {
         dispatch(action);
     }, []);
 
+    // For some reason, useState(bidQuantities) will produce only an empty array
+    // Have to use useEffect to update the bidQuantites
+    // need to pass primitive value into useEffect. If objects or arrays are passed, e.g. bidQuantities[], there will be inifite rerender
+    // as useEffect compares by memory location. bidsInCart.map() will produce a new array in memory
     const rows: Row[] = bidsInCart.map(bid => createRowFromBid(bid));
     console.log("rows", rows);
     const [quantities, setQuantities] = useState<number[]>(bidQuantities);
@@ -65,15 +66,15 @@ export function CartPage(): JSX.Element {
             setQuantities(newQuantites);
         };
     
-        rows[i].actionComponent = <CartButtons quantity={quantity} setQuantity={setQuantity} actionTitle={"Update Cart"}/>
+        rows[i].updateCartComponent = <CartButtons quantity={quantity} setQuantity={setQuantity} actionTitle={"Update Cart"} size={"small"}/>
+        rows[i].viewProductComponent = <Button size={"small"}>More info</Button>
     }
     const accessors: string[] = Object.keys(new Row());
-    const columns = ["BidId", "Name", "Quantity", "Min Order Quantity", "Original Price", "Discounted Price", "Collection Address", "Expiry Date", "Delivery Charge", "Button"];
+    const columns = ["BidId", "Name", "Price per Item", "Quantity", "Delivery Charge", "Collection Address", "View more"];
 
     return <div>
         <MaterialTableComponent data={rows} columnNames={columns} accessors={accessors} title="Cart" 
-            handleChecked={handleChecked} idColumnAccessorName={"bidId"} 
-            
+            handleChecked={handleChecked} idColumnAccessorName={"bidId"}             
             actionIcon={AddShoppingCartIcon}
             />
     </div>
@@ -87,16 +88,15 @@ function createRowFromBid(bid: Bid): Row {
         dateString = date.toDateString();        
     }
 
+    let discountedPrice = bid.discountScheme?.discountedPrice as number;
+    let originalPrice = bid.discountScheme?.product?.originalPrice as number;
+
     let row: Row = new Row();
     row.bidId = bid.bidId;
-    row.quantity = bid.quantity;
     row.collectionAddress = bid.collectionAddress;
-    row.minOrderQuantity = bid.discountScheme?.minOrderQnty;
-    row.discountedPrice = bid.discountScheme?.discountedPrice;
-    row.expiryDate = dateString;
-    row.deliveryCharge = bid.discountScheme?.deliveryCharge;
+    row.discountedPrice = `$${discountedPrice} (Save $${originalPrice - discountedPrice})`;
+    row.deliveryCharge = "$" + bid.discountScheme?.deliveryCharge;
     row.name = bid.discountScheme?.product?.name;
-    row.originalPrice = bid.discountScheme?.product?.originalPrice;
     
     return row;
 }

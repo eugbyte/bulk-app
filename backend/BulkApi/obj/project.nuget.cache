@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gEHzg1ls/ycqImiLR2nHtyOPIB9OccvfmxuuEbFGUvc4b7BjASTjliJneMeWtCqti02JFZ7ebfTRx/LxNYzflw==",
+  "dgSpecHash": "oBw3e+OydzIoTHP9VlpcpsEv3jFb4gtvy5ZZa9VNDcijS857+8fXYDBXzwkFX5eC+lMBcdkc9aEJC8MkkBp0IA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\eugen\\Downloads\\bulkApi-master\\backend\\BulkApi\\BulkApi.csproj",
+  "projectFilePath": "C:\\Users\\eugen\\Codes\\bulkApi-master\\backend\\BulkApi\\BulkApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\eugen\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\3.1.7\\microsoft.aspnetcore.cryptography.internal.3.1.7.nupkg.sha512",
     "C:\\Users\\eugen\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\3.1.7\\microsoft.aspnetcore.cryptography.keyderivation.3.1.7.nupkg.sha512",
