@@ -39,8 +39,6 @@ export default function bidReducer(prevState = initialState, action: IBidAction)
             newState.message = action.message;
             return newState;    
         case(ACTIONS.UPDATE_BID_IN_CART_RECEIVED):
-            newState.bids = action.bids;
-            console.log(newState.bids);
             newState.message = action.message;
             return newState;
         default:

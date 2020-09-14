@@ -27,61 +27,56 @@ export function CartPage(): JSX.Element {
     // The Bids received from the GET request
     const bidsInCart: Bid[] = useSelector((action: RootState) => action.bidReducer.bids as Bid[] ) ?? [];  
 
+    // For some reason, useState(bidQuantities) will produce only an empty array
+    // Have to use useEffect to update the bidQuantites
+    // need to pass primitive value into useEffect. If objects or arrays are passed, e.g. bidQuantities[], there will be inifite rerender
+    // as useEffect compares by memory location. bidsInCart.map() will produce a new array in memory
+    let isBidsInitialized: boolean = bidsInCart.length > 0;
+
+    const bidQuantities: number[] = bidsInCart.map(row => row.quantity);    
+    console.log("bidQuantities", bidQuantities);    // [ 1, 3, 3, 1, 3, 1, 5 ]
+    const [quantities, setQuantities] = useState<number[]>(bidQuantities);  //bidQuantites[], rows[], and bidsInCart[] have the same length and order
+    console.log("quantities", quantities);  // []
+
     useEffect(() => {
         document.title = "Cart";
         const customerId = 1;
         const action = getBidsOfCustomerInCartAsync(customerId);
         dispatch(action);
-    }, []);
+
+        setQuantities(bidQuantities);
+    }, [isBidsInitialized]);
 
     // Convert the Bids to Rows to pass to the DataTable
     const rows: Row[] = bidsInCart.map(bid => createRowFromBid(bid));
 
-    // To allow the user to adjust the quantities through CartButtons component
-    const bidQuantities: number[] = bidsInCart.map(row => row.quantity);
-    // For some reason, useState(bidQuantities) will produce only an empty array
-    // Have to use useEffect to update the bidQuantites
-    // need to pass primitive value into useEffect. If objects or arrays are passed, e.g. bidQuantities[], there will be inifite rerender
-    // as useEffect compares by memory location. bidsInCart.map() will produce a new array in memory
-    // console.log("bidQuantities", bidQuantities);    // bidQuantitie  Array(7) [ 1, 1, 6, 1, 3, 1, 5 ]
-
-    const [quantities, setQuantities] = useState<number[]>(bidQuantities);  //bidQuantites[], rows[], and bidsInCart[] have the same length and order
-    // console.log("quantities", quantities);  // quantities  Array []
-    let isBidsInitialized: boolean = bidQuantities.length > 0;
-    useEffect(() => {
-        setQuantities(bidQuantities);
-        console.log("bidQuanttiies in useEffect", bidQuantities);
-    }, [isBidsInitialized])
-    // console.log("quantities", quantities);  // quantities  Array(7) [ 1, 1, 6, 1, 3, 1, 5 ]
-
-    const handleUpdateCart = (bidId: number, quantity: number, dsId: number) => {
-        let bid: Bid = new Bid();
-        bid.bidId = bidId;
-        bid.customerId = 1;
-        bid.collectionAddress = "AMK";
-        bid.discountSchemeId = dsId;
-        bid.quantity = quantity;
-
-        const action = updateBidInCartAsync(bid);
-        dispatch(action);
-    }
-
-    
     // To add React components to each row
     for (let i = 0; i < bidsInCart.length; i++) {
-        const quantity: number = quantities[i];
-        const bidId = bidsInCart[i].bidId;
-        const discountSchemeId = bidsInCart[i].discountSchemeId;
+        const quantity: number = quantities[i]; 
 
+        // Method reference to set quantity to pass into CartButtons
         const setQuantity = (newQuantity: number) => {
             let newQuantites: number[] = [...quantities];
             newQuantites[i] = newQuantity;
             setQuantities(newQuantites);
         };
 
+        // Method reference to POST updated id to pass into CartButtons
+        const handleUpdateCart = () => {
+            let bid: Bid = new Bid();
+            bid.bidId = bidsInCart[i].bidId;;
+            bid.customerId = 1;
+            bid.collectionAddress = "AMK";
+            bid.discountSchemeId = bidsInCart[i].discountSchemeId;
+            bid.quantity = quantity;
+    
+            const action = updateBidInCartAsync(bid);
+            dispatch(action);
+        }
+
     
         rows[i].updateCartComponent = <CartButtons quantity={quantity} setQuantity={setQuantity} 
-            action={()=> handleUpdateCart(bidId, quantity, discountSchemeId)}  actionTitle={"Update Cart"} size={"small"}/>
+            action={handleUpdateCart}  actionTitle={"Update Cart"} size={"small"}/>
         rows[i].viewProductComponent = <Button size={"small"}>More info</Button>
     }
 
