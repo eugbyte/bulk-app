@@ -76,13 +76,7 @@ namespace BulkApi.Services.Bids
         }
 
         public async Task<Bid> AddBidToCart(int schemeId, int quantity, string collectionAddress, int customerId)
-        {
-            DiscountScheme discountScheme = await db.DiscountSchemes
-                .IncludeOptimized(ds => ds.Bids)
-                .FirstOrDefaultAsync(ds => ds.DiscountSchemeId == schemeId);
-
-            if (discountScheme == null)
-                throw new Exception($"DiscountScheme with id {schemeId} not found");
+        {             
             
             // Check whether the bid for the same discountScheme exist in cart
             // If so, update, else, create
@@ -113,6 +107,21 @@ namespace BulkApi.Services.Bids
             db.Bids.Add(newBid);
             await db.SaveChangesAsync();
             return newBid;
+        }
+
+        public async Task<Bid> UpdateBidInCart(int schemeId, int quantity, string collectionAddress, int customerId)
+        {
+            // Check whether the bid for the same discountScheme exist in cart
+            // If so, update, else, create
+            Bid existingBid = await db.Bids
+                .Where(bid => bid.DiscountSchemeId == schemeId)
+                .Where(bid => bid.CustomerId == customerId)
+                .Where(bid => bid.CollectionAddress == collectionAddress)
+                .FirstOrDefaultAsync();
+
+            existingBid.Quantity = quantity;
+            await db.SaveChangesAsync();
+            return existingBid;
         }
 
         private int GetTotalBidsForDiscountScheme(int discountSchemeId)

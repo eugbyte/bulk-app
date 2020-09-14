@@ -29,12 +29,19 @@ namespace BulkApi.Controllers
             return Ok(bids);
         }
 
-        [HttpPost("cart")]        
+        [HttpPost("addcart")]        
         public async Task<ActionResult<Bid>> AddBidToCart(Bid bid)
         {
             Bid createdBid = await bidService.AddBidToCart(bid.DiscountSchemeId, bid.Quantity, bid.CollectionAddress, bid.CustomerId);
             createdBid.DiscountScheme = null;
             return Ok(createdBid);
+        }
+        [HttpPost("updatecart")]
+        public async Task<ActionResult<Bid>> UpdateCart(Bid bid)
+        {
+            Bid updatedBid = await bidService.UpdateBidInCart(bid.DiscountSchemeId, bid.Quantity, bid.CollectionAddress, bid.CustomerId);
+            updatedBid.DiscountScheme = null;
+            return Ok(updatedBid);
         }
 
         [HttpPut("order")]

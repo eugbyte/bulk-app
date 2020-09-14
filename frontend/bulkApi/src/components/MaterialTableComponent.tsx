@@ -48,14 +48,15 @@ export function MaterialTableComponent({title, data, columnNames, accessors, han
         let headerDict: any = {
             "title": header,
             "field": accessor,
-            "hidden": accessor === idColumnAccessorName
+            "hidden": accessor === idColumnAccessorName,
+            
         }; 
         headerDicts.push(headerDict);
     } 
 
     return (
       <MaterialTable
-      
+        
         icons={tableIcons}
           title={title}
           columns={headerDicts}

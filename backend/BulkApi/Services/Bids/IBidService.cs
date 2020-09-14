@@ -11,5 +11,6 @@ namespace BulkApi.Services.Bids
         Task<Bid> AddBidToCart(int schemeId, int quantity, string collectionAddress, int customerId);
         Task OrderBidsFromCart(params int[] bidIds);
         Task<List<Bid>> GetBidsOfCustomerInCart(int customerId);
+        Task<Bid> UpdateBidInCart(int schemeId, int quantity, string collectionAddress, int customerId);
     }
 }
