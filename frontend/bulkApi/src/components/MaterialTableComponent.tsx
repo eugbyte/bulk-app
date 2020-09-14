@@ -48,8 +48,7 @@ export function MaterialTableComponent({title, data, columnNames, accessors, han
         let headerDict: any = {
             "title": header,
             "field": accessor,
-            "hidden": accessor === idColumnAccessorName,
-            
+            "hidden": accessor === idColumnAccessorName
         }; 
         headerDicts.push(headerDict);
     } 
@@ -75,7 +74,7 @@ export function MaterialTableComponent({title, data, columnNames, accessors, han
             {
               tooltip: 'Remove All Selected Users',
               icon: actionIcon ??  AddBox,
-              onClick: (evt, data) => handleChecked(returnSelectedIds(data, idColumnAccessorName))  }
+              onClick: (evt, data) => console.log(data)  }
           ]} 
       />
     )

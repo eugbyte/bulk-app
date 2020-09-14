@@ -21,13 +21,11 @@ export function DialogueComponent({open, setOpen, message, severity, cleanUp}: I
         }
     }; 
     
-    let dialogue: JSX.Element = <Snackbar open={open} autoHideDuration={6000} onClose={() => handleClose("clickaway")}>
+    return <Snackbar open={open} autoHideDuration={6000} onClose={() => handleClose("clickaway")}>
         <Alert onClose={() => handleClose("clickaway")} severity={severity} >
             {message}
         </Alert>
     </Snackbar>
-
-    return dialogue;
 }
 
 

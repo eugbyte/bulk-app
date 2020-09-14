@@ -9,6 +9,7 @@ import { MaterialTableComponent } from "../components/MaterialTableComponent";
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import { CartButtons } from "../components/CartButtons";
 import { Button } from "@material-ui/core";
+import { DialogueComponent } from "../components/DialogueComponent";
 
 class Row {
     bidId: number | undefined;
@@ -17,12 +18,15 @@ class Row {
     updateCartComponent: JSX.Element | undefined;
     deliveryCharge: string | undefined;
     collectionAddress: string | undefined;
-    viewProductComponent: JSX.Element | undefined;
+    tableData: any | undefined; // to set tableData: { checked: true } in order to select all rows by default
 }
 
 export function CartPage(): JSX.Element {
 
-    const dispatch: Dispatch<any> = useDispatch();          
+    const dispatch: Dispatch<any> = useDispatch();       
+    
+    // State to determine whether to show notification
+    const [open, setOpen] = useState(false);
 
     // The Bids received from the GET request
     const bidsInCart: Bid[] = useSelector((action: RootState) => action.bidReducer.bids as Bid[] ) ?? [];  
@@ -34,9 +38,9 @@ export function CartPage(): JSX.Element {
     let isBidsInitialized: boolean = bidsInCart.length > 0;
 
     const bidQuantities: number[] = bidsInCart.map(row => row.quantity);    
-    console.log("bidQuantities", bidQuantities);    // [ 1, 3, 3, 1, 3, 1, 5 ]
+    // console.log("bidQuantities", bidQuantities);    // [ 1, 3, 3, 1, 3, 1, 5 ]
     const [quantities, setQuantities] = useState<number[]>(bidQuantities);  //bidQuantites[], rows[], and bidsInCart[] have the same length and order
-    console.log("quantities", quantities);  // []
+    // console.log("quantities", quantities);  // []
 
     useEffect(() => {
         document.title = "Cart";
@@ -72,28 +76,29 @@ export function CartPage(): JSX.Element {
     
             const action = updateBidInCartAsync(bid);
             dispatch(action);
+            setOpen(true)
         }
-
     
         rows[i].updateCartComponent = <CartButtons quantity={quantity} setQuantity={setQuantity} 
             action={handleUpdateCart}  actionTitle={"Update Cart"} size={"small"}/>
-        rows[i].viewProductComponent = <Button size={"small"}>More info</Button>
     }
 
     // Represents the rowIndexes when the user selects a row
     let rowIds: number[] = [];
     const handleChecked = (checkedRowIds: number[]) => {    
+        console.log("checkedRowIds", checkedRowIds);
         rowIds = checkedRowIds;   
         console.log(rowIds);
     }
+
     const accessors: string[] = Object.keys(new Row());
-    const columns = ["BidId", "Name", "Price per Item", "Quantity", "Delivery Charge", "Collection Address", "View more"];
+    const columns = ["BidId", "Name", "Price per Item", "Quantity", "Delivery Charge", "Collection Address"];
 
     return <div>
         <MaterialTableComponent data={rows} columnNames={columns} accessors={accessors} title="Cart" 
             handleChecked={handleChecked} idColumnAccessorName={"bidId"}             
-            actionIcon={AddShoppingCartIcon}
-            />
+            actionIcon={AddShoppingCartIcon} />
+        <DialogueComponent open={open} setOpen={setOpen} message={"Cart updated"} severity={"success"}/>
     </div>
 }
 
@@ -114,6 +119,7 @@ function createRowFromBid(bid: Bid): Row {
     row.discountedPrice = `$${discountedPrice} (Save $${originalPrice - discountedPrice})`;
     row.deliveryCharge = "$" + bid.discountScheme?.deliveryCharge;
     row.name = bid.discountScheme?.product?.name;
+    row.tableData = { checked: true }
     
     return row;
 }

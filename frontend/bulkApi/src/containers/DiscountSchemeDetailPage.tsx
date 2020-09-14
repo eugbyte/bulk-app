@@ -41,48 +41,7 @@ export function DiscountSchemeDetailPage(): JSX.Element {
         // Since you are returning a new object (at a different memory address) from the reducer, 
         // useEffect will treat it that vaLue changed when doing shallow comparison
     }, [discountSchemeId]);  
-    let ds: DiscountScheme = useSelector((action: RootState) => action.discountSchemeReducer.discountScheme as DiscountScheme );      
-
-    // The error, if any, when GET the discountScheme
-    const error = useSelector((action: RootState) => action.errorReducer.error as Error);   
-
-    // When user dismisses error notification, clean up errors with this callback function
-    const cleanUpError = () => {
-        console.log("cleaning up");
-        const action = errorActionCreator(ACTIONS.CLEAR_ERROR);
-        dispatch(action);
-    };
-    
-    // When an error occurs, set notification state to true to display notification
-    useEffect(() => {
-        console.log(error);
-        if (error) {
-            setOpen(true);
-        } else {
-            setOpen(false);
-        } 
-    }, [error]);    
-    
-    // The time when the bid is successfully created through the POST request
-    let isOkTime: Date = useSelector((action: RootState) => action.bidReducer.isOkTime as Date );
-    console.log(isOkTime);  
-    
-    // Whenever user successfully submits POST request, set notification state to true to display notification
-    useEffect(() => {
-        if (isOkTime) {
-            setOpen(true);
-        }
-        console.log("isOkTime", isOkTime);
-    }, [isOkTime]);
-
-    // If API is loading or returns an error ...
-    if (!ds || error) {
-        return <Container maxWidth="sm">
-            <p>Loading Discount Scheme...</p>  
-            <CircularProgress /> 
-            <DialogueComponent open={open} setOpen={setOpen} message={"Failed to retrieve product"} severity={"error"} cleanUp={cleanUpError} />
-        </Container>
-    } 
+    let ds: DiscountScheme = useSelector((action: RootState) => action.discountSchemeReducer.discountScheme as DiscountScheme ) ?? new DiscountScheme();      
  
     // POST bid when user bids for the discountScheme
     const submitBid = () => {
@@ -94,8 +53,8 @@ export function DiscountSchemeDetailPage(): JSX.Element {
 
         const action = addBidToCartAsync(bid);
         dispatch(action);
+        setOpen(true);
     };
-
     
     // The details of the the discountScheme to display
     let dateString: string = "";
@@ -108,7 +67,7 @@ export function DiscountSchemeDetailPage(): JSX.Element {
             .filter(bid => !bid.isInCart)
             .reduce((accum, bid) => accum + bid?.quantity, 0);
 
-    let textDict = {
+    let textDict: Record<string, any> = {
         "Description": ds.product?.description,
         "Original Price": "$" + ds.product?.originalPrice ?? "$",
         "Discounted Price": "$" + ds.discountedPrice,
