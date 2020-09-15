@@ -4,7 +4,7 @@ import { RootState } from "../store/rootReducer";
 import { deleteBidFromCartAsync, getBidsOfCustomerInCartAsync, updateBidInCartAsync } from "../store/thunks/bidThunk";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux"; 
-import { MaterialTableComponent } from "../components/MaterialTableComponent";
+import { DataTable } from "../components/DataTable";
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import { CartButtons } from "../components/CartButtons";
 import { DialogueComponent } from "../components/DialogueComponent";
@@ -12,6 +12,7 @@ import { Button, Container } from "@material-ui/core";
 import Checkbox from '@material-ui/core/Checkbox';
 import { OrderCheckoutComponent } from "../components/OrderCheckoutComponent";
 import { ACTIONS } from "../store/actionEnums";
+import Typography from '@material-ui/core/Typography';
 
 
 class Row {
@@ -23,12 +24,13 @@ class Row {
     deliveryCharge: string | undefined;
     collectionAddress: string | undefined;
     deleteButton: JSX.Element | undefined;
+    detailPanel: JSX.Element | undefined;
 }
 
-export function CartPage(): JSX.Element {
 
-    const dispatch: Dispatch<any> = useDispatch();       
-    
+export function CartPage(): JSX.Element {
+          
+    const dispatch: Dispatch<any> = useDispatch(); 
     // State to determine whether to show notification
     const [open, setOpen] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState("");
@@ -83,20 +85,14 @@ export function CartPage(): JSX.Element {
 
     // To add React components to each row
     for (let i = 0; i < bidsInCart.length; i++) {
-        const quantity: number = quantities[i];         
+        const quantity: number = quantities[i];  
+        let bid: Bid = bidsInCart[i];       
 
         // Method reference to POST updated id to pass into CartButtons
         const handleUpdateCart = (newQuantity: number) => {
-            let bid: Bid = new Bid();
-            bid.bidId = bidsInCart[i].bidId;;
-            bid.customerId = 1;
-            bid.collectionAddress = bidsInCart[i].collectionAddress;
-            bid.discountSchemeId = bidsInCart[i].discountSchemeId;
-            bid.quantity = newQuantity;
-    
-            const updateAction = updateBidInCartAsync(bid);
+            let bidToUpdate: Bid = createBid(newQuantity, bid.bidId, bid.customerId, bid.collectionAddress, bid.discountSchemeId);    
+            const updateAction = updateBidInCartAsync(bidToUpdate);
             dispatch(updateAction);
-
             handleNotification(true, "bid added to cart"); 
         }
 
@@ -109,7 +105,7 @@ export function CartPage(): JSX.Element {
         };
 
         const toggleCheckedRowId = () => {
-            const bidId: number = bidsInCart[i].bidId;
+            const bidId: number = bid.bidId;
             if (!selectedRowIds.includes(bidId)) {
                 setSelectedRowIds([...selectedRowIds, bidId])
             } else {
@@ -119,38 +115,59 @@ export function CartPage(): JSX.Element {
         }
 
         const deleteBid = () => {
-            const bidId: number = bidsInCart[i].bidId;
+            const bidId: number = bid.bidId;
             const deleteAction = deleteBidFromCartAsync(bidId);
             dispatch(deleteAction);
-
             handleNotification(true, "item deleted");
+        }
+
+        let dateString = "";
+        if (bid.discountScheme?.expiryDate) {
+            let date: Date = new Date(bid.discountScheme.expiryDate.toString());
+            dateString = date.toDateString();        
         }
     
         rows[i].updateCartComponent = <CartButtons quantity={quantity} setQuantity={setQuantity} size={"small"}/>
         rows[i].checkbox = <Checkbox size="small" onChange={toggleCheckedRowId} />
         rows[i].deleteButton = <Button size={"small"} variant={"contained"} color={"primary"} onClick={deleteBid}>Delete</Button>
+        rows[i].detailPanel = <Typography variant={"body2"} align={"left"} paragraph={true} color={"textSecondary"} style={{margin: "10px"}}>
+                <b>Min Collective Quantity</b> {bid.discountScheme?.minOrderQnty} <br/>
+                <b>Description</b> {bid.discountScheme?.product?.description} <br/>
+                <b>Bid Expiry Date</b> {dateString} <br/>
+            </Typography>       
     }
 
-    const accessors: string[] = Object.keys(new Row());
+    let accessors: string[] = Object.keys(new Row());
+    const detailPanelName: string = "detailPanel";
+    accessors = accessors.filter(accessor => accessor != detailPanelName);
     const columns: any[] = ["BidId", "Check Box", "Name", "Price per Item", "Quantity", "Delivery Charge", "Collection Address", "Remove"];
 
     return <Container maxWidth="xl">
         <OrderCheckoutComponent bids={bidsInCart} rowIds={selectedRowIds} />
         <br/>
-        <MaterialTableComponent data={rows} columnNames={columns} accessors={accessors} title="Cart" 
+        <DataTable data={rows} columnNames={columns} accessors={accessors} title="Cart" 
             idColumnAccessorName={"bidId"}             
-            actionMessage="Make Order"  actionIcon={AddShoppingCartIcon}  />
+            actionMessage="Make Order"  actionIcon={AddShoppingCartIcon}  
+            detailPanelFielddName={detailPanelName} />
         <DialogueComponent open={open} setOpen={setOpen} message={notificationMessage} severity={"success"}/>
     </Container>
 }
 
+// Method reference to POST updated id to pass into CartButtons
+function createBid(newQuantity: number, bidId: number, customerId: number, collectionAddress: string, discountSchemeId: number): Bid {
+    let bid: Bid = new Bid();
+    bid.bidId = bidId;
+    bid.customerId = customerId;
+    bid.collectionAddress = collectionAddress;
+    bid.discountSchemeId = discountSchemeId;
+    bid.quantity = newQuantity;
+    
+    return bid;
+}
+
 function createRowFromBid(bid: Bid): Row {
 
-    let dateString = "";
-    if (bid.discountScheme?.expiryDate) {
-        let date: Date = new Date(bid.discountScheme.expiryDate.toString());
-        dateString = date.toDateString();        
-    }
+   
 
     let discountedPrice = bid.discountScheme?.discountedPrice as number;
     let originalPrice = bid.discountScheme?.product?.originalPrice as number;

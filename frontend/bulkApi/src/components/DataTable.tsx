@@ -37,11 +37,12 @@ interface IProp {
   enablePaging?: boolean;
   enableSelection?: boolean;
   actionMessage?: string;
+  detailPanelFielddName?: string; //To render the detail panel
 }
 
  
-export function MaterialTableComponent({title, data, columnNames, accessors, handleChecked=defaultHandleChecked, idColumnAccessorName="", pageSize=5, actionIcon,
-  enablePaging=false, enableSearch=false, actionMessage="Action", enableSelection=false }: IProp): JSX.Element {
+export function DataTable({title, data, columnNames, accessors, handleChecked=defaultHandleChecked, idColumnAccessorName="", pageSize=5, actionIcon,
+  enablePaging=false, enableSearch=false, actionMessage="Action", enableSelection=false, detailPanelFielddName=""  }: IProp): JSX.Element {
 
   let headerDicts: any[] = [];
     for(let i = 0; i < columnNames.length; i++) {
@@ -71,7 +72,9 @@ export function MaterialTableComponent({title, data, columnNames, accessors, han
                 height: "100px"
               },
             
-            }} 
+            }}
+            detailPanel={rowData => returnDetailTable(rowData, detailPanelFielddName)}
+            
       />
       </div>
     )
@@ -79,10 +82,9 @@ export function MaterialTableComponent({title, data, columnNames, accessors, han
 
   // There is a bug with Material Table where the table is fully rerendered on parent state update since 1.53.0
   // https://github.com/mbrn/material-table/issues/1265 
-function returnSelectedIds(rowDatas: any[], idColumnAccessorName: string): number[] {
-  let selectedIds: any[] = rowDatas.map(rowData => rowData[idColumnAccessorName]);
-  console.log(selectedIds);
-  return selectedIds;  
+function returnDetailTable(rowData: any, detailPanelFielddName: string): JSX.Element {
+  console.log(rowData);
+  return rowData[detailPanelFielddName] as JSX.Element;
 }
 
 const defaultHandleChecked = (val?: any) => {};

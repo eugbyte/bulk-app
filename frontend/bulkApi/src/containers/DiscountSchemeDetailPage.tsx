@@ -66,7 +66,7 @@ export function DiscountSchemeDetailPage(): JSX.Element {
         "Description": ds.product?.description,
         "Original Price": "$" + ds.product?.originalPrice ?? "$",
         "Discounted Price": "$" + ds.discountedPrice,
-        "Min Order Quantity": ds.minOrderQnty,
+        "Min Collective Quantity": ds.minOrderQnty,
         "Current Total Bids": currentBids,
         "Remaining Bids Needed": ds.minOrderQnty - currentBids,
         "Expiry Date": dateString
