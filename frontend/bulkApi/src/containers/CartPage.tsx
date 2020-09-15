@@ -10,6 +10,7 @@ import { CartButtons } from "../components/CartButtons";
 import { DialogueComponent } from "../components/DialogueComponent";
 import { Button, Container } from "@material-ui/core";
 import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
+import { OrderCheckoutComponent } from "../components/OrderCheckoutComponent";
 
 
 class Row {
@@ -70,7 +71,7 @@ export function CartPage(): JSX.Element {
             let bid: Bid = new Bid();
             bid.bidId = bidsInCart[i].bidId;;
             bid.customerId = 1;
-            bid.collectionAddress = "AMK";
+            bid.collectionAddress = bidsInCart[i].collectionAddress;
             bid.discountSchemeId = bidsInCart[i].discountSchemeId;
             bid.quantity = newQuantity;
     
@@ -106,7 +107,7 @@ export function CartPage(): JSX.Element {
     const columns = ["BidId", "Check Box", "Name", "Price per Item", "Quantity", "Delivery Charge", "Collection Address"];
 
     return <Container maxWidth="xl">
-        {selectedRowIds.map(id => <span>{id}</span>)}
+        <OrderCheckoutComponent bids={bidsInCart} rowIds={selectedRowIds} />
         <MaterialTableComponent data={rows} columnNames={columns} accessors={accessors} title="Cart" 
             idColumnAccessorName={"bidId"}             
             actionMessage="Make Order"  actionIcon={AddShoppingCartIcon}  />
@@ -131,8 +132,7 @@ function createRowFromBid(bid: Bid): Row {
     row.discountedPrice = `$${discountedPrice} (Save $${originalPrice - discountedPrice})`;
     row.deliveryCharge = "$" + bid.discountScheme?.deliveryCharge;
     row.name = bid.discountScheme?.product?.name;
-    //row.tableData = { checked: true }
-    
+    //row.tableData = { checked: true }   
     
     return row;
 }

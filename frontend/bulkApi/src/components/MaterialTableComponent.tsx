@@ -43,11 +43,6 @@ interface IProp {
 export function MaterialTableComponent({title, data, columnNames, accessors, handleChecked=defaultHandleChecked, idColumnAccessorName="", pageSize=5, actionIcon,
   enablePaging=false, enableSearch=false, actionMessage="Action", enableSelection=false }: IProp): JSX.Element {
 
-  // Ideally, this component should be stateless
-  // However, there is a bug with Material Table where the table is fully rerendered on parent state update since 1.53.0
-  // https://github.com/mbrn/material-table/issues/1265 
-  //let [checkedIds, setCheckedIds] = useState<number[]>([]);
-
   let headerDicts: any[] = [];
     for(let i = 0; i < columnNames.length; i++) {
         let header: string = columnNames[i];
@@ -61,30 +56,29 @@ export function MaterialTableComponent({title, data, columnNames, accessors, han
     } 
 
     return (
-
-      <div>
- 
-      <MaterialTable
-        
-        icons={tableIcons}
-          title={title}
-          columns={headerDicts}
-          data={data}        
-          options={{
-            selection: enableSelection,
-            pageSize: pageSize,
-            search: enableSearch,
-            paging: enablePaging,
-            rowStyle:{
-              height: "100px"
-            },
-          
-          }} 
+      <div> 
+        <MaterialTable        
+          icons={tableIcons}
+            title={title}
+            columns={headerDicts}
+            data={data}        
+            options={{
+              selection: enableSelection,
+              pageSize: pageSize,
+              search: enableSearch,
+              paging: enablePaging,
+              rowStyle:{
+                height: "100px"
+              },
+            
+            }} 
       />
       </div>
     )
 }
 
+  // There is a bug with Material Table where the table is fully rerendered on parent state update since 1.53.0
+  // https://github.com/mbrn/material-table/issues/1265 
 function returnSelectedIds(rowDatas: any[], idColumnAccessorName: string): number[] {
   let selectedIds: any[] = rowDatas.map(rowData => rowData[idColumnAccessorName]);
   console.log(selectedIds);
