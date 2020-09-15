@@ -36,14 +36,13 @@ export function CartButtons({quantity, setQuantity, actionTitle, action, size="m
             <Button>{quantity}</Button>
             <Button onClick={handleDecrement}><RemoveIcon /></Button>
         </ButtonGroup>
-        <ButtonGroup size={size}>
+        {action && 
+          <ButtonGroup size={size}>
             
             <Button  onClick={action} color="primary" variant="contained">{actionTitle}</Button>
            
           </ButtonGroup>
-        
-
-        
+        } 
     </div>
 
 }

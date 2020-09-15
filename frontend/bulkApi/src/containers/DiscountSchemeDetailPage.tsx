@@ -12,12 +12,7 @@ import { CartButtons } from "../components/CartButtons";
 import e_commerce from '../images/e_commerce.png';
 import { Bid } from "../models/Bid";
 import { addBidToCartAsync } from "../store/thunks/bidThunk";
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { DialogueComponent } from "../components/DialogueComponent";
-import { errorActionCreator } from "../store/errorAction";
-import { ACTIONS } from "../store/actionEnums";
-import MaterialTable from "material-table";
-import { MaterialTableComponent } from "../components/MaterialTableComponent";
+import { DialogueComponent } from "../components/DialogueComponent"; 
 
 export function DiscountSchemeDetailPage(): JSX.Element {
     const dispatch: Dispatch<any> = useDispatch();  

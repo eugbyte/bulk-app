@@ -1,5 +1,5 @@
 import MaterialTable from 'material-table';
-import React from "react"; 
+import React, { useEffect, useState } from "react"; 
 
 import { forwardRef } from 'react';
 
@@ -33,13 +33,20 @@ interface IProp {
   idColumnAccessorName?: string; //to hide the id column,
   pageSize?: number;
   actionIcon?: OverridableComponent<SvgIconTypeMap<{}, "svg">>;
-  enableSearch?: false;
-  enablePaging?: false;
+  enableSearch?: boolean;
+  enablePaging?: boolean;
+  enableSelection?: boolean;
+  actionMessage?: string;
 }
 
  
 export function MaterialTableComponent({title, data, columnNames, accessors, handleChecked=defaultHandleChecked, idColumnAccessorName="", pageSize=5, actionIcon,
-  enablePaging=false, enableSearch=false}: IProp): JSX.Element {
+  enablePaging=false, enableSearch=false, actionMessage="Action", enableSelection=false }: IProp): JSX.Element {
+
+  // Ideally, this component should be stateless
+  // However, there is a bug with Material Table where the table is fully rerendered on parent state update since 1.53.0
+  // https://github.com/mbrn/material-table/issues/1265 
+  //let [checkedIds, setCheckedIds] = useState<number[]>([]);
 
   let headerDicts: any[] = [];
     for(let i = 0; i < columnNames.length; i++) {
@@ -54,6 +61,9 @@ export function MaterialTableComponent({title, data, columnNames, accessors, han
     } 
 
     return (
+
+      <div>
+ 
       <MaterialTable
         
         icons={tableIcons}
@@ -61,7 +71,7 @@ export function MaterialTableComponent({title, data, columnNames, accessors, han
           columns={headerDicts}
           data={data}        
           options={{
-            selection: true,
+            selection: enableSelection,
             pageSize: pageSize,
             search: enableSearch,
             paging: enablePaging,
@@ -70,21 +80,17 @@ export function MaterialTableComponent({title, data, columnNames, accessors, han
             },
           
           }} 
-          actions={[
-            {
-              tooltip: 'Remove All Selected Users',
-              icon: actionIcon ??  AddBox,
-              onClick: (evt, data) => console.log(data)  }
-          ]} 
       />
+      </div>
     )
 }
 
 function returnSelectedIds(rowDatas: any[], idColumnAccessorName: string): number[] {
   let selectedIds: any[] = rowDatas.map(rowData => rowData[idColumnAccessorName]);
-  return selectedIds;
-  
+  console.log(selectedIds);
+  return selectedIds;  
 }
+
 const defaultHandleChecked = (val?: any) => {};
   
 const tableIcons = {
