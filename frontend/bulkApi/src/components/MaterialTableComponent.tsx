@@ -27,7 +27,7 @@ import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 interface IProp {
   title: string,
   data: any[];
-  columnNames: string[];
+  columnNames: any[];
   accessors: string[];
   handleChecked?: (rowIds: number[]) => any;
   idColumnAccessorName?: string; //to hide the id column,

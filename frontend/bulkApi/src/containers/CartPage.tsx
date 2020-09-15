@@ -11,6 +11,7 @@ import { DialogueComponent } from "../components/DialogueComponent";
 import { Button, Container } from "@material-ui/core";
 import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 import { OrderCheckoutComponent } from "../components/OrderCheckoutComponent";
+import { ACTIONS } from "../store/actionEnums";
 
 
 class Row {
@@ -35,13 +36,14 @@ export function CartPage(): JSX.Element {
 
     // The Bids received from the GET request
     const bidsInCart: Bid[] = useSelector((action: RootState) => action.bidReducer.bids as Bid[] ) ?? [];  
+    console.log("bids received", bidsInCart);
 
     useEffect(() => {
         document.title = "Cart";
         const customerId = 1;
         const action = getBidsOfCustomerInCartAsync(customerId);
         dispatch(action);        
-    }, []);
+    }, [bidsInCart.toString()]);
 
     // For some reason, useState(bidQuantities) will produce only an empty array
     // React hooks are always one step behind. On next render, the state variable will have a new value.
@@ -59,6 +61,19 @@ export function CartPage(): JSX.Element {
         setQuantities(bidQuantities);
     }, [isBidsInitialized]);
 
+    //Response on update. If update is successful, make another request to get bids in cart
+    const responseMessages: string[] = useSelector( (action: RootState) => action.bidReducer.responseMessages as string[] ) ?? [""]; 
+    useEffect(() => {
+        console.log("useEffect updateResponseMessages", responseMessages);
+        let message: string = responseMessages[responseMessages.length - 1];
+        if (message == ACTIONS.UPDATE_SUCCESS) {
+            const customerId = 1;
+            const action = getBidsOfCustomerInCartAsync(customerId);
+            dispatch(action); 
+        }
+        
+    }, [responseMessages.length]);
+
     // Convert the Bids to Rows to pass to the DataTable
     const rows: Row[] = bidsInCart.map(bid => createRowFromBid(bid));    
 
@@ -75,9 +90,12 @@ export function CartPage(): JSX.Element {
             bid.discountSchemeId = bidsInCart[i].discountSchemeId;
             bid.quantity = newQuantity;
     
-            const action = updateBidInCartAsync(bid);
-            dispatch(action);
-            setOpen(true)
+            const updateAction = updateBidInCartAsync(bid);
+            dispatch(updateAction);
+            setOpen(true);
+
+            // Need to have logic to refetch all the bids
+            // ...
         }
 
         // Method reference to set quantity to pass into CartButtons
@@ -104,10 +122,11 @@ export function CartPage(): JSX.Element {
     }
 
     const accessors: string[] = Object.keys(new Row());
-    const columns = ["BidId", "Check Box", "Name", "Price per Item", "Quantity", "Delivery Charge", "Collection Address"];
+    const columns: any[] = ["BidId", "Check Box", "Name", "Price per Item", "Quantity", "Delivery Charge", "Collection Address"];
 
     return <Container maxWidth="xl">
         <OrderCheckoutComponent bids={bidsInCart} rowIds={selectedRowIds} />
+        <br/>
         <MaterialTableComponent data={rows} columnNames={columns} accessors={accessors} title="Cart" 
             idColumnAccessorName={"bidId"}             
             actionMessage="Make Order"  actionIcon={AddShoppingCartIcon}  />
@@ -136,3 +155,4 @@ function createRowFromBid(bid: Bid): Row {
     
     return row;
 }
+ 

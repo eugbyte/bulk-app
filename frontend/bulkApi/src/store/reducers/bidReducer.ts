@@ -6,40 +6,39 @@ const initialState : IBidAction = {
     type: "",
     bid: undefined,
     bids: undefined,
-    message: "Initial State",
-    isOkTime: null
+    messages: ["Initial Message"],
+    responseMessages: ["Initial Response Message"],        
+
 }
 
 export default function bidReducer(prevState = initialState, action: IBidAction): IBidAction {
     let newState: IBidAction = cloneDeep(prevState);
     newState.type = action.type;
-
+    newState.messages = newState.messages?.concat(action.messages ?? []);
+    newState.responseMessages = newState.responseMessages?.concat(action.responseMessages ?? []);
+    console.log("in bidReducer. messages", newState.messages);
+    console.log("in bidReducer. responseMessages", newState.responseMessages);
+ 
     switch(action.type) {    
         case(ACTIONS.ADD_BID_TO_CART_REQUEST):
-            console.log(action.message);
-            newState.message = action.message;
+            console.log(action.messages);
+            
             return newState;    
         case(ACTIONS.ADD_BID_TO_CART_RECEIVED): 
-            console.log(action.message);           
+            console.log(action.messages);           
             newState.bid = action.bid;
-            newState.message = action.message;
-            newState.isOkTime = action.isOkTime;
             return newState;
         case(ACTIONS.GET_BIDSOFCUSTOMER_INCART_REQUEST):
-            console.log(action.message);
-            newState.message = action.message;
+            console.log(action.messages);
             return newState;
         case(ACTIONS.GET_BIDSOFCUSTOMER_INCART_RECEIVED):
             newState.bids = action.bids;
             console.log(newState.bids);
-            newState.message = action.message;
             return newState;
         case(ACTIONS.ADD_BID_TO_CART_REQUEST):
-            console.log(action.message);
-            newState.message = action.message;
+            console.log(action.messages);
             return newState;    
         case(ACTIONS.UPDATE_BID_IN_CART_RECEIVED):
-            newState.message = action.message;
             return newState;
         default:
             return prevState;
