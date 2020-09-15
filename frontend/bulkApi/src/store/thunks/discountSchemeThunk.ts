@@ -2,7 +2,7 @@ import { ACTIONS } from "../actionEnums";
 import { ThunkDispatch, ThunkAction } from 'redux-thunk';
 import { DiscountScheme } from "../../models/DiscountScheme";
 import { Action } from "redux";
-import { IErrorAction, errorActionCreator } from "../errorAction";
+import { IErrorAction, errorActionCreator } from "../actions/errorAction";
 
 export interface IDiscountSchemeAction extends Action {
     type: string;

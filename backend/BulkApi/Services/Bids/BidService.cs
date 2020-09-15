@@ -124,6 +124,13 @@ namespace BulkApi.Services.Bids
             return existingBid;
         }
 
+        public async Task DeleteBidInCart(int bidId)
+        {
+            Bid existingBid = await db.Bids.FirstOrDefaultAsync(bid => bid.BidId == bidId);
+            db.Bids.Remove(existingBid);
+            await db.SaveChangesAsync();
+        }
+
         private int GetTotalBidsForDiscountScheme(int discountSchemeId)
         {
             int countBids = db.Bids

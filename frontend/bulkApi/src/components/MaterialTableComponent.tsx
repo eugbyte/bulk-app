@@ -1,5 +1,5 @@
 import MaterialTable from 'material-table';
-import React, { useEffect, useState } from "react"; 
+import React from "react"; 
 
 import { forwardRef } from 'react';
 
@@ -21,7 +21,7 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 
 import { Icons } from 'material-table';
-import SvgIcon, { SvgIconProps, SvgIconTypeMap } from "@material-ui/core/SvgIcon";
+import  { SvgIconTypeMap } from "@material-ui/core/SvgIcon";
 import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 
 interface IProp {

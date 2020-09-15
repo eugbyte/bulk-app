@@ -1,13 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { Button, Typography } from "@material-ui/core";
-import CardMedia from '@material-ui/core/CardMedia';
-import { DiscountScheme } from "../models/DiscountScheme";
-import { CartButtons } from "./CartButtons";
+import { Button } from "@material-ui/core";
+import CardMedia from '@material-ui/core/CardMedia'; 
 
 interface IProps {
     open: boolean;  //open is part of useState(false)

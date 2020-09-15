@@ -4,9 +4,6 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from "@material-ui/icons/Remove";
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { getClassSet } from "react-bootstrap/lib/utils/bootstrapUtils";
-
-
 
 interface IProp {
     quantity: number; // quantity is part of useState(0)

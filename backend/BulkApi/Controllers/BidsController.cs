@@ -44,6 +44,13 @@ namespace BulkApi.Controllers
             return Ok(updatedBid);
         }
 
+        [HttpDelete("cart/{bidId}")]
+        public async Task<ActionResult> DeleteBidFromCart(int bidId)
+        {
+            await bidService.DeleteBidInCart(bidId);
+            return Ok();
+        }
+
         [HttpPut("order")]
         public async Task<ActionResult> OrderBidsFromCart(List<Bid> bids)
         {

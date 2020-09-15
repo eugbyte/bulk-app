@@ -1,4 +1,4 @@
-import { IErrorAction } from "../errorAction";
+import { IErrorAction } from "../actions/errorAction";
 import { ACTIONS } from "../actionEnums";
 
 const initialState : IErrorAction = {

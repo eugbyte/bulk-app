@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Bid } from "../models/Bid";
 import { RootState } from "../store/rootReducer";
-import { getBidsOfCustomerInCartAsync, updateBidInCartAsync } from "../store/thunks/bidThunk";
+import { deleteBidFromCartAsync, getBidsOfCustomerInCartAsync, updateBidInCartAsync } from "../store/thunks/bidThunk";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux"; 
 import { MaterialTableComponent } from "../components/MaterialTableComponent";
@@ -9,7 +9,7 @@ import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import { CartButtons } from "../components/CartButtons";
 import { DialogueComponent } from "../components/DialogueComponent";
 import { Button, Container } from "@material-ui/core";
-import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
+import Checkbox from '@material-ui/core/Checkbox';
 import { OrderCheckoutComponent } from "../components/OrderCheckoutComponent";
 import { ACTIONS } from "../store/actionEnums";
 
@@ -22,7 +22,7 @@ class Row {
     updateCartComponent: JSX.Element | undefined;
     deliveryCharge: string | undefined;
     collectionAddress: string | undefined;
-    tableData: any | undefined; // to set tableData: { checked: true } in order to select all rows by default
+    deleteButton: JSX.Element | undefined;
 }
 
 export function CartPage(): JSX.Element {
@@ -31,6 +31,11 @@ export function CartPage(): JSX.Element {
     
     // State to determine whether to show notification
     const [open, setOpen] = useState(false);
+    const [notificationMessage, setNotificationMessage] = useState("");
+    const handleNotification = (isOpen: boolean, message: string) => {
+        setOpen(isOpen);
+        setNotificationMessage(message);
+    }
 
     const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
 
@@ -62,16 +67,15 @@ export function CartPage(): JSX.Element {
     }, [isBidsInitialized]);
 
     //Response on update. If update is successful, make another request to get bids in cart
-    const responseMessages: string[] = useSelector( (action: RootState) => action.bidReducer.responseMessages as string[] ) ?? [""]; 
+    const responseMessages: string[] = useSelector( (action: RootState) => action.bidReducer.httpMessages as string[] ) ?? [""]; 
     useEffect(() => {
         console.log("useEffect updateResponseMessages", responseMessages);
         let message: string = responseMessages[responseMessages.length - 1];
-        if (message == ACTIONS.UPDATE_SUCCESS) {
+        if (message == ACTIONS.HTTP_UPDATE_SUCCESS || message == ACTIONS.HTTP_DELETE_SUCCESS) {
             const customerId = 1;
             const action = getBidsOfCustomerInCartAsync(customerId);
             dispatch(action); 
-        }
-        
+        }        
     }, [responseMessages.length]);
 
     // Convert the Bids to Rows to pass to the DataTable
@@ -92,10 +96,8 @@ export function CartPage(): JSX.Element {
     
             const updateAction = updateBidInCartAsync(bid);
             dispatch(updateAction);
-            setOpen(true);
 
-            // Need to have logic to refetch all the bids
-            // ...
+            handleNotification(true, "bid added to cart"); 
         }
 
         // Method reference to set quantity to pass into CartButtons
@@ -108,7 +110,6 @@ export function CartPage(): JSX.Element {
 
         const toggleCheckedRowId = () => {
             const bidId: number = bidsInCart[i].bidId;
-            console.log("toggleCheckedRowId. BidId: ", bidId);
             if (!selectedRowIds.includes(bidId)) {
                 setSelectedRowIds([...selectedRowIds, bidId])
             } else {
@@ -116,13 +117,22 @@ export function CartPage(): JSX.Element {
                 setSelectedRowIds(newSelectedRowIds);
             }
         }
+
+        const deleteBid = () => {
+            const bidId: number = bidsInCart[i].bidId;
+            const deleteAction = deleteBidFromCartAsync(bidId);
+            dispatch(deleteAction);
+
+            handleNotification(true, "item deleted");
+        }
     
         rows[i].updateCartComponent = <CartButtons quantity={quantity} setQuantity={setQuantity} size={"small"}/>
         rows[i].checkbox = <Checkbox size="small" onChange={toggleCheckedRowId} />
+        rows[i].deleteButton = <Button size={"small"} variant={"contained"} color={"primary"} onClick={deleteBid}>Delete</Button>
     }
 
     const accessors: string[] = Object.keys(new Row());
-    const columns: any[] = ["BidId", "Check Box", "Name", "Price per Item", "Quantity", "Delivery Charge", "Collection Address"];
+    const columns: any[] = ["BidId", "Check Box", "Name", "Price per Item", "Quantity", "Delivery Charge", "Collection Address", "Remove"];
 
     return <Container maxWidth="xl">
         <OrderCheckoutComponent bids={bidsInCart} rowIds={selectedRowIds} />
@@ -130,7 +140,7 @@ export function CartPage(): JSX.Element {
         <MaterialTableComponent data={rows} columnNames={columns} accessors={accessors} title="Cart" 
             idColumnAccessorName={"bidId"}             
             actionMessage="Make Order"  actionIcon={AddShoppingCartIcon}  />
-        <DialogueComponent open={open} setOpen={setOpen} message={"Cart updated"} severity={"success"}/>
+        <DialogueComponent open={open} setOpen={setOpen} message={notificationMessage} severity={"success"}/>
     </Container>
 }
 
