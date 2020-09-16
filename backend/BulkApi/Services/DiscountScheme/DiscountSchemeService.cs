@@ -30,10 +30,12 @@ namespace BulkApi.Services.DiscountSchemes
         {
             List<DiscountScheme> discountSchemes = await GetAllDiscountSchemesWithBid();            
 
-            // Remove discountSchemes that have already succeeded
-            discountSchemes = discountSchemes.Where(ds => ds.Bids.Any(bid => bid.BidSuccessDate == null)).ToList();
+            // Ignore discountSchemes that have already succeeded
+            discountSchemes = discountSchemes
+                .Where(ds => ds.Bids.Count == 0 || ds.Bids.Any(bid => bid.BidSuccessDate == null))
+                .ToList();
 
-            // Remove bids that are already in cart
+            // Remove bids that are already in cart to get a true representation of bids already ordered
             for (int i = 0; i < discountSchemes.Count; i++)
             {
                 RemoveBidsInCart(discountSchemes[i]);

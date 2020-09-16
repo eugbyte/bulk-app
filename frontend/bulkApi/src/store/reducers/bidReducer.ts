@@ -8,18 +8,17 @@ const initialState : IBidAction = {
     bids: undefined,
     messages: ["Initial Message"],
     httpMessages: ["Initial Response Message"],        
-
 }
 
 export default function bidReducer(prevState = initialState, action: IBidAction): IBidAction {
     let newState: IBidAction = cloneDeep(prevState);
     
     newState.type = action.type;
-    newState.messages = newState.messages?.concat(action.messages ?? []);
-    newState.httpMessages = newState.httpMessages?.concat(action.httpMessages ?? []);
+    newState.messages = newState.messages?.concat(action.messages ?? []) as string[];
+    newState.httpMessages = newState.httpMessages?.concat(action.httpMessages ?? []) as string[];
 
-    console.log("in bidReducer. messages", newState.messages);
-    console.log("in bidReducer. responseMessages", newState.httpMessages);
+    console.log("in bidReducer. messages", newState.messages[(newState.messages?.length ?? 1) - 1]);
+    console.log("in bidReducer. responseMessages", newState.httpMessages[(newState.httpMessages?.length ?? 1) - 1]);
  
     switch(action.type) {    
         case(ACTIONS.ADD_BID_TO_CART_REQUEST):
@@ -42,6 +41,15 @@ export default function bidReducer(prevState = initialState, action: IBidAction)
         case(ACTIONS.DELETE_BID_IN_CART_REQUEST):
             return newState;
         case(ACTIONS.DELETE_BID_IN_CART_RECEIVED):
+            return newState;
+        case(ACTIONS.ORDER_BIDS_IN_CART_REQUEST):
+            return newState;
+        case(ACTIONS.ORDER_BIDS_IN_CART_RECEIVED):
+            return newState;
+        case(ACTIONS.GET_PENDING_OR_SUCCESSFUL_BIDS_REQUEST):
+            return newState;
+        case(ACTIONS.GET_PENDING_OR_SUCCESSFUL_BIDS_RECEIVED):
+            newState.bids = action.bids;
             return newState;
         default:
             return prevState;

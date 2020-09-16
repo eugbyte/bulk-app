@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Bid } from "../models/Bid";
 import { RootState } from "../store/rootReducer";
-import { deleteBidFromCartAsync, getBidsOfCustomerInCartAsync, updateBidInCartAsync } from "../store/thunks/bidThunk";
+import { deleteBidFromCartAsync, getBidsOfCustomerInCartAsync, orderBidsFromCart, updateBidInCartAsync } from "../store/thunks/bidThunk";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux"; 
 import { DataTable } from "../components/DataTable";
@@ -12,7 +12,8 @@ import { Button, Container } from "@material-ui/core";
 import Checkbox from '@material-ui/core/Checkbox';
 import { OrderCheckoutComponent } from "../components/OrderCheckoutComponent";
 import { ACTIONS } from "../store/actionEnums";
-import Typography from '@material-ui/core/Typography';
+import { SummaryDictComponent } from "../components/SummaryDictComponent";
+import { useHistory } from "react-router-dom";
 
 
 class Row {
@@ -29,8 +30,10 @@ class Row {
 
 
 export function CartPage(): JSX.Element {
-          
+    document.title = "Cart";
+    const history = useHistory();          
     const dispatch: Dispatch<any> = useDispatch(); 
+
     // State to determine whether to show notification
     const [open, setOpen] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState("");
@@ -39,14 +42,11 @@ export function CartPage(): JSX.Element {
         setNotificationMessage(message);
     }
 
-    const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
-
     // The Bids received from the GET request
     const bidsInCart: Bid[] = useSelector((action: RootState) => action.bidReducer.bids as Bid[] ) ?? [];  
     console.log("bids received", bidsInCart);
 
     useEffect(() => {
-        document.title = "Cart";
         const customerId = 1;
         const action = getBidsOfCustomerInCartAsync(customerId);
         dispatch(action);        
@@ -68,16 +68,28 @@ export function CartPage(): JSX.Element {
         setQuantities(bidQuantities);
     }, [isBidsInitialized]);
 
+    // When the user selects the row (Bid) in the datatable
+    const [selectedRowBidIds, setSelectedRowBidIds] = useState<number[]>([]);
+    const handleOrder = () => {
+        let bidsToOrder: Bid[] = bidsInCart.filter(bid => selectedRowBidIds.includes(bid.bidId));
+        const action = orderBidsFromCart(bidsToOrder);
+        dispatch(action);
+    };
+
     //Response on update. If update is successful, make another request to get bids in cart
     const responseMessages: string[] = useSelector( (action: RootState) => action.bidReducer.httpMessages as string[] ) ?? [""]; 
     useEffect(() => {
         console.log("useEffect updateResponseMessages", responseMessages);
-        let message: string = responseMessages[responseMessages.length - 1];
-        if (message == ACTIONS.HTTP_UPDATE_SUCCESS || message == ACTIONS.HTTP_DELETE_SUCCESS) {
+        let responseMessage: string = responseMessages[responseMessages.length - 1];
+        if (responseMessage == ACTIONS.HTTP_UPDATE_SUCCESS || responseMessage == ACTIONS.HTTP_DELETE_SUCCESS) {
             const customerId = 1;
             const action = getBidsOfCustomerInCartAsync(customerId);
             dispatch(action); 
         }        
+        if (responseMessage == ACTIONS.HTTP_UPDATE_ORDER_SUCCESS) {
+            console.log(responseMessages[responseMessages.length - 1]);
+            history.push("/orders")
+        }
     }, [responseMessages.length]);
 
     // Convert the Bids to Rows to pass to the DataTable
@@ -106,11 +118,11 @@ export function CartPage(): JSX.Element {
 
         const toggleCheckedRowId = () => {
             const bidId: number = bid.bidId;
-            if (!selectedRowIds.includes(bidId)) {
-                setSelectedRowIds([...selectedRowIds, bidId])
+            if (!selectedRowBidIds.includes(bidId)) {
+                setSelectedRowBidIds([...selectedRowBidIds, bidId])
             } else {
-                let newSelectedRowIds: number[] = selectedRowIds.filter(id => id != bidId);
-                setSelectedRowIds(newSelectedRowIds);
+                let newSelectedRowIds: number[] = selectedRowBidIds.filter(id => id != bidId);
+                setSelectedRowBidIds(newSelectedRowIds);
             }
         }
 
@@ -126,15 +138,18 @@ export function CartPage(): JSX.Element {
             let date: Date = new Date(bid.discountScheme.expiryDate.toString());
             dateString = date.toDateString();        
         }
+        let summaryDict: Record<string, any> = {
+            "Min Collective Quantity": bid.discountScheme?.minOrderQnty,
+            "Description": bid.discountScheme?.product?.description,
+            "Bid Expiry Date": dateString,
+            "Current total bids": bid.currentTotalBids,
+            "Remaining bids required": bid.discountScheme?.minOrderQnty as number - (bid.currentTotalBids as number)
+        }
     
         rows[i].updateCartComponent = <CartButtons quantity={quantity} setQuantity={setQuantity} size={"small"}/>
         rows[i].checkbox = <Checkbox size="small" onChange={toggleCheckedRowId} />
         rows[i].deleteButton = <Button size={"small"} variant={"contained"} color={"primary"} onClick={deleteBid}>Delete</Button>
-        rows[i].detailPanel = <Typography variant={"body2"} align={"left"} paragraph={true} color={"textSecondary"} style={{margin: "10px"}}>
-                <b>Min Collective Quantity</b> {bid.discountScheme?.minOrderQnty} <br/>
-                <b>Description</b> {bid.discountScheme?.product?.description} <br/>
-                <b>Bid Expiry Date</b> {dateString} <br/>
-            </Typography>       
+        rows[i].detailPanel = <SummaryDictComponent dictSummary={summaryDict} />       
     }
 
     let accessors: string[] = Object.keys(new Row());
@@ -143,12 +158,12 @@ export function CartPage(): JSX.Element {
     const columns: any[] = ["BidId", "Check Box", "Name", "Price per Item", "Quantity", "Delivery Charge", "Collection Address", "Remove"];
 
     return <Container maxWidth="xl">
-        <OrderCheckoutComponent bids={bidsInCart} rowIds={selectedRowIds} />
+        <OrderCheckoutComponent bids={bidsInCart} rowIds={selectedRowBidIds} handleOrder={handleOrder} />
         <br/>
         <DataTable data={rows} columnNames={columns} accessors={accessors} title="Cart" 
             idColumnAccessorName={"bidId"}             
             actionMessage="Make Order"  actionIcon={AddShoppingCartIcon}  
-            detailPanelFielddName={detailPanelName} />
+            enabledDetailPanel={true} detailPanelFieldName={detailPanelName} />
         <DialogueComponent open={open} setOpen={setOpen} message={notificationMessage} severity={"success"}/>
     </Container>
 }
@@ -165,9 +180,7 @@ function createBid(newQuantity: number, bidId: number, customerId: number, colle
     return bid;
 }
 
-function createRowFromBid(bid: Bid): Row {
-
-   
+function createRowFromBid(bid: Bid): Row {   
 
     let discountedPrice = bid.discountScheme?.discountedPrice as number;
     let originalPrice = bid.discountScheme?.product?.originalPrice as number;

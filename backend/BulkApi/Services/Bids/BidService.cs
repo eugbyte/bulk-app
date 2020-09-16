@@ -21,20 +21,23 @@ namespace BulkApi.Services.Bids
         {
             List<Bid> bids = await db.Bids
                 .Where(bid => bid.CustomerId == customerId)
-                .Where(bid => bid.IsInCart)
+                .Where(bid => bid.IsInCart) 
+                .Include(bid => bid.DiscountScheme)
+                    .ThenInclude(ds => ds.Product)
+                .ToListAsync();            
+
+            return bids;
+        }
+
+        // Bascially, GetBidsOfCustomers Not InCart
+        public async Task<List<Bid>> GetPendingOrSuccessfulBidsOfCustomer(int customerId)
+        {
+            List<Bid> bids = await db.Bids
+                .Where(bid => bid.CustomerId == customerId)
+                .Where(bid => !bid.IsInCart)
+                .Include(bid => bid.DiscountScheme)
+                    .ThenInclude(ds => ds.Product)
                 .ToListAsync();
-
-            List<DiscountScheme> discountSchemes = await db.DiscountSchemes
-                .IncludeOptimized(ds => ds.Product)
-                .ToListAsync();
-
-            foreach(Bid bid in bids)
-            {
-                DiscountScheme discountScheme = discountSchemes.Find(ds => ds.DiscountSchemeId == bid.DiscountSchemeId);
-                discountScheme.Bids = null;
-                bid.DiscountScheme = discountScheme;
-            }
-
             return bids;
         }
 
@@ -47,23 +50,24 @@ namespace BulkApi.Services.Bids
 
             foreach(Bid bid in bids)
             {
-                //1. validate whether the bids will exceed the bid limit imposed by the Discount Scheme
+                //1. For now, ignore validation whether the bids will exceed the bid limit imposed by the Discount Scheme
                 //2. update the bidStatus that it is no longer in the cart
 
-                //1. validate whether the bids will exceed the bid limit imposed by the Discount Scheme
                 //DiscountScheme has Bid property eager loaded
                 DiscountScheme discountScheme = bid.DiscountScheme;
-                int currentNumBids = GetTotalBidsForDiscountScheme(discountScheme.DiscountSchemeId);
+                int currentNumBids = discountScheme.Bids
+                    .Where(b => !b.IsInCart)
+                    .ToList()
+                    .Aggregate(0, (acc, b) => acc + b.Quantity);
+
                 currentNumBids += bid.Quantity;
-                bool hasMinOrderQuantityReached = currentNumBids > discountScheme.MinOrderQnty;
-                if (hasMinOrderQuantityReached)
-                    throw new Exception($"after taking into account current quantity bidded for, will exceed bid limit. Failed to order bid {bid.BidId}");
 
                 //2. update the bidStatus that it is no longer in the cart
                 bid.IsInCart = false;
                 db.Bids.Update(bid);
                 await db.SaveChangesAsync();
 
+                // If the minOrderQuantity is reached, bid is successful ...
                 if (currentNumBids == discountScheme.MinOrderQnty)
                 {
                     discountScheme.Bids.ForEach(bid => bid.BidSuccessDate = DateTime.Now);
@@ -129,16 +133,6 @@ namespace BulkApi.Services.Bids
             Bid existingBid = await db.Bids.FirstOrDefaultAsync(bid => bid.BidId == bidId);
             db.Bids.Remove(existingBid);
             await db.SaveChangesAsync();
-        }
-
-        private int GetTotalBidsForDiscountScheme(int discountSchemeId)
-        {
-            int countBids = db.Bids
-                .Where(b => b.DiscountSchemeId == discountSchemeId)
-                .Where(b => !b.IsInCart)
-                .ToList()
-                .Aggregate(0, (acc, b) => acc + b.Quantity);
-            return countBids;
         } 
 
     }

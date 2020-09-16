@@ -37,12 +37,13 @@ interface IProp {
   enablePaging?: boolean;
   enableSelection?: boolean;
   actionMessage?: string;
-  detailPanelFielddName?: string; //To render the detail panel
+  detailPanelFieldName?: string; //To render the detail panel
+  enabledDetailPanel?: boolean;
 }
 
  
 export function DataTable({title, data, columnNames, accessors, handleChecked=defaultHandleChecked, idColumnAccessorName="", pageSize=5, actionIcon,
-  enablePaging=false, enableSearch=false, actionMessage="Action", enableSelection=false, detailPanelFielddName=""  }: IProp): JSX.Element {
+  enablePaging=false, enableSearch=false, actionMessage="Action", enableSelection=false, detailPanelFieldName="", enabledDetailPanel=false  }: IProp): JSX.Element {
 
   let headerDicts: any[] = [];
     for(let i = 0; i < columnNames.length; i++) {
@@ -54,7 +55,7 @@ export function DataTable({title, data, columnNames, accessors, handleChecked=de
             "hidden": accessor === idColumnAccessorName
         }; 
         headerDicts.push(headerDict);
-    } 
+    }
 
     return (
       <div> 
@@ -70,10 +71,10 @@ export function DataTable({title, data, columnNames, accessors, handleChecked=de
               paging: enablePaging,
               rowStyle:{
                 height: "100px"
-              },
-            
+              },            
             }}
-            detailPanel={rowData => returnDetailTable(rowData, detailPanelFielddName)}
+            detailPanel={rowData => returnDetailTable(rowData, detailPanelFieldName)}
+            //rowData => returnDetailTable(rowData, detailPanelFieldName)
             
       />
       </div>

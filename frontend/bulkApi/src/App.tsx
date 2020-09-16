@@ -6,6 +6,7 @@ import { Route } from 'react-router-dom';
 import { Switch, BrowserRouter as Router } from 'react-router-dom';
 import { DiscountSchemeDetailPage } from './containers/DiscountSchemeDetailPage';
 import { CartPage } from './containers/CartPage';
+import { OrdersPage } from './containers/OrdersPage';
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
         <Switch>
           <Route path="/discountScheme/:discountSchemeId" component= { DiscountSchemeDetailPage } />
           <Route path="/cart" component= { CartPage } />
+          <Route path="/orders" component= { OrdersPage } />
           <Route exact path="/" component={ DiscountSchemesPage } />
         </Switch>
       </Router> 

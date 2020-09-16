@@ -48,7 +48,7 @@ export function updateBidInCartAsync(bid: Bid): ThunkAction<Promise<void>, {}, {
 
         try {
             const response: Response = await fetch("https://localhost:44397/api/bids/updatecart", {
-                method: "POST",
+                method: "PUT",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(bid)
             });
@@ -102,6 +102,49 @@ export function deleteBidFromCartAsync(bidId: number) {
             }
             
             dispatch({ type: ACTIONS.GET_BIDSOFCUSTOMER_INCART_RECEIVED, messages: [response.statusText], httpMessages: [ACTIONS.HTTP_DELETE_SUCCESS] });
+        } catch(error) {
+            dispatch(errorActionCreator(ACTIONS.ERROR, error));
+        }
+    }
+}
+
+export function orderBidsFromCart(bids: Bid[]) {
+    return async (dispatch: ThunkDispatch<{}, {}, IBidAction | IErrorAction>) => { 
+        dispatch({ type: ACTIONS.ORDER_BIDS_IN_CART_REQUEST, messages: ["ordering bids in cart " + bids.toString()]});
+        try {
+            const response: Response = await fetch("https://localhost:44397/api/bids/cart/order", {
+                method: "PUT",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bids)
+            });
+
+            if (!response.ok) {
+                let errorMessage: string = response.statusText + " " + response.url;
+                throw new Error(errorMessage);
+            }
+
+            dispatch({type: ACTIONS.ORDER_BIDS_IN_CART_RECEIVED, messages: [response.statusText], httpMessages: [ACTIONS.HTTP_UPDATE_ORDER_SUCCESS] })
+        } catch(error) {
+            dispatch(errorActionCreator(ACTIONS.ERROR, error));
+        }
+    }
+}
+
+export function getPendingOrSuccessfulBids(customerId: number) {
+    return async (dispatch: ThunkDispatch<{}, {}, IBidAction | IErrorAction>) => { 
+        dispatch({ type: ACTIONS.GET_PENDING_OR_SUCCESSFUL_BIDS_REQUEST, messages: ["getting  PendingOrSuccessfulBids of customer " + customerId]});
+        try {
+            const response: Response = await fetch("https://localhost:44397/api/bids/orders/" + customerId);
+
+            if (!response.ok) {
+                let errorMessage: string = response.statusText + " " + response.url;
+                throw new Error(errorMessage);
+            }
+
+            const bids: Bid[] = await response.json();
+            console.log("in thunk", bids);
+
+            dispatch({type: ACTIONS.GET_PENDING_OR_SUCCESSFUL_BIDS_RECEIVED, bids: bids, messages: [response.statusText], httpMessages: [ACTIONS.HTTP_READ_SUCCESS] });
         } catch(error) {
             dispatch(errorActionCreator(ACTIONS.ERROR, error));
         }

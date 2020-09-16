@@ -13,4 +13,7 @@ export class Bid {
 
     customerId: number = 0;
 
+    //View model properties
+    currentTotalBids?: number = 0;
+
 }

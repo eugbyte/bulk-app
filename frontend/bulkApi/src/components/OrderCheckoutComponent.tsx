@@ -8,9 +8,10 @@ import Grid from '@material-ui/core/Grid';
 interface IProp {
     bids: Bid[];
     rowIds: number[];
+    handleOrder: () => void
 }
 
-export function OrderCheckoutComponent({bids, rowIds}: IProp) {
+export function OrderCheckoutComponent({bids, rowIds, handleOrder}: IProp) {
 
     console.log("in orderCheckOut", bids);
 
@@ -30,7 +31,7 @@ export function OrderCheckoutComponent({bids, rowIds}: IProp) {
                 <Typography variant={"body1"} align={"center"} color="textSecondary" paragraph={true}><b>Total Quantity: </b>{totalQuantity}</Typography>
             </Grid>
             <Grid item xs={3} alignContent="flex-end">
-                <Button color="secondary" size="large" variant="contained">Order Bids</Button>
+                <Button color="secondary" size="large" variant="contained" onClick={handleOrder} disabled={selectedBids.length < 1}>Order Bids</Button>
             </Grid>        
         </Grid> 
     </Paper>

@@ -20,6 +20,7 @@ export function NavBar() {
               <Nav className="mr-auto">
               <Button color="inherit" ><NavLink to="/" className={classes.navLink} >Products</NavLink></Button>
               <Button color="inherit"><NavLink to="/cart" className={classes.navLink}>Cart</NavLink></Button>
+              <Button color="inherit"><NavLink to="/orders" className={classes.navLink}>Orders</NavLink></Button>
                 {/* <Button color="inherit">
                   <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                     <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
