@@ -19,6 +19,9 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import UnfoldMore from "@material-ui/icons/UnfoldMore";
+import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+
 
 import { Icons } from 'material-table';
 import  { SvgIconTypeMap } from "@material-ui/core/SvgIcon";
@@ -57,6 +60,8 @@ export function DataTable({title, data, columnNames, accessors, handleChecked=de
         headerDicts.push(headerDict);
     }
 
+    const classes = useStyles();
+
     return (
       <div> 
         <MaterialTable        
@@ -73,7 +78,13 @@ export function DataTable({title, data, columnNames, accessors, handleChecked=de
                 height: "100px"
               },            
             }}
-            detailPanel={rowData => returnDetailTable(rowData, detailPanelFieldName)}
+            detailPanel={[
+              rowData => ({
+                disabled: !enabledDetailPanel,
+                icon: () => <ChevronRight className={enabledDetailPanel ? classes.display : classes.displayNone } />,
+                render: () => returnDetailTable(rowData, detailPanelFieldName)
+              })
+            ]}
             //rowData => returnDetailTable(rowData, detailPanelFieldName)
             
       />
@@ -89,6 +100,17 @@ function returnDetailTable(rowData: any, detailPanelFielddName: string): JSX.Ele
 }
 
 const defaultHandleChecked = (val?: any) => {};
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    displayNone: {
+      display: 'none'      
+    },
+    display: {
+      display: "initial"
+    }
+  }),
+);
   
 const tableIcons = {
   Add: forwardRef<any, Icons>((props, ref) => <AddBox {...props} ref={ref} />),

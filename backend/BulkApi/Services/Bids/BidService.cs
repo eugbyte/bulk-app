@@ -68,7 +68,7 @@ namespace BulkApi.Services.Bids
                 await db.SaveChangesAsync();
 
                 // If the minOrderQuantity is reached, bid is successful ...
-                if (currentNumBids == discountScheme.MinOrderQnty)
+                if (currentNumBids >= discountScheme.MinOrderQnty)
                 {
                     discountScheme.Bids.ForEach(bid => bid.BidSuccessDate = DateTime.Now);
                     db.DiscountSchemes.Update(discountScheme);
