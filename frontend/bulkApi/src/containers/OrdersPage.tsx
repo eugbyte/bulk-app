@@ -14,6 +14,8 @@ class Row {
     deliveryCharge: string | undefined;
     collectionAddress: string | undefined;
     remainingBidsRequired: number | undefined;
+    bidExpiryDate: string | undefined;
+    bidStatus: "SUCCESS" | "PENDING" | "FAILED" | undefined
 };
 
 export function OrdersPage(): JSX.Element {
@@ -28,12 +30,12 @@ export function OrdersPage(): JSX.Element {
         dispatch(action);
     }, []);
 
-    const columns: string[] = ["Name", "Discounted Price", "Quantity", "Delivery Charge", "Collection Address", "Remaining Bids Required"];
+    const columns: string[] = ["Name", "Discounted Price", "Quantity", "Delivery Charge", "Collection Address", "Remaining Bids Required", "Bid Expiry Date", "Bid Status"];
     const accessors: string[] = Object.keys(new Row());
     const rows: Row[] = bids.map(bid => createRowFromBid(bid));
 
      return <Container>
-         <DataTable columnNames={columns} accessors={accessors} data={rows} title={"Pending / Successful Bids"} />
+         <DataTable columnNames={columns} accessors={accessors} data={rows} title={"Submitted Bids"} />
      </Container>
 }
 
@@ -49,6 +51,17 @@ function createRowFromBid(bid: Bid): Row {
     row.deliveryCharge = "$" + bid.discountScheme?.deliveryCharge;
     row.name = bid.discountScheme?.product?.name;
     row.remainingBidsRequired = bid.discountScheme?.minOrderQnty as number - (bid.currentTotalBids as number);
+
+    let expiryDate: Date = new Date(bid.discountScheme?.expiryDate as Date);    //json return date as strings
+    row.bidExpiryDate = expiryDate.toDateString();
+
+    if (bid.bidSuccessDate != null) {
+        row.bidStatus = "SUCCESS";        
+    } else if (new Date() > expiryDate) {
+        row.bidStatus = "FAILED";
+    } else {
+        row.bidStatus = "PENDING";
+    }
     
     return row;
 }
