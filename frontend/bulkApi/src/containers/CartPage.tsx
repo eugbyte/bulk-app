@@ -73,19 +73,19 @@ export function CartPage(): JSX.Element {
         let responseMessage: string = responseMessages[responseMessages.length - 1];
 
         // if user successful update quantity or remove from cart, refresh page
-        if (responseMessage == ACTIONS.HTTP_UPDATE_SUCCESS || responseMessage == ACTIONS.HTTP_DELETE_SUCCESS) {
+        if (responseMessage === ACTIONS.HTTP_UPDATE_SUCCESS || responseMessage === ACTIONS.HTTP_DELETE_SUCCESS) {
             const customerId = 1;
             const action = getBidsOfCustomerInCartAsync(customerId);
             dispatch(action); 
         
         // upon successful GET bids, set the state for the bids' quantities
-        } else if (responseMessage == ACTIONS.HTTP_READ_SUCCESS) {
+        } else if (responseMessage === ACTIONS.HTTP_READ_SUCCESS) {
             const bidQuantities: number[] = bidsInCart.map(bid => bid.quantity);    
             setQuantities(bidQuantities);
         }       
 
         // if user successfully makes an order, redirect to orders page
-        if (responseMessage == ACTIONS.HTTP_UPDATE_ORDER_SUCCESS) {
+        if (responseMessage === ACTIONS.HTTP_UPDATE_ORDER_SUCCESS) {
             console.log(responseMessages[responseMessages.length - 1]);
             history.push("/orders")
         }
@@ -120,7 +120,7 @@ export function CartPage(): JSX.Element {
             if (!selectedRowBidIds.includes(bidId)) {
                 setSelectedRowBidIds([...selectedRowBidIds, bidId])
             } else {
-                let newSelectedRowIds: number[] = selectedRowBidIds.filter(id => id != bidId);
+                let newSelectedRowIds: number[] = selectedRowBidIds.filter(id => id !== bidId);
                 setSelectedRowBidIds(newSelectedRowIds);
             }
         }
@@ -155,7 +155,7 @@ export function CartPage(): JSX.Element {
 
     let accessors: string[] = Object.keys(new Row());   // accessors allow the DataTable to access the properties of the Row object. 
     const detailPanelName: string = "detailPanel";  // Remove access to detailPanel property
-    accessors = accessors.filter(accessor => accessor != detailPanelName);
+    accessors = accessors.filter(accessor => accessor !== detailPanelName);
     const columnNames: any[] = ["BidId", "Check Box", "Name", "Price per Item", "Quantity", "Delivery Charge", "Collection Address", "Remove"];
 
     return <Container maxWidth="xl">
