@@ -49,7 +49,7 @@ namespace BulkApi.Controllers
         [HttpPut("updatecart")]
         public async Task<ActionResult<Bid>> UpdateCart(Bid bid)
         {
-            Bid updatedBid = await bidService.UpdateBidInCart(bid.DiscountSchemeId, bid.Quantity, bid.CollectionAddress, bid.CustomerId);
+            Bid updatedBid = await bidService.UpdateBidInCart(bid.BidId, bid.Quantity, bid.CollectionAddress);
             updatedBid.DiscountScheme = null;
             return Ok(updatedBid);
         }
@@ -76,13 +76,14 @@ namespace BulkApi.Controllers
             List<Bid> pendingOrSuccessfulBids = await bidService.GetPendingOrSuccessfulBidsOfCustomer(customerId);
             List<BidVM> bidVms = pendingOrSuccessfulBids.Select(bid => new BidVM(bid)).ToList();
             foreach (BidVM bidVm in bidVms)
-            {
+            { 
                 int currentBids = bidVm.DiscountScheme.Bids
                     .Where(bid => !bid.IsInCart)
                     .Aggregate(0, (accum, bid) => accum + bid.Quantity);
                 bidVm.CurrentTotalBids = currentBids;
-                bidVm.DiscountScheme.Bids = null;
+                
             }
+
             return Ok(bidVms);
         }
 

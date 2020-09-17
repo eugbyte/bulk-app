@@ -30,19 +30,22 @@ export function OrdersPage(): JSX.Element {
         dispatch(action);
     }, []);
 
-    const columns: string[] = ["Name", "Discounted Price", "Quantity", "Delivery Charge", "Collection Address", "Remaining Bids Required", "Bid Expiry Date", "Bid Status"];
+    const columnNames: string[] = ["Name", "Discounted Price Per Item", "Quantity", "Delivery Charge", "Collection Address", "Remaining Bids Required", "Bid Expiry Date", "Bid Status"];
     const accessors: string[] = Object.keys(new Row());
     const rows: Row[] = bids.map(bid => createRowFromBid(bid));
 
      return <Container>
-         <DataTable columnNames={columns} accessors={accessors} data={rows} title={"Submitted Bids"} />
+         <DataTable columnNames={columnNames} accessors={accessors} data={rows} title={"Submitted Bids"} />
      </Container>
 }
 
 function createRowFromBid(bid: Bid): Row {   
 
-    let discountedPrice = bid.discountScheme?.discountedPrice as number;
-    let originalPrice = bid.discountScheme?.product?.originalPrice as number;
+    let discountedPrice: number = bid.discountScheme?.discountedPrice as number;
+    let originalPrice: number = bid.discountScheme?.product?.originalPrice as number;
+    let minOrderQnty: number = bid.discountScheme?.minOrderQnty as number;
+    let currentTotalBids: number = bid.currentTotalBids as number;
+    console.log("remainingBidsRequired", minOrderQnty, currentTotalBids, minOrderQnty - currentTotalBids, "bidId: " + bid.bidId);
 
     let row: Row = new Row();
     row.quantity = bid.quantity + "";
@@ -50,7 +53,7 @@ function createRowFromBid(bid: Bid): Row {
     row.discountedPrice = `$${discountedPrice} (Save $${originalPrice - discountedPrice})`;
     row.deliveryCharge = "$" + bid.discountScheme?.deliveryCharge;
     row.name = bid.discountScheme?.product?.name;
-    row.remainingBidsRequired = bid.discountScheme?.minOrderQnty as number - (bid.currentTotalBids as number);
+    row.remainingBidsRequired = minOrderQnty - currentTotalBids;
 
     let expiryDate: Date = new Date(bid.discountScheme?.expiryDate as Date);    //json return date as strings
     row.bidExpiryDate = expiryDate.toDateString();

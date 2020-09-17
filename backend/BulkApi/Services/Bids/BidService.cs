@@ -1,4 +1,5 @@
 ﻿using BulkApi.Data;
+using BulkApi.Exceptions;
 using BulkApi.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -17,8 +18,16 @@ namespace BulkApi.Services.Bids
             this.db = db;
         }
 
+        private bool IsCustomerExists(int customerId)
+        {
+            return db.Customers.Any(customer => customer.CustomerId == customerId);
+        }               
+
         public async Task<List<Bid>> GetBidsOfCustomerInCart(int customerId)
         {
+            if (!IsCustomerExists(customerId))
+                throw new EntityNotFoundException(customerId, typeof(Customer));
+
             List<Bid> bids = await db.Bids
                 .Where(bid => bid.CustomerId == customerId)
                 .Where(bid => bid.IsInCart) 
@@ -32,6 +41,9 @@ namespace BulkApi.Services.Bids
         // Bascially, GetBidsOfCustomers Not InCart
         public async Task<List<Bid>> GetPendingOrSuccessfulBidsOfCustomer(int customerId)
         {
+            if (!IsCustomerExists(customerId))
+                throw new EntityNotFoundException(customerId, typeof(Customer));
+
             List<Bid> bids = await db.Bids
                 .Where(bid => bid.CustomerId == customerId)
                 .Where(bid => !bid.IsInCart)
@@ -55,10 +67,7 @@ namespace BulkApi.Services.Bids
 
                 //DiscountScheme has Bid property eager loaded
                 DiscountScheme discountScheme = bid.DiscountScheme;
-                int currentNumBids = discountScheme.Bids
-                    .Where(b => !b.IsInCart)
-                    .ToList()
-                    .Aggregate(0, (acc, b) => acc + b.Quantity);
+                int currentNumBids = GetNumberOfPendingBidsOfScheme(discountScheme);
 
                 currentNumBids += bid.Quantity;
 
@@ -70,13 +79,33 @@ namespace BulkApi.Services.Bids
                 // If the minOrderQuantity is reached, bid is successful ...
                 if (currentNumBids >= discountScheme.MinOrderQnty)
                 {
-                    discountScheme.Bids.ForEach(bid => bid.BidSuccessDate = DateTime.Now);
-                    db.DiscountSchemes.Update(discountScheme);
-                    await db.SaveChangesAsync();
+                    await SetBidStatusOfSchemeToSuccess(discountScheme);
                 }
                
             }
 
+        }
+
+        private async Task SetBidStatusOfSchemeToSuccess(DiscountScheme discountScheme)
+        {
+            if (discountScheme.Bids == null || discountScheme.Bids.Count == 0)
+                throw new NullReferenceException("discount scheme does not have any bids.\n Check that the bids are eagerly loaded");
+
+            discountScheme.Bids.ForEach(bid => bid.BidSuccessDate = DateTime.Now);
+            db.DiscountSchemes.Update(discountScheme);
+            await db.SaveChangesAsync();
+        }
+
+        private int GetNumberOfPendingBidsOfScheme(DiscountScheme discountScheme)
+        {
+            if (discountScheme.Bids == null || discountScheme.Bids.Count == 0)
+                throw new NullReferenceException("discount scheme does not have any bids.\n Check that the bids are eagerly loaded");
+
+            int currentNumBids = discountScheme.Bids
+                    .Where(b => !b.IsInCart)
+                    .ToList()
+                    .Aggregate(0, (acc, b) => acc + b.Quantity);
+            return currentNumBids;
         }
 
         public async Task<Bid> AddBidToCart(int schemeId, int quantity, string collectionAddress, int customerId)
@@ -85,12 +114,13 @@ namespace BulkApi.Services.Bids
             // Check whether the bid for the same discountScheme exist in cart
             // If so, update, else, create
             Bid existingBid = await db.Bids
+                .Where(bid => bid.IsInCart)
                 .Where(bid => bid.DiscountSchemeId == schemeId)
                 .Where(bid => bid.CustomerId == customerId)
                 .Where(bid => bid.CollectionAddress == collectionAddress)
                 .FirstOrDefaultAsync();
             
-            // Update bid if it already exists in cart
+            // Update bid if it already exists in cart, by incrementing the quantity
             if (existingBid != null)
             {
                 existingBid.Quantity += quantity;
@@ -98,32 +128,40 @@ namespace BulkApi.Services.Bids
                 return existingBid;
             }
 
-            // Otherwise add to cart
-            Bid newBid = new Bid
-            {
-                Quantity = quantity,
-                DiscountSchemeId = schemeId,
-                CollectionAddress = collectionAddress,
-                CustomerId = customerId,
-                IsInCart = true
-            };
-
-            db.Bids.Add(newBid);
-            await db.SaveChangesAsync();
+            Bid newBid = await AddBid(isInCart: true, quantity: quantity, collectionAddress: collectionAddress, customerId: customerId, discountSchemeId: schemeId);
             return newBid;
         }
 
-        public async Task<Bid> UpdateBidInCart(int schemeId, int quantity, string collectionAddress, int customerId)
+        private async Task<Bid> AddBid(bool isInCart=true,int quantity=0, DateTime? bidSuccessDate=null, string collectionAddress="", int customerId=0, int discountSchemeId=0)
+        {
+            Bid newBid = new Bid
+            {
+                Quantity = quantity,
+                DiscountSchemeId = discountSchemeId,
+                CollectionAddress = collectionAddress,
+                CustomerId = customerId,
+                IsInCart = isInCart,
+                BidSuccessDate = bidSuccessDate
+            };
+            db.Bids.Add(newBid);
+            await db.SaveChangesAsync();
+            return newBid;
+
+        }
+
+        public async Task<Bid> UpdateBidInCart(int bidId, int quantity, string collectionAddress)
         {
             // Check whether the bid for the same discountScheme exist in cart
             // If so, update, else, create
             Bid existingBid = await db.Bids
-                .Where(bid => bid.DiscountSchemeId == schemeId)
-                .Where(bid => bid.CustomerId == customerId)
-                .Where(bid => bid.CollectionAddress == collectionAddress)
+                .Where(bid => bid.BidId == bidId)
                 .FirstOrDefaultAsync();
 
+            if (existingBid == null)
+                throw new EntityNotFoundException(bidId, typeof(Bid));
+
             existingBid.Quantity = quantity;
+            existingBid.CollectionAddress = collectionAddress;
             await db.SaveChangesAsync();
             return existingBid;
         }
@@ -134,6 +172,9 @@ namespace BulkApi.Services.Bids
             db.Bids.Remove(existingBid);
             await db.SaveChangesAsync();
         } 
+
+        
+
 
     }
 }

@@ -44,6 +44,7 @@ export function addBidToCartAsync(bid: Bid): ThunkAction<Promise<void>, {}, {}, 
 
 export function updateBidInCartAsync(bid: Bid): ThunkAction<Promise<void>, {}, {}, IBidAction | IErrorAction> {
     return async (dispatch: ThunkDispatch<{}, {}, IBidAction | IErrorAction>) => {
+        console.log("in thunk. bid to update", bid.bidId)
         dispatch({ type: ACTIONS.UPDATE_BID_IN_CART_REQUEST, messages: ["Request to update bid in cart"] });
 
         try {

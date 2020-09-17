@@ -30,7 +30,6 @@ class Row {
 
 
 export function CartPage(): JSX.Element {
-    document.title = "Cart";
     const history = useHistory();          
     const dispatch: Dispatch<any> = useDispatch(); 
 
@@ -47,26 +46,17 @@ export function CartPage(): JSX.Element {
     console.log("bids received", bidsInCart);
 
     useEffect(() => {
+        document.title = "Cart";
         const customerId = 1;
         const action = getBidsOfCustomerInCartAsync(customerId);
         dispatch(action);        
-    }, [bidsInCart.toString()]);
+    }, []);
 
-    // For some reason, useState(bidQuantities) will produce only an empty array
+    // For some reason, useState(bidsInCart.map(bid => bid.quantity)) will produce only an empty array
     // React hooks are always one step behind. On next render, the state variable will have a new value.
-    // Have to use useEffect to update the bidQuantites
-    // need to pass primitive value into useEffect. If objects or arrays are passed, e.g. bidQuantities[], there will be inifite rerender
-    // as useEffect compares by memory location. bidsInCart.map() will produce a new array in memory
-    let isBidsInitialized: boolean = bidsInCart.length > 0;
+    // as useEffect compares by memory location. useEffect(()=>{}, [bidsInCart.map()]) will produce a new array in memory
 
-    const bidQuantities: number[] = bidsInCart.map(bid => bid.quantity);    
-    // console.log("bidQuantities", bidQuantities);    // [ 1, 3, 3, 1, 3, 1, 5 ]
-    const [quantities, setQuantities] = useState<number[]>(bidQuantities);  //bidQuantites[], rows[], and bidsInCart[] have the same length and order
-    // console.log("quantities", quantities);  // []    
-
-    useEffect(() => {
-        setQuantities(bidQuantities);
-    }, [isBidsInitialized]);
+    const [quantities, setQuantities] = useState<number[]>([]);  //bidQuantites[], rows[], and bidsInCart[] have the same length and order
 
     // When the user selects the row (Bid) in the datatable
     const [selectedRowBidIds, setSelectedRowBidIds] = useState<number[]>([]);
@@ -81,11 +71,20 @@ export function CartPage(): JSX.Element {
     useEffect(() => {
         console.log("useEffect updateResponseMessages", responseMessages);
         let responseMessage: string = responseMessages[responseMessages.length - 1];
+
+        // if user successful update quantity or remove from cart, refresh page
         if (responseMessage == ACTIONS.HTTP_UPDATE_SUCCESS || responseMessage == ACTIONS.HTTP_DELETE_SUCCESS) {
             const customerId = 1;
             const action = getBidsOfCustomerInCartAsync(customerId);
             dispatch(action); 
-        }        
+        
+        // upon successful GET bids, set the state for the bids' quantities
+        } else if (responseMessage == ACTIONS.HTTP_READ_SUCCESS) {
+            const bidQuantities: number[] = bidsInCart.map(bid => bid.quantity);    
+            setQuantities(bidQuantities);
+        }       
+
+        // if user successfully makes an order, redirect to orders page
         if (responseMessage == ACTIONS.HTTP_UPDATE_ORDER_SUCCESS) {
             console.log(responseMessages[responseMessages.length - 1]);
             history.push("/orders")
@@ -102,7 +101,7 @@ export function CartPage(): JSX.Element {
 
         // Method reference to POST updated id to pass into CartButtons
         const handleUpdateCart = (newQuantity: number) => {
-            let bidToUpdate: Bid = createBid(newQuantity, bid.bidId, bid.customerId, bid.collectionAddress, bid.discountSchemeId);    
+            let bidToUpdate: Bid = createBid(bid.bidId, newQuantity, bid.collectionAddress);    
             const updateAction = updateBidInCartAsync(bidToUpdate);
             dispatch(updateAction);
             handleNotification(true, "bid added to cart"); 
@@ -138,29 +137,31 @@ export function CartPage(): JSX.Element {
             let date: Date = new Date(bid.discountScheme.expiryDate.toString());
             dateString = date.toDateString();        
         }
+
+        rows[i].updateCartComponent = <CartButtons quantity={quantity} setQuantity={setQuantity} size={"small"}/>
+        rows[i].checkbox = <Checkbox size="small" onChange={toggleCheckedRowId} />
+        rows[i].deleteButton = <Button size={"small"} variant={"contained"} color={"primary"} onClick={deleteBid}>Delete</Button>
+
         let summaryDict: Record<string, any> = {
             "Min Collective Quantity": bid.discountScheme?.minOrderQnty,
             "Description": bid.discountScheme?.product?.description,
             "Bid Expiry Date": dateString,
             "Current total bids": bid.currentTotalBids,
             "Remaining bids required": bid.discountScheme?.minOrderQnty as number - (bid.currentTotalBids as number)
-        }
-    
-        rows[i].updateCartComponent = <CartButtons quantity={quantity} setQuantity={setQuantity} size={"small"}/>
-        rows[i].checkbox = <Checkbox size="small" onChange={toggleCheckedRowId} />
-        rows[i].deleteButton = <Button size={"small"} variant={"contained"} color={"primary"} onClick={deleteBid}>Delete</Button>
+        }  
+
         rows[i].detailPanel = <SummaryDictComponent dictSummary={summaryDict} />       
     }
 
-    let accessors: string[] = Object.keys(new Row());
-    const detailPanelName: string = "detailPanel";
+    let accessors: string[] = Object.keys(new Row());   // accessors allow the DataTable to access the properties of the Row object. 
+    const detailPanelName: string = "detailPanel";  // Remove access to detailPanel property
     accessors = accessors.filter(accessor => accessor != detailPanelName);
-    const columns: any[] = ["BidId", "Check Box", "Name", "Price per Item", "Quantity", "Delivery Charge", "Collection Address", "Remove"];
+    const columnNames: any[] = ["BidId", "Check Box", "Name", "Price per Item", "Quantity", "Delivery Charge", "Collection Address", "Remove"];
 
     return <Container maxWidth="xl">
         <OrderCheckoutComponent bids={bidsInCart} rowIds={selectedRowBidIds} handleOrder={handleOrder} />
         <br/>
-        <DataTable data={rows} columnNames={columns} accessors={accessors} title="Cart" 
+        <DataTable data={rows} columnNames={columnNames} accessors={accessors} title="Cart" 
             idColumnAccessorName={"bidId"}             
             actionMessage="Make Order"  actionIcon={AddShoppingCartIcon}  
             enabledDetailPanel={true} detailPanelFieldName={detailPanelName} />
@@ -169,14 +170,11 @@ export function CartPage(): JSX.Element {
 }
 
 // Method reference to POST updated id to pass into CartButtons
-function createBid(newQuantity: number, bidId: number, customerId: number, collectionAddress: string, discountSchemeId: number): Bid {
+function createBid(bidId: number, newQuantity: number, collectionAddress: string): Bid {
     let bid: Bid = new Bid();
     bid.bidId = bidId;
-    bid.customerId = customerId;
     bid.collectionAddress = collectionAddress;
-    bid.discountSchemeId = discountSchemeId;
-    bid.quantity = newQuantity;
-    
+    bid.quantity = newQuantity;    
     return bid;
 }
 

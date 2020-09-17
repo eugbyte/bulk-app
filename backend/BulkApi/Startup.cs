@@ -31,6 +31,7 @@ namespace BulkApi
             services.AddIdentityExtension();
             services.AddServicesExtension();
             services.AddControllersExtension();
+            services.AddErrorFilterExtension();
             
         }
 
