@@ -9,6 +9,7 @@ using BulkApi.Data;
 using BulkApi.Models;
 using BulkApi.Services.Bids;
 using BulkApi.ViewModels;
+using BulkApi.Services.DiscountSchemes;
 
 namespace BulkApi.Controllers
 {
@@ -17,10 +18,12 @@ namespace BulkApi.Controllers
     public class BidsController : ControllerBase
     {
         private readonly IBidService bidService;
+        private readonly IDiscountSchemeService discountSchemeService;
 
-        public BidsController(IBidService bidService)
+        public BidsController(IBidService bidService, IDiscountSchemeService discountSchemeService)
         {
             this.bidService = bidService;
+            this.discountSchemeService = discountSchemeService;
         }
 
         [HttpGet("cart/{customerId}")]
@@ -29,12 +32,8 @@ namespace BulkApi.Controllers
             List<Bid> bids = await bidService.GetBidsOfCustomerInCart(customerId);
             List<BidVM> bidVms = bids.Select(bid => new BidVM(bid)).ToList();
             foreach(BidVM bidVm in bidVms)
-            {
-                int currentBids = bidVm.DiscountScheme.Bids
-                    .Where(bid => !bid.IsInCart)
-                    .Aggregate(0, (accum, bid) => accum + bid.Quantity);
-                bidVm.CurrentTotalBids = currentBids;
-                bidVm.DiscountScheme.Bids = null;
+            {                
+                bidVm.CurrentTotalBids = await GetTotalPendingBids(bidVm.DiscountSchemeId);
             }
             return Ok(bidVms);
         }
@@ -46,6 +45,7 @@ namespace BulkApi.Controllers
             createdBid.DiscountScheme = null;
             return Ok(createdBid);
         }
+
         [HttpPut("updatecart")]
         public async Task<ActionResult<Bid>> UpdateCart(Bid bid)
         {
@@ -76,15 +76,20 @@ namespace BulkApi.Controllers
             List<Bid> pendingOrSuccessfulBids = await bidService.GetPendingOrSuccessfulBidsOfCustomer(customerId);
             List<BidVM> bidVms = pendingOrSuccessfulBids.Select(bid => new BidVM(bid)).ToList();
             foreach (BidVM bidVm in bidVms)
-            { 
-                int currentBids = bidVm.DiscountScheme.Bids
-                    .Where(bid => !bid.IsInCart)
-                    .Aggregate(0, (accum, bid) => accum + bid.Quantity);
-                bidVm.CurrentTotalBids = currentBids;
-                
+            {                
+                bidVm.CurrentTotalBids = await GetTotalPendingBids(bidVm.DiscountSchemeId);                
             }
 
             return Ok(bidVms);
+        }
+
+        private async Task<int> GetTotalPendingBids(int discountSchemeId)
+        {
+            DiscountScheme discountScheme = await discountSchemeService.GetDiscountSchemeWithBids(discountSchemeId);
+            int currentBids = discountScheme.Bids
+                .Where(bid => !bid.IsInCart)
+                .Aggregate(0, (accum, bid) => accum + bid.Quantity);
+            return currentBids;
         }
 
 

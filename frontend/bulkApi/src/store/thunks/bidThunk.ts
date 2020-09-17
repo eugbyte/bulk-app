@@ -3,6 +3,7 @@ import { Bid } from "../../models/Bid";
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { ACTIONS } from "../actionEnums";
 import { IErrorAction, errorActionCreator } from "../actions/errorAction";
+import { ApiError } from "../../models/ApiError";
 
 
 export interface IBidAction extends Action {
@@ -29,8 +30,8 @@ export function addBidToCartAsync(bid: Bid): ThunkAction<Promise<void>, {}, {}, 
             });
 
             if (!response.ok) {
-                let errorMessage: string = response.statusText + " " + response.url;
-                throw new Error(errorMessage);
+                let apiError: ApiError = await response.json();
+                throw apiError;
             }
             
             let createdBid: Bid = (await response.json());
@@ -55,8 +56,8 @@ export function updateBidInCartAsync(bid: Bid): ThunkAction<Promise<void>, {}, {
             });
 
             if (!response.ok) {
-                let errorMessage: string = response.statusText + " " + response.url;
-                throw new Error(errorMessage);
+                let apiError: ApiError = await response.json();
+                throw apiError;
             }
             
             let updatedBid: Bid = (await response.json());
@@ -76,8 +77,8 @@ export function getBidsOfCustomerInCartAsync(customerId: number) {
             const response: Response = await fetch("https://localhost:44397/api/bids/cart/" + customerId);
 
             if (!response.ok) {
-                let errorMessage: string = response.statusText + " " + response.url;
-                throw new Error(errorMessage);
+                let apiError: ApiError = await response.json();
+                throw apiError;
             }
 
             const bids: Bid[] = await response.json();
@@ -98,8 +99,8 @@ export function deleteBidFromCartAsync(bidId: number) {
             });
 
             if (!response.ok) {
-                let errorMessage: string = response.statusText + " " + response.url;
-                throw new Error(errorMessage);
+                let apiError: ApiError = await response.json();
+                throw apiError;
             }
             
             dispatch({ type: ACTIONS.GET_BIDSOFCUSTOMER_INCART_RECEIVED, messages: [response.statusText], httpMessages: [ACTIONS.HTTP_DELETE_SUCCESS] });
@@ -120,8 +121,8 @@ export function orderBidsFromCart(bids: Bid[]) {
             });
 
             if (!response.ok) {
-                let errorMessage: string = response.statusText + " " + response.url;
-                throw new Error(errorMessage);
+                let apiError: ApiError = await response.json();
+                throw apiError;
             }
 
             dispatch({type: ACTIONS.ORDER_BIDS_IN_CART_RECEIVED, messages: [response.statusText], httpMessages: [ACTIONS.HTTP_UPDATE_ORDER_SUCCESS] })
@@ -135,11 +136,11 @@ export function getPendingOrSuccessfulBids(customerId: number) {
     return async (dispatch: ThunkDispatch<{}, {}, IBidAction | IErrorAction>) => { 
         dispatch({ type: ACTIONS.GET_PENDING_OR_SUCCESSFUL_BIDS_REQUEST, messages: ["getting  PendingOrSuccessfulBids of customer " + customerId]});
         try {
-            const response: Response = await fetch("https://localhost:44397/api/bids/orders/" + customerId);
+            const response: Response = await fetch("https://localhost:44397/api/bids/orders/" + 1);
 
             if (!response.ok) {
-                let errorMessage: string = response.statusText + " " + response.url;
-                throw new Error(errorMessage);
+                let apiError: ApiError = await response.json();
+                throw apiError;
             }
 
             const bids: Bid[] = await response.json();

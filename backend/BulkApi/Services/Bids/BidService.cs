@@ -57,7 +57,6 @@ namespace BulkApi.Services.Bids
         {
             List<Bid> bids = await db.Bids
                 .Where(bid => bidIds.Contains(bid.BidId))
-                .IncludeOptimized(bid => bid.DiscountScheme)
                 .ToListAsync();            
 
             foreach(Bid bid in bids)
@@ -66,7 +65,10 @@ namespace BulkApi.Services.Bids
                 //2. update the bidStatus that it is no longer in the cart
 
                 //DiscountScheme has Bid property eager loaded
-                DiscountScheme discountScheme = bid.DiscountScheme;
+                DiscountScheme discountScheme = await db.DiscountSchemes
+                    .IncludeOptimized(ds => ds.Bids)
+                    .FirstOrDefaultAsync(ds => ds.DiscountSchemeId == bid.DiscountSchemeId);
+
                 int currentNumBids = GetNumberOfPendingBidsOfScheme(discountScheme);
 
                 currentNumBids += bid.Quantity;

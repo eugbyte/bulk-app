@@ -34,7 +34,7 @@ namespace BulkApi.Controllers
         public async Task<ActionResult<DiscountScheme>> GetDiscountSchemeWithBid(int bidId)
         {
             //return BadRequest();
-            return await discountSchemeService.GetDiscountSchemeWithBid(bidId);
+            return await discountSchemeService.GetDiscountSchemeWithBids(bidId);
         }
 
         [HttpGet("success/{producerId}")]

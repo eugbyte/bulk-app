@@ -3,6 +3,7 @@ import { ThunkDispatch, ThunkAction } from 'redux-thunk';
 import { DiscountScheme } from "../../models/DiscountScheme";
 import { Action } from "redux";
 import { IErrorAction, errorActionCreator } from "../actions/errorAction";
+import { ApiError } from "../../models/ApiError";
 
 export interface IDiscountSchemeAction extends Action {
     type: string;
@@ -17,6 +18,12 @@ export function getAllDiscountSchemesWithBidsAsync(): ThunkAction<Promise<void>,
         dispatch({ type: ACTIONS.GET_DISCOUNTSCHEMES_REQUEST, message: "GET DiscountSchemes..."});
         try {            
             const response: Response = await fetch("https://localhost:44397/api/discountSchemes");
+
+            if (!response.ok) {
+                let apiError: ApiError = await response.json();
+                throw apiError;
+            }
+
             const discountSchemes: DiscountScheme[] = await response.json();
             dispatch({ type: ACTIONS.GET_DISCOUNTSCHEMES_RECEIVED, discountSchemes: discountSchemes});
         } catch (error) {
@@ -31,9 +38,10 @@ export function getDiscountSchemeAsync(discountSchemeId: number): ThunkAction<Pr
         dispatch({ type: ACTIONS.GET_DISCOUNTSCHEME_REQUEST, message: "GET DiscountScheme with id: " + discountSchemeId});
         try {            
             const response: Response = await fetch("https://localhost:44397/api/discountSchemes/" + discountSchemeId);
+            
             if (!response.ok) {
-                let errorMessage: string = response.statusText + " " + response.url;
-                throw new Error(errorMessage);
+                let apiError: ApiError = await response.json();
+                throw apiError;
             }
             
             const discountScheme: DiscountScheme = await response.json();

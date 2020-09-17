@@ -40,6 +40,7 @@ namespace BulkApi.Services.DiscountSchemes
             // Ignore discountSchemes that have already succeeded
             discountSchemes = discountSchemes
                 .Where(ds => ds.Bids.Count == 0 || ds.Bids.Any(bid => bid.BidSuccessDate == null))
+                .Where(ds =>  DateTime.Now < ds.ExpiryDate)
                 .ToList();
 
             // Remove bids in discountScheme that are already in cart to get a true representation of bids already ordered
@@ -59,7 +60,7 @@ namespace BulkApi.Services.DiscountSchemes
             discountScheme.Bids = bids;
         }
 
-        public async Task<DiscountScheme> GetDiscountSchemeWithBid(int discountSchemeId)
+        public async Task<DiscountScheme> GetDiscountSchemeWithBids(int discountSchemeId)
         {
             if (!IsDiscountSchemeExist(discountSchemeId))
                 throw new EntityNotFoundException(discountSchemeId, typeof(DiscountScheme));
