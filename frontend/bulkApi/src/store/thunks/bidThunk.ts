@@ -2,7 +2,7 @@ import { Action } from "redux";
 import { Bid } from "../../models/Bid";
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { ACTIONS } from "../actionEnums";
-import { IErrorAction, errorActionCreator } from "../actions/errorAction";
+import { IErrorAction, errorAction } from "../actions/errorAction";
 import { ApiError } from "../../models/ApiError";
 
 
@@ -37,7 +37,7 @@ export function addBidToCartAsync(bid: Bid): ThunkAction<Promise<void>, {}, {}, 
             let createdBid: Bid = (await response.json());
             dispatch({ type: ACTIONS.ADD_BID_TO_CART_RECEIVED, bid: createdBid, messages: [response.statusText],  httpMessages: [ACTIONS.HTTP_CREATE_SUCCESS] });
         } catch(error) {
-            dispatch(errorActionCreator(ACTIONS.ERROR, error));
+            dispatch(errorAction(ACTIONS.ERROR, error));
         }        
         
     }
@@ -63,7 +63,7 @@ export function updateBidInCartAsync(bid: Bid): ThunkAction<Promise<void>, {}, {
             let updatedBid: Bid = (await response.json());
             dispatch({ type: ACTIONS.UPDATE_BID_IN_CART_RECEIVED, bid: updatedBid, messages: [response.statusText], httpMessages: [ACTIONS.HTTP_UPDATE_SUCCESS] });
         } catch(error) {
-            dispatch(errorActionCreator(ACTIONS.ERROR, error));
+            dispatch(errorAction(ACTIONS.ERROR, error));
         }        
         
     }
@@ -84,7 +84,7 @@ export function getBidsOfCustomerInCartAsync(customerId: number) {
             const bids: Bid[] = await response.json();
             dispatch({ type: ACTIONS.GET_BIDSOFCUSTOMER_INCART_RECEIVED, bids: bids, messages: [response.statusText], httpMessages: [ACTIONS.HTTP_READ_SUCCESS] });
         } catch(error) {
-            dispatch(errorActionCreator(ACTIONS.ERROR, error));
+            dispatch(errorAction(ACTIONS.ERROR, error));
         }
     }
 }
@@ -105,7 +105,7 @@ export function deleteBidFromCartAsync(bidId: number) {
             
             dispatch({ type: ACTIONS.GET_BIDSOFCUSTOMER_INCART_RECEIVED, messages: [response.statusText], httpMessages: [ACTIONS.HTTP_DELETE_SUCCESS] });
         } catch(error) {
-            dispatch(errorActionCreator(ACTIONS.ERROR, error));
+            dispatch(errorAction(ACTIONS.ERROR, error));
         }
     }
 }
@@ -127,7 +127,7 @@ export function orderBidsFromCart(bids: Bid[]) {
 
             dispatch({type: ACTIONS.ORDER_BIDS_IN_CART_RECEIVED, messages: [response.statusText], httpMessages: [ACTIONS.HTTP_UPDATE_ORDER_SUCCESS] })
         } catch(error) {
-            dispatch(errorActionCreator(ACTIONS.ERROR, error));
+            dispatch(errorAction(ACTIONS.ERROR, error));
         }
     }
 }
@@ -148,7 +148,7 @@ export function getPendingOrSuccessfulBids(customerId: number) {
 
             dispatch({type: ACTIONS.GET_PENDING_OR_SUCCESSFUL_BIDS_RECEIVED, bids: bids, messages: [response.statusText], httpMessages: [ACTIONS.HTTP_READ_SUCCESS] });
         } catch(error) {
-            dispatch(errorActionCreator(ACTIONS.ERROR, error));
+            dispatch(errorAction(ACTIONS.ERROR, error));
         }
     }
 }

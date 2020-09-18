@@ -2,7 +2,7 @@ import { ACTIONS } from "../actionEnums";
 import { ThunkDispatch, ThunkAction } from 'redux-thunk';
 import { DiscountScheme } from "../../models/DiscountScheme";
 import { Action } from "redux";
-import { IErrorAction, errorActionCreator } from "../actions/errorAction";
+import { IErrorAction, errorAction } from "../actions/errorAction";
 import { ApiError } from "../../models/ApiError";
 
 export interface IDiscountSchemeAction extends Action {
@@ -27,7 +27,7 @@ export function getAllDiscountSchemesWithBidsAsync(): ThunkAction<Promise<void>,
             const discountSchemes: DiscountScheme[] = await response.json();
             dispatch({ type: ACTIONS.GET_DISCOUNTSCHEMES_RECEIVED, discountSchemes: discountSchemes});
         } catch (error) {
-            dispatch(errorActionCreator(ACTIONS.ERROR, error));
+            dispatch(errorAction(ACTIONS.ERROR, error));
         }
         
     }
@@ -47,7 +47,7 @@ export function getDiscountSchemeAsync(discountSchemeId: number): ThunkAction<Pr
             const discountScheme: DiscountScheme = await response.json();
             dispatch({ type: ACTIONS.GET_DISCOUNTSCHEME_RECEIVED, discountScheme: discountScheme});
         } catch(error) {
-            dispatch(errorActionCreator(ACTIONS.ERROR, error));
+            dispatch(errorAction(ACTIONS.ERROR, error));
         }
         
     }

@@ -3,12 +3,12 @@ import { ApiError } from "../../models/ApiError";
 
 export interface IErrorAction extends Action {
     type: string;
-    error: ApiError | Error | null;
+    errors: ApiError[] | Error[];
 }
  
-export function errorActionCreator (type: string, error?: Error | ApiError): IErrorAction {
+export function errorAction (type: string, errors?: Error[] | ApiError[]): IErrorAction {
     return {
         type: type,
-        error: error ?? null
+        errors: errors ?? []
     }
 }
