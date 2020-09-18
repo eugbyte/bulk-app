@@ -30,10 +30,14 @@ namespace BulkApi.Controllers
         public async Task<ActionResult<List<BidVM>>> GetBidsOfCustomerInCart(int customerId)
         {
             List<Bid> bids = await bidService.GetBidsOfCustomerInCart(customerId);
+            int[] dsIds = bids.Select(bid => bid.DiscountSchemeId).ToArray();
             List<BidVM> bidVms = bids.Select(bid => new BidVM(bid)).ToList();
+
+            List<DiscountScheme> discountSchemes = await discountSchemeService.GetAllDiscountSchemesWithBid();
+
             foreach(BidVM bidVm in bidVms)
-            {                
-                bidVm.CurrentTotalBids = await GetTotalPendingBids(bidVm.DiscountSchemeId);
+            {                                
+                bidVm.CurrentTotalBids = GetTotalPendingBids(bidVm.DiscountSchemeId, discountSchemes);
             }
             return Ok(bidVms);
         }
@@ -75,17 +79,23 @@ namespace BulkApi.Controllers
         {
             List<Bid> pendingOrSuccessfulBids = await bidService.GetPendingOrSuccessfulBidsOfCustomer(customerId);
             List<BidVM> bidVms = pendingOrSuccessfulBids.Select(bid => new BidVM(bid)).ToList();
+
+            List<DiscountScheme> discountSchemes = await discountSchemeService.GetAllDiscountSchemesWithBid();
             foreach (BidVM bidVm in bidVms)
             {                
-                bidVm.CurrentTotalBids = await GetTotalPendingBids(bidVm.DiscountSchemeId);                
+                bidVm.CurrentTotalBids = GetTotalPendingBids(bidVm.DiscountSchemeId, discountSchemes);                
             }
 
             return Ok(bidVms);
         }
 
-        private async Task<int> GetTotalPendingBids(int discountSchemeId)
+        private int GetTotalPendingBids(int discountSchemeId, List<DiscountScheme> discountSchemes)
         {
-            DiscountScheme discountScheme = await discountSchemeService.GetDiscountSchemeWithBids(discountSchemeId);
+            //The discountSchemes must have the Bid property eagerly loaded
+            if (discountSchemes.Any(ds => ds.Bids == null))
+                throw new Exception("Bid property of discountScheme is not eagerly loaded");
+
+            DiscountScheme discountScheme = discountSchemes.Where(ds => ds.DiscountSchemeId == discountSchemeId).FirstOrDefault();
             int currentBids = discountScheme.Bids
                 .Where(bid => !bid.IsInCart)
                 .Aggregate(0, (accum, bid) => accum + bid.Quantity);
