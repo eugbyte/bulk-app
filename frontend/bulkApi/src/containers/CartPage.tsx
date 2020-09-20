@@ -67,29 +67,28 @@ export function CartPage(): JSX.Element {
     };
 
     //Response on update. If update is successful, make another request to get bids in cart
-    const responseMessages: string[] = useSelector( (action: RootState) => action.bidReducer.httpMessages as string[] ) ?? [""]; 
+    const apiMessage: string = useSelector( (action: RootState) => action.bidReducer.httpMessage as string ) ?? ""; 
     useEffect(() => {
-        console.log("useEffect updateResponseMessages", responseMessages);
-        let responseMessage: string = responseMessages[responseMessages.length - 1];
+        console.log("useEffect updateResponseMessages", apiMessage);
 
         // if user successful update quantity or remove from cart, refresh page
-        if (responseMessage === ACTIONS.HTTP_UPDATE_SUCCESS || responseMessage === ACTIONS.HTTP_DELETE_SUCCESS) {
+        if (apiMessage.includes(ACTIONS.HTTP_UPDATE_SUCCESS) || apiMessage.includes(ACTIONS.HTTP_DELETE_SUCCESS)) {
             const customerId = 1;
             const action = getBidsOfCustomerInCartAsync(customerId);
             dispatch(action); 
         
         // upon successful GET bids, set the state for the bids' quantities
-        } else if (responseMessage === ACTIONS.HTTP_READ_SUCCESS) {
+        } else if (apiMessage.includes(ACTIONS.HTTP_READ_SUCCESS)) {
             const bidQuantities: number[] = bidsInCart.map(bid => bid.quantity);    
             setQuantities(bidQuantities);
         }       
 
         // if user successfully makes an order, redirect to orders page
-        if (responseMessage === ACTIONS.HTTP_UPDATE_ORDER_SUCCESS) {
-            console.log(responseMessages[responseMessages.length - 1]);
+        if (apiMessage.includes(ACTIONS.HTTP_UPDATE_ORDER_SUCCESS)) {
+            console.log(apiMessage);
             history.push("/orders")
         }
-    }, [responseMessages.length]);
+    }, [apiMessage]);
 
     // Convert the Bids to Rows to pass to the DataTable
     const rows: Row[] = bidsInCart.map(bid => createRowFromBid(bid));    

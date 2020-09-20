@@ -6,19 +6,19 @@ const initialState : IBidAction = {
     type: "",
     bid: undefined,
     bids: undefined,
-    messages: ["Initial Message"],
-    httpMessages: ["Initial Response Message"],        
+    message: "Initial Message",
+    httpMessage: "Initial Response Message",        
 }
 
 export default function bidReducer(prevState = initialState, action: IBidAction): IBidAction {
     let newState: IBidAction = cloneDeep(prevState);
     
     newState.type = action.type;
-    newState.messages = newState.messages?.concat(action.messages ?? []) as string[];
-    newState.httpMessages = newState.httpMessages?.concat(action.httpMessages ?? []) as string[];
+    newState.message = `${action.message} ${(new Date())}`;
+    newState.httpMessage = `${action.httpMessage} + ${new Date()}`;
 
-    console.log("in bidReducer. messages", newState.messages[(newState.messages?.length ?? 1) - 1]);
-    console.log("in bidReducer. responseMessages", newState.httpMessages[(newState.httpMessages?.length ?? 1) - 1]);
+    console.log("in bidReducer. Latest message", newState.message);
+    console.log("in bidReducer. Latest api message", newState.httpMessage);
  
     switch(action.type) {    
         case(ACTIONS.ADD_BID_TO_CART_REQUEST):
