@@ -11,6 +11,8 @@ const initialState : IDiscountSchemeAction = {
 export default function discountSchemeReducer(prevState = initialState, action: IDiscountSchemeAction): IDiscountSchemeAction {
     let newState: IDiscountSchemeAction = cloneDeep(prevState);
     newState.type = action.type;
+    newState.message = `${action.message} ${(new Date())}`;
+    newState.httpMessage = `${action.httpMessage} + ${new Date()}`;
 
     switch(action.type) {        
         case(ACTIONS.GET_DISCOUNTSCHEMES_REQUEST):

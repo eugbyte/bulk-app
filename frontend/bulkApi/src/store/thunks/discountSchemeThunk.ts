@@ -10,6 +10,7 @@ export interface IDiscountSchemeAction extends Action {
     discountSchemes?: DiscountScheme[] | null;
     discountScheme?: DiscountScheme | null;
     message?: string;
+    httpMessage?: string;
 }
 
 
@@ -25,7 +26,7 @@ export function getAllDiscountSchemesWithBidsAsync(): ThunkAction<Promise<void>,
             }
 
             const discountSchemes: DiscountScheme[] = await response.json();
-            dispatch({ type: ACTIONS.GET_DISCOUNTSCHEMES_RECEIVED, discountSchemes: discountSchemes});
+            dispatch({ type: ACTIONS.GET_DISCOUNTSCHEMES_RECEIVED, discountSchemes: discountSchemes, httpMessage: ACTIONS.HTTP_READ_SUCCESS });
         } catch (error) {
             dispatch(errorAction(ACTIONS.ERROR, error));
         }
@@ -45,7 +46,7 @@ export function getDiscountSchemeAsync(discountSchemeId: number): ThunkAction<Pr
             }
             
             const discountScheme: DiscountScheme = await response.json();
-            dispatch({ type: ACTIONS.GET_DISCOUNTSCHEME_RECEIVED, discountScheme: discountScheme});
+            dispatch({ type: ACTIONS.GET_DISCOUNTSCHEME_RECEIVED, discountScheme: discountScheme, httpMessage: ACTIONS.HTTP_READ_SUCCESS });
         } catch(error) {
             dispatch(errorAction(ACTIONS.ERROR, error));
         }

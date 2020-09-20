@@ -86,6 +86,8 @@ namespace BulkApi.Controllers
                 bidVm.CurrentTotalBids = GetTotalPendingBids(bidVm.DiscountSchemeId, discountSchemes);                
             }
 
+            discountSchemes.Reverse();
+
             return Ok(bidVms);
         }
 

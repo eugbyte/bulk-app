@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace BulkApi.ViewModels
 {
-    public class BidVM : Bid
-    {
-        public int CurrentTotalBids { get; set; }
-        public IDictionary<string, int> AddressBidCountDict { get; set; }
+    public class DiscountSchemeVM : DiscountScheme
+    { 
 
-        public BidVM() 
+        public IDictionary<string, int> AddressBidCountDict { get; set; } 
+
+        public DiscountSchemeVM()
         {
             AddressBidCountDict = new Dictionary<string, int>()
             {
@@ -20,24 +20,24 @@ namespace BulkApi.ViewModels
                 { "SERANGOON", 0 }
             };
         }
-        public BidVM(Bid bid): this()
+
+        public DiscountSchemeVM(DiscountScheme discountScheme) : this()
         {
-            BidId = bid.BidId;
-            IsInCart = bid.IsInCart;
-            Quantity = bid.Quantity;
-            BidSuccessDate = bid.BidSuccessDate;
-            CollectionAddress = bid.CollectionAddress;
-            CustomerId = bid.CustomerId;
-            Customer = bid.Customer;
-            DiscountSchemeId = bid.DiscountSchemeId;
-            DiscountScheme = bid.DiscountScheme;
+            DiscountSchemeId = discountScheme.DiscountSchemeId;
+            MinOrderQnty = discountScheme.MinOrderQnty;
+            DiscountedPrice = discountScheme.DiscountedPrice;
+            ExpiryDate = discountScheme.ExpiryDate;
+            DeliveryCharge = discountScheme.DeliveryCharge;
+            ProductId = discountScheme.ProductId;
+            Product = discountScheme.Product;
+            Bids = discountScheme.Bids;            
 
         }
 
-        public IDictionary<string, int> SetAddressBidCountDictionary(DiscountScheme discountScheme)
+        public IDictionary<string, int> SetAddressBidCountDictionary()
         {
-
-            foreach (Bid bid in discountScheme.Bids)
+       
+            foreach (Bid bid in Bids)
             {
                 if (AddressBidCountDict.ContainsKey(bid.CollectionAddress))
                 {

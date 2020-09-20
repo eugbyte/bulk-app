@@ -9,6 +9,7 @@ using BulkApi.Data;
 using BulkApi.Models;
 using BulkApi.Services;
 using BulkApi.Services.DiscountSchemes;
+using BulkApi.ViewModels;
 
 namespace BulkApi.Controllers
 {
@@ -25,16 +26,19 @@ namespace BulkApi.Controllers
 
         // GET: api/DiscountSchemes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DiscountScheme>>> GetDiscountSchemesWithBid()
+        public async Task<ActionResult<IEnumerable<DiscountScheme>>> GetAllPendingDiscountSchemesWithBid()
         {
             return await discountSchemeService.GetAllPendingDiscountSchemesWithBid();
         }
 
         [HttpGet("{bidId}")]
-        public async Task<ActionResult<DiscountScheme>> GetDiscountSchemeWithBid(int bidId)
+        public async Task<ActionResult<DiscountSchemeVM>> GetDiscountSchemeWithBid(int bidId)
         {
-            //return BadRequest();
-            return await discountSchemeService.GetDiscountSchemeWithBids(bidId);
+            DiscountScheme discountScheme = await discountSchemeService.GetDiscountSchemeWithBids(bidId);
+            DiscountSchemeVM discountSchemeVM = new DiscountSchemeVM(discountScheme);
+            discountSchemeVM.SetAddressBidCountDictionary();
+
+            return discountSchemeVM;
         }
 
         [HttpGet("success/{producerId}")]
@@ -44,6 +48,7 @@ namespace BulkApi.Controllers
             return Ok(discountSchemes);
         }
 
+        
 
 
 

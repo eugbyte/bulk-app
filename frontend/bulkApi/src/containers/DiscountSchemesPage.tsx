@@ -9,6 +9,8 @@ import { CardComponent } from "../components/CardComponent";
 import Typography from '@material-ui/core/Typography';
 import { useHistory } from "react-router-dom";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import { ApiError } from "../models/ApiError";
+import { ErrorNotification } from "../components/ErrorNotification";
  
 export function DiscountSchemesPage(): JSX.Element {
     const dispatch: Dispatch<any> = useDispatch();  
@@ -17,6 +19,8 @@ export function DiscountSchemesPage(): JSX.Element {
 
     let discountSchemes: DiscountScheme[] = useSelector((action: RootState) => action.discountSchemeReducer.discountSchemes as DiscountScheme[]) ?? []; 
     console.log(discountSchemes);
+
+    const error: ApiError = useSelector((action: RootState) => action.errorReducer.error as ApiError) ?? null;
 
     useEffect(() => {
         document.title = "Products"
@@ -71,6 +75,7 @@ export function DiscountSchemesPage(): JSX.Element {
                 {cards}
             </Grid>     
         }
+        <ErrorNotification error={error} message="error fetching schemes" />
     </div>
 
 } 

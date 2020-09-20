@@ -1,6 +1,4 @@
-import React from "react"
 import { Product } from "./Product";
-import { NONAME } from "dns";
 import { Bid } from "./Bid";
 
 export class DiscountScheme {
@@ -13,5 +11,8 @@ export class DiscountScheme {
     productId: number = 0;
     product: Product | null = null;
     bids: Bid[] = [];
+
+    //Properties of ViewModel
+    addressBidCountDict?: Record<string, number> = {}
 
 }

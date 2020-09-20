@@ -11,10 +11,11 @@ interface IProp {
     actionTitle?: string;
     action?: (val: any) => any;
     size?: "small" | "medium" | "large"
+    align?: "alignLeft" | "alignCenter" | "alignRight"
 }
 
-export function CartButtons({quantity, setQuantity, actionTitle, action, size="medium"}: IProp): JSX.Element {
-    const classes = useStyles();
+export function CartButtons({quantity, setQuantity, actionTitle, action, size="medium", align="alignLeft"}: IProp): JSX.Element {
+    const classes: Record<string, any> = useStyles();
 
     const handleIncrement = () => {
         setQuantity(quantity + 1);
@@ -27,7 +28,7 @@ export function CartButtons({quantity, setQuantity, actionTitle, action, size="m
         setQuantity(quantity - 1);
     }
 
-    return <div className={classes.buttonGroup}>
+    return <div className={classes[align]}>
         <ButtonGroup color="primary" aria-label="outlined primary button group" size={size}>
             <Button onClick={handleIncrement}><AddIcon/></Button>
             <Button>{quantity}</Button>
@@ -46,13 +47,29 @@ export function CartButtons({quantity, setQuantity, actionTitle, action, size="m
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    buttonGroup: {
+    alignLeft: {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'left',
       '& > *': {
         margin: theme.spacing(1),
-      },
+      }
+    }, 
+    alignCenter: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      '& > *': {
+        margin: theme.spacing(1),
+      }
+    },
+    alignRight: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'right',
+      '& > *': {
+        margin: theme.spacing(1),
+      }
     }
   }),
 );

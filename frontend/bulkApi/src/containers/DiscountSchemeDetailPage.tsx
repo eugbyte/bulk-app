@@ -13,6 +13,10 @@ import e_commerce from '../images/e_commerce.png';
 import { Bid } from "../models/Bid";
 import { addBidToCartAsync } from "../store/thunks/bidThunk";
 import { DialogueComponent } from "../components/DialogueComponent"; 
+import { SelectComponent } from "../components/SelectComponent";
+import { Grid } from "@material-ui/core";
+import { SelectListItem } from "../models/SelectListItem";
+import { TextComponent } from "../components/TextComponent";
 
 export function DiscountSchemeDetailPage(): JSX.Element {
     const dispatch: Dispatch<any> = useDispatch();  
@@ -22,7 +26,7 @@ export function DiscountSchemeDetailPage(): JSX.Element {
     const discountSchemeId: number = parseInt(routeParams["discountSchemeId"]);
 
     // Quantity to add to cart
-    const [quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState(1);    
 
     // State to determine whether to show notification
     const [open, setOpen] = useState(false);
@@ -36,7 +40,27 @@ export function DiscountSchemeDetailPage(): JSX.Element {
         // Since you are returning a new object (at a different memory address) from the reducer, 
         // useEffect will treat it that vaLue changed when doing shallow comparison
     }, [discountSchemeId]);  
+
     let ds: DiscountScheme = useSelector((action: RootState) => action.discountSchemeReducer.discountScheme as DiscountScheme ) ?? new DiscountScheme();      
+
+    console.log("in DiscountSchemeDetailPage", ds);
+
+    // Collection Address
+    const addressBidCountDict = ds.addressBidCountDict as Record<string, number>;   // { collectionAddress: number of bids} 
+    const selectListItems: SelectListItem[] = [];
+    for (let address in addressBidCountDict) {
+        let selectListItem: SelectListItem = new SelectListItem(address, address);
+        selectListItems.push(selectListItem);
+    }
+
+    const [address, setAddress] = useState<string>("");
+    const handleChangeAddress = (event: React.ChangeEvent<any>) => {
+        let selectedAddress: string = event.target.value;
+        console.log(selectedAddress);
+        setAddress(selectedAddress);
+    }
+    const numBidsAtAddress: number = addressBidCountDict[address];
+    const avgDeliveryCharge: number = (!numBidsAtAddress) ? ds.deliveryCharge : ds.deliveryCharge / numBidsAtAddress;
  
     // POST bid when user bids for the discountScheme
     const submitBid = () => {
@@ -71,26 +95,33 @@ export function DiscountSchemeDetailPage(): JSX.Element {
         "Remaining Bids Needed": ds.minOrderQnty - currentBids,
         "Expiry Date": dateString
     } 
-    
-    let paras: JSX.Element[] = [];
-    for (let [key, value] of Object.entries(textDict)) {
-        let para: JSX.Element = <Typography variant="body2" color="textSecondary" component="p" align="left" key={key}>
-            <b>{key}&nbsp;</b>{value} 
-        </Typography>
-        paras.push(para)
-    }
 
-    let title = ds.product?.name ?? "";
+    let addressTextDict: Record<string, any> = {
+        "Delivery Charge": "$" + ds.deliveryCharge,
+        "Current bids at collection point": numBidsAtAddress,
+        "Current Average Delivery charge": "approx $" + avgDeliveryCharge
+    }
     
     return  <Container maxWidth="sm">
-        <Typography color="primary" variant="h5" align="left">{title}</Typography>
+        <Typography color="primary" variant="h5" align="left">{ds.product?.name ?? ""}</Typography>
         <CardMedia 
             component="img"
             image={e_commerce}
             title="https://acowebs.com/impact-ecommerce-society/"/>
         <br/>
-        {paras}
-        <CartButtons quantity={quantity} setQuantity={setQuantity} actionTitle={"Update Cart"} action={submitBid}/>
+        <TextComponent textDict={textDict}/>
+        <hr/>
+        <Grid container>
+            <Grid item xs={4}>        
+                <SelectComponent title={"Delivery"} state={address} selectListItems={selectListItems} handleChange={handleChangeAddress} />
+            </Grid>
+            <Grid item xs={8}>
+                <TextComponent textDict={addressTextDict} />
+            </Grid>
+        </Grid>
+        <hr/>
+       
+        <CartButtons quantity={quantity} setQuantity={setQuantity} actionTitle={"Update Cart"} action={submitBid} align={"alignCenter"}/>
         <DialogueComponent open={open} setOpen={setOpen} message={"Bid successfully created"} severity={"success"}/>
     </Container>
 }

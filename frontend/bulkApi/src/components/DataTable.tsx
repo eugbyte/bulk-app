@@ -45,7 +45,7 @@ interface IProp {
 }
 
  
-export function DataTable({title, data, columnNames, accessors, handleChecked=defaultHandleChecked, idColumnAccessorName="", pageSize=5, actionIcon,
+export function DataTable({title, data, columnNames, accessors, handleChecked=defaultHandleChecked, idColumnAccessorName="", pageSize=10, actionIcon,
   enablePaging=false, enableSearch=false, actionMessage="Action", enableSelection=false, detailPanelFieldName="", enabledDetailPanel=false  }: IProp): JSX.Element {
 
   let headerDicts: any[] = [];

@@ -1,14 +1,15 @@
 import { Action } from "redux";
 import { ApiError } from "../../models/ApiError";
+import { ErrorCollection } from "../../models/ErrorCollection";
 
 export interface IErrorAction extends Action {
     type: string;
-    errors: ApiError[] | Error[];
+    error: ApiError | Error | ErrorCollection | null;
 }
  
-export function errorAction (type: string, errors?: Error[] | ApiError[]): IErrorAction {
+export function errorAction(type: string, error: ApiError | Error | ErrorCollection): IErrorAction {
     return {
         type: type,
-        errors: errors ?? []
+        error: error,
     }
 }
