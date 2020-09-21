@@ -17,6 +17,8 @@ import { SelectComponent } from "../components/SelectComponent";
 import { Grid } from "@material-ui/core";
 import { SelectListItem } from "../models/SelectListItem";
 import { TextComponent } from "../components/TextComponent";
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 
 export function DiscountSchemeDetailPage(): JSX.Element {
     const dispatch: Dispatch<any> = useDispatch();  
@@ -85,20 +87,37 @@ export function DiscountSchemeDetailPage(): JSX.Element {
     let currentBids: number = ds.bids
             .filter(bid => !bid.isInCart)
             .reduce((accum, bid) => accum + bid?.quantity, 0);
-
-    let textDict: Record<string, any> = {
+    
+    let leftExpiryDateDict: Record<string, any> = {
+        "Expiry Date": dateString
+    }
+    let rightDescriptionDict: Record<string, any> = {
         "Description": ds.product?.description,
-        "Original Price": "$" + ds.product?.originalPrice ?? "$",
+    }
+
+    let leftPriceDict: Record<string, any> = {
         "Discounted Price": "$" + ds.discountedPrice,
+    }
+
+    let rightPriceDict: Record<string, any> = {
+        "Original Price": "$" + ds.product?.originalPrice ?? "$"
+    }
+
+    let leftQuantityDict: Record<string, any> = {
+        "Remaining Bids Needed": ds.minOrderQnty - currentBids,
+    }
+
+    let rightQuantityDict: Record<string, any> = {
         "Min Collective Quantity": ds.minOrderQnty,
         "Current Total Bids": currentBids,
-        "Remaining Bids Needed": ds.minOrderQnty - currentBids,
-        "Expiry Date": dateString
-    } 
+    }
 
     let addressTextDict: Record<string, any> = {
         "Delivery Charge": "$" + ds.deliveryCharge,
         "Current bids at collection point": numBidsAtAddress,
+    }
+
+    let avgDeliveryChargeDict: Record<string, any> = {
         "Current Average Delivery charge": "approx $" + avgDeliveryCharge
     }
     
@@ -109,7 +128,31 @@ export function DiscountSchemeDetailPage(): JSX.Element {
             image={e_commerce}
             title="https://acowebs.com/impact-ecommerce-society/"/>
         <br/>
-        <TextComponent textDict={textDict}/>
+        <Grid container>
+            <Grid item xs={12}>
+                    <TextComponent textDict={rightDescriptionDict}/>
+                    <hr/>
+                </Grid>
+            <Grid item xs={12}>
+                <TextComponent textDict={leftExpiryDateDict} color="textPrimary"/>
+                <hr/>
+            </Grid>           
+            <Grid item xs={7}>
+                <TextComponent textDict={leftPriceDict} color="textPrimary"/>
+                <hr/>
+            </Grid>
+            <Grid item xs={5}>
+                <TextComponent textDict={rightPriceDict}/>  
+                <hr/>          
+            </Grid>
+            <Grid item xs={7}>
+                <TextComponent textDict={leftQuantityDict} color="textPrimary"/>            
+            </Grid>
+            <Grid item xs={5}>
+                <TextComponent textDict={rightQuantityDict}/>            
+            </Grid>
+        </Grid>
+        
         <hr/>
         <Grid container>
             <Grid item xs={4}>        
@@ -117,11 +160,15 @@ export function DiscountSchemeDetailPage(): JSX.Element {
             </Grid>
             <Grid item xs={8}>
                 <TextComponent textDict={addressTextDict} />
+                <TextComponent textDict={avgDeliveryChargeDict} color="textPrimary" />
             </Grid>
         </Grid>
         <hr/>
        
-        <CartButtons quantity={quantity} setQuantity={setQuantity} actionTitle={"Update Cart"} action={submitBid} align={"alignCenter"}/>
+        <CartButtons quantity={quantity} setQuantity={setQuantity} align={"alignCenter"}/>
+        <ButtonGroup size={"medium"}>            
+            <Button  onClick={submitBid} color="primary" variant="contained" disabled={!address || quantity < 1}>Add To Cart</Button>           
+          </ButtonGroup>
         <DialogueComponent open={open} setOpen={setOpen} message={"Bid successfully created"} severity={"success"}/>
     </Container>
 }

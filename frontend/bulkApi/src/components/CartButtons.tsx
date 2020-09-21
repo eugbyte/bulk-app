@@ -8,13 +8,11 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 interface IProp {
     quantity: number; // quantity is part of useState(0)
     setQuantity: (num: number) => any;  // setQuantity is part of useState(0)
-    actionTitle?: string;
-    action?: (val: any) => any;
     size?: "small" | "medium" | "large"
     align?: "alignLeft" | "alignCenter" | "alignRight"
 }
 
-export function CartButtons({quantity, setQuantity, actionTitle, action, size="medium", align="alignLeft"}: IProp): JSX.Element {
+export function CartButtons({quantity, setQuantity, size="medium", align="alignLeft"}: IProp): JSX.Element {
     const classes: Record<string, any> = useStyles();
 
     const handleIncrement = () => {
@@ -34,13 +32,6 @@ export function CartButtons({quantity, setQuantity, actionTitle, action, size="m
             <Button>{quantity}</Button>
             <Button onClick={handleDecrement}><RemoveIcon /></Button>
         </ButtonGroup>
-        {action && 
-          <ButtonGroup size={size}>
-            
-            <Button  onClick={action} color="primary" variant="contained">{actionTitle}</Button>
-           
-          </ButtonGroup>
-        } 
     </div>
 
 }

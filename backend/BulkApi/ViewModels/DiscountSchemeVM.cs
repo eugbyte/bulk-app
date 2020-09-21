@@ -13,12 +13,7 @@ namespace BulkApi.ViewModels
 
         public DiscountSchemeVM()
         {
-            AddressBidCountDict = new Dictionary<string, int>()
-            {
-                { "AMK", 0 },
-                { "BISHAN", 0 },
-                { "SERANGOON", 0 }
-            };
+            AddressBidCountDict = new Dictionary<string, int>();
         }
 
         public DiscountSchemeVM(DiscountScheme discountScheme) : this()
@@ -34,21 +29,6 @@ namespace BulkApi.ViewModels
 
         }
 
-        public IDictionary<string, int> SetAddressBidCountDictionary()
-        {
-       
-            foreach (Bid bid in Bids)
-            {
-                if (AddressBidCountDict.ContainsKey(bid.CollectionAddress))
-                {
-                    AddressBidCountDict[bid.CollectionAddress] += bid.Quantity;
-                }
-                else
-                {
-                    AddressBidCountDict[bid.CollectionAddress] = bid.Quantity;
-                }
-            }
-            return AddressBidCountDict;
-        }
+        
     }
 }

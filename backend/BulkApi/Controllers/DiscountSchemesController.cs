@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BulkApi.Data;
 using BulkApi.Models;
-using BulkApi.Services;
+using BulkApi.Extensions;
 using BulkApi.Services.DiscountSchemes;
 using BulkApi.ViewModels;
 
@@ -36,7 +36,7 @@ namespace BulkApi.Controllers
         {
             DiscountScheme discountScheme = await discountSchemeService.GetDiscountSchemeWithBids(bidId);
             DiscountSchemeVM discountSchemeVM = new DiscountSchemeVM(discountScheme);
-            discountSchemeVM.SetAddressBidCountDictionary();
+            discountSchemeVM.SetAddressBidCountDict(discountScheme);
 
             return discountSchemeVM;
         }
