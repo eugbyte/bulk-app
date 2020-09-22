@@ -12,12 +12,12 @@ import { Button, Container } from "@material-ui/core";
 import Checkbox from '@material-ui/core/Checkbox';
 import { OrderCheckoutComponent } from "../components/OrderCheckoutComponent";
 import { ACTIONS } from "../store/actionEnums";
-import { SummaryDictComponent } from "../components/SummaryDictComponent";
 import { useHistory } from "react-router-dom";
 import { CartDialog } from "../components/CartDialog";
 import { SelectListItem } from "../models/SelectListItem";
 import { SelectComponent } from "../components/SelectComponent";
-
+import { Grid } from "@material-ui/core";
+import { TextComponent } from "../components/TextComponent";
 
 class Row {
     bidId: number | undefined;
@@ -48,17 +48,14 @@ export function CartPage(): JSX.Element {
     const bidsInCart: Bid[] = useSelector((action: RootState) => action.bidReducer.bids as Bid[] ) ?? [];  
     console.log("bids received", bidsInCart);
 
+    // For some reason, useState(bidsInCart.map(bid => bid.quantity)) will produce only an empty array
+    // React hooks are always one step behind. On next render, the state variable will have a new value.
     useEffect(() => {
         document.title = "Cart";
         const customerId = 1;
         const action = getBidsOfCustomerInCartAsync(customerId);
         dispatch(action);        
-    }, []);
-
-    // For some reason, useState(bidsInCart.map(bid => bid.quantity)) will produce only an empty array
-    // React hooks are always one step behind. On next render, the state variable will have a new value.
-    // as useEffect compares by memory location. useEffect(()=>{}, [bidsInCart.map()]) will produce a new array in memory
-
+    }, []); 
 
     // When the user selects the row (Bid) in the datatable
     const [selectedRowBidIds, setSelectedRowBidIds] = useState<number[]>([]);
@@ -109,14 +106,14 @@ export function CartPage(): JSX.Element {
         }
 
         // Method reference to set quantity to pass into CartButtons
-        const setQuantity = (newQuantity: number) => {
-            handleUpdateCart(newQuantity, bid.collectionAddress);
-            return;
-            // let newQuantites: number[] = [...quantities];
-            // newQuantites[i] = newQuantity;
-            // setQuantities(newQuantites);
-            
+        const handleChangeQuantity = (newQuantity: number) => {
+            handleUpdateCart(newQuantity, bid.collectionAddress);            
         };
+
+        const handleChangeAddress = (event: React.ChangeEvent<any>) => {
+            let selectedAddress: string = event.target.value;
+            handleUpdateCart(bid.quantity, selectedAddress);
+        }
 
         const toggleCheckedRowId = () => {
             const bidId: number = bid.bidId;
@@ -141,19 +138,9 @@ export function CartPage(): JSX.Element {
             dateString = date.toDateString();        
         }
 
-        rows[i].updateCartComponent = <CartButtons quantity={quantity} setQuantity={setQuantity} size={"small"}/>
+        rows[i].updateCartComponent = <CartButtons quantity={quantity} setQuantity={handleChangeQuantity} size={"small"}/>
         rows[i].checkbox = <Checkbox size="small" onChange={toggleCheckedRowId} />
         rows[i].deleteButton = <Button size={"small"} variant={"contained"} color={"primary"} onClick={deleteBid}>Delete</Button>
-
-        let summaryDict: Record<string, any> = {
-            "Min Collective Quantity": bid.discountScheme?.minOrderQnty,
-            "Description": bid.discountScheme?.product?.description,
-            "Bid Expiry Date": dateString,
-            "Current total bids": bid.currentTotalBids,
-            "Remaining bids required": bid.discountScheme?.minOrderQnty as number - (bid.currentTotalBids as number)
-        }  
-
-        rows[i].detailPanel = <SummaryDictComponent dictSummary={summaryDict} />       
 
         // Collection Address
         const addressBidCountDict = bid.addressBidCountDict as Record<string, number>;   // { collectionAddress: number of bids} 
@@ -162,25 +149,42 @@ export function CartPage(): JSX.Element {
             let selectListItem: SelectListItem = new SelectListItem(address, address);
             selectListItem.selected = bid.collectionAddress === address;
             selectListItems.push(selectListItem);
-        }
-
-        const handleChangeAddress = (event: React.ChangeEvent<any>) => {
-            let selectedAddress: string = event.target.value;
-            handleUpdateCart(bid.quantity, selectedAddress);
-        }
-
+        }        
         rows[i].collectionAddress = <SelectComponent title={"Delivery"} state={bid.collectionAddress} selectListItems={selectListItems} handleChange={handleChangeAddress} />
+
+        // Detail Panel
+        let descriptionDict: Record<string, any> = {
+            "Description": bid.discountScheme?.product?.description,
+            "Bid Expiry Date": dateString
+        }  
+
+        let quantityDict: Record<string, any> = {
+            "Min Order Quantity": bid.discountScheme?.minOrderQnty,
+            "Current total bids": bid.currentTotalBids,
+            "Remaining bids required": bid.discountScheme?.minOrderQnty as number - (bid.currentTotalBids as number)
+        }
+
+        let deliveryDict: Record<string, any> = {
+            "Delivery Charge": "$" + bid.discountScheme?.deliveryCharge
+        }
+        rows[i].detailPanel = <Grid container>
+            <Grid item xs={4}>
+                <TextComponent textDict={descriptionDict}/>
+            </Grid>
+            <Grid item xs={4}>
+                <TextComponent textDict={quantityDict}/>
+            </Grid>
+            <Grid item xs={4}>
+                <TextComponent textDict={deliveryDict}/>
+            </Grid>
+        </Grid>
+        
     }
 
     let accessors: string[] = Object.keys(new Row());   // accessors allow the DataTable to access the properties of the Row object. 
     const detailPanelName: string = "detailPanel";  // Remove access to detailPanel property
     accessors = accessors.filter(accessor => accessor !== detailPanelName);
     const columnNames: any[] = ["BidId", "Check Box", "Name", "Price per Item", "Quantity", "Average Delivery Charge", "Collection Address", "Remove"];
-
-    const [openDialog, setOpenDialog] = useState<boolean>(false);
-    const handleOpenDialog = () => {
-        setOpenDialog(!openDialog);
-    }
 
     return <Container maxWidth="xl">
         <OrderCheckoutComponent bids={bidsInCart} rowIds={selectedRowBidIds} handleOrder={handleOrder} />
@@ -190,8 +194,6 @@ export function CartPage(): JSX.Element {
             actionMessage="Make Order"  actionIcon={AddShoppingCartIcon}  
             enabledDetailPanel={true} detailPanelFieldName={detailPanelName} />
         <DialogueComponent open={open} setOpen={setOpen} message={notificationMessage} severity={"success"}/>
-        <CartDialog  open={openDialog} toggleOpen={handleOpenDialog}/>
-        <button onClick={handleOpenDialog}>Open dialog</button>
     </Container>
 }
 
@@ -218,7 +220,7 @@ function createRowFromBid(bid: Bid): Row {
     const numBidsAtAddress: number = addressBidCountDict[bid.collectionAddress];
     const deliveryCharge: number = bid?.discountScheme?.deliveryCharge ?? 0;
     const avgDeliveryCharge: number = (!numBidsAtAddress) ? deliveryCharge : deliveryCharge / numBidsAtAddress;
-    row.deliveryCharge = `$${deliveryCharge} / ${numBidsAtAddress} bids = $${avgDeliveryCharge}`;
+    row.deliveryCharge = `$ ${avgDeliveryCharge}`;
     
     return row;
 }

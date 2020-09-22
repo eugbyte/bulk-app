@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
-import { useParams } from "react-router-dom";
 import { DiscountScheme } from "../models/DiscountScheme";
 import { RootState } from "../store/rootReducer";
 import { getDiscountSchemeAsync } from "../store/thunks/discountSchemeThunk";
