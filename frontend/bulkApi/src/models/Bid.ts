@@ -15,5 +15,5 @@ export class Bid {
 
     //View model properties
     currentTotalBids?: number = 0;
-
+    addressBidCountDict?: Record<string, number> = {}
 }

@@ -10,6 +10,7 @@ using BulkApi.Models;
 using BulkApi.Services.Bids;
 using BulkApi.ViewModels;
 using BulkApi.Services.DiscountSchemes;
+using BulkApi.Extensions;
 
 namespace BulkApi.Controllers
 {
@@ -38,6 +39,8 @@ namespace BulkApi.Controllers
             foreach(BidVM bidVm in bidVms)
             {                                
                 bidVm.CurrentTotalBids = GetTotalPendingBids(bidVm.DiscountSchemeId, discountSchemes);
+                DiscountScheme discountScheme = discountSchemes.FirstOrDefault(ds => ds.DiscountSchemeId == bidVm.DiscountSchemeId);
+                bidVm.SetAddressBidCountDict(discountScheme);
             }
             return Ok(bidVms);
         }

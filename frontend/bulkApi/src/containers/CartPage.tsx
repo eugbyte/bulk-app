@@ -15,6 +15,8 @@ import { ACTIONS } from "../store/actionEnums";
 import { SummaryDictComponent } from "../components/SummaryDictComponent";
 import { useHistory } from "react-router-dom";
 import { CartDialog } from "../components/CartDialog";
+import { SelectListItem } from "../models/SelectListItem";
+import { SelectComponent } from "../components/SelectComponent";
 
 
 class Row {
@@ -24,7 +26,7 @@ class Row {
     discountedPrice: string | undefined;
     updateCartComponent: JSX.Element | undefined;
     deliveryCharge: string | undefined;
-    collectionAddress: string | undefined;
+    collectionAddress: JSX.Element | undefined;
     deleteButton: JSX.Element | undefined;
     detailPanel: JSX.Element | undefined;
 }
@@ -57,7 +59,6 @@ export function CartPage(): JSX.Element {
     // React hooks are always one step behind. On next render, the state variable will have a new value.
     // as useEffect compares by memory location. useEffect(()=>{}, [bidsInCart.map()]) will produce a new array in memory
 
-    const [quantities, setQuantities] = useState<number[]>([]);  //bidQuantites[], rows[], and bidsInCart[] have the same length and order
 
     // When the user selects the row (Bid) in the datatable
     const [selectedRowBidIds, setSelectedRowBidIds] = useState<number[]>([]);
@@ -81,7 +82,7 @@ export function CartPage(): JSX.Element {
         // upon successful GET bids, set the state for the bids' quantities
         } else if (apiMessage.includes(ACTIONS.HTTP_READ_SUCCESS)) {
             const bidQuantities: number[] = bidsInCart.map(bid => bid.quantity);    
-            setQuantities(bidQuantities);
+            //setQuantities(bidQuantities);
         }       
 
         // if user successfully makes an order, redirect to orders page
@@ -96,12 +97,12 @@ export function CartPage(): JSX.Element {
 
     // To add React components to each row
     for (let i = 0; i < bidsInCart.length; i++) {
-        const quantity: number = quantities[i];  
         let bid: Bid = bidsInCart[i];       
+        const quantity: number = bid.quantity as number;
 
         // Method reference to POST updated id to pass into CartButtons
-        const handleUpdateCart = (newQuantity: number) => {
-            let bidToUpdate: Bid = createBid(bid.bidId, newQuantity, bid.collectionAddress);    
+        const handleUpdateCart = (newQuantity: number, collectionAddress: string) => {
+            let bidToUpdate: Bid = createBid(bid.bidId, newQuantity, collectionAddress);    
             const updateAction = updateBidInCartAsync(bidToUpdate);
             dispatch(updateAction);
             handleNotification(true, "bid added to cart"); 
@@ -109,10 +110,12 @@ export function CartPage(): JSX.Element {
 
         // Method reference to set quantity to pass into CartButtons
         const setQuantity = (newQuantity: number) => {
-            let newQuantites: number[] = [...quantities];
-            newQuantites[i] = newQuantity;
-            setQuantities(newQuantites);
-            handleUpdateCart(newQuantity);
+            handleUpdateCart(newQuantity, bid.collectionAddress);
+            return;
+            // let newQuantites: number[] = [...quantities];
+            // newQuantites[i] = newQuantity;
+            // setQuantities(newQuantites);
+            
         };
 
         const toggleCheckedRowId = () => {
@@ -151,12 +154,28 @@ export function CartPage(): JSX.Element {
         }  
 
         rows[i].detailPanel = <SummaryDictComponent dictSummary={summaryDict} />       
+
+        // Collection Address
+        const addressBidCountDict = bid.addressBidCountDict as Record<string, number>;   // { collectionAddress: number of bids} 
+        const selectListItems: SelectListItem[] = [];
+        for (let address in addressBidCountDict) {
+            let selectListItem: SelectListItem = new SelectListItem(address, address);
+            selectListItem.selected = bid.collectionAddress === address;
+            selectListItems.push(selectListItem);
+        }
+
+        const handleChangeAddress = (event: React.ChangeEvent<any>) => {
+            let selectedAddress: string = event.target.value;
+            handleUpdateCart(bid.quantity, selectedAddress);
+        }
+
+        rows[i].collectionAddress = <SelectComponent title={"Delivery"} state={bid.collectionAddress} selectListItems={selectListItems} handleChange={handleChangeAddress} />
     }
 
     let accessors: string[] = Object.keys(new Row());   // accessors allow the DataTable to access the properties of the Row object. 
     const detailPanelName: string = "detailPanel";  // Remove access to detailPanel property
     accessors = accessors.filter(accessor => accessor !== detailPanelName);
-    const columnNames: any[] = ["BidId", "Check Box", "Name", "Price per Item", "Quantity", "Delivery Charge", "Collection Address", "Remove"];
+    const columnNames: any[] = ["BidId", "Check Box", "Name", "Price per Item", "Quantity", "Average Delivery Charge", "Collection Address", "Remove"];
 
     const [openDialog, setOpenDialog] = useState<boolean>(false);
     const handleOpenDialog = () => {
@@ -192,11 +211,14 @@ function createRowFromBid(bid: Bid): Row {
 
     let row: Row = new Row();
     row.bidId = bid.bidId;
-    row.collectionAddress = bid.collectionAddress;
     row.discountedPrice = `$${discountedPrice} (Save $${originalPrice - discountedPrice})`;
-    row.deliveryCharge = "$" + bid.discountScheme?.deliveryCharge;
     row.name = bid.discountScheme?.product?.name;
-    //row.tableData = { checked: true }   
+
+    const addressBidCountDict = bid.addressBidCountDict as Record<string, number>; 
+    const numBidsAtAddress: number = addressBidCountDict[bid.collectionAddress];
+    const deliveryCharge: number = bid?.discountScheme?.deliveryCharge ?? 0;
+    const avgDeliveryCharge: number = (!numBidsAtAddress) ? deliveryCharge : deliveryCharge / numBidsAtAddress;
+    row.deliveryCharge = `$${deliveryCharge} / ${numBidsAtAddress} bids = $${avgDeliveryCharge}`;
     
     return row;
 }

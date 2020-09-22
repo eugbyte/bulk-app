@@ -50,7 +50,7 @@ namespace BulkApi.Extensions
 
         public static IDictionary<string, int> SetAddressBidCountDict(this BidVM bidVM, DiscountScheme discountScheme)
         {
-            if (bidVM.BidId != discountScheme.DiscountSchemeId)
+            if (bidVM.DiscountSchemeId != discountScheme.DiscountSchemeId)
                 throw new InvalidOperationException("DiscountScheme Ids do not match");
             bidVM.AddressBidCountDict = _SetAddressBidCountDict(discountScheme);
             return bidVM.AddressBidCountDict;
