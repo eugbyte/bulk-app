@@ -18,6 +18,7 @@ import { SelectListItem } from "../models/SelectListItem";
 import { SelectComponent } from "../components/SelectComponent";
 import { Grid } from "@material-ui/core";
 import { TextComponent } from "../components/TextComponent";
+import { DiscountSchemeDetailPage } from "./DiscountSchemeDetailPage";
 
 class Row {
     bidId: number | undefined;
@@ -29,6 +30,7 @@ class Row {
     collectionAddress: JSX.Element | undefined;
     deleteButton: JSX.Element | undefined;
     detailPanel: JSX.Element | undefined;
+    updateCart: JSX.Element | undefined;
 }
 
 
@@ -43,6 +45,10 @@ export function CartPage(): JSX.Element {
         setOpen(isOpen);
         setNotificationMessage(message);
     }
+
+    const [bidToUpdate, setBidToUpdate] = useState<Bid>(new Bid());
+    const [showCartDialogue, setShowCartDialogue] = useState<boolean>(false);
+    
 
     // The Bids received from the GET request
     const bidsInCart: Bid[] = useSelector((action: RootState) => action.bidReducer.bids as Bid[] ) ?? [];  
@@ -132,6 +138,11 @@ export function CartPage(): JSX.Element {
             handleNotification(true, "item deleted");
         }
 
+        const handleShowCartDialogue = () => {
+            setBidToUpdate(bid);
+            setShowCartDialogue(!showCartDialogue);
+        }
+
         let dateString = "";
         if (bid.discountScheme?.expiryDate) {
             let date: Date = new Date(bid.discountScheme.expiryDate.toString());
@@ -178,13 +189,18 @@ export function CartPage(): JSX.Element {
                 <TextComponent textDict={deliveryDict}/>
             </Grid>
         </Grid>
+
+        rows[i].updateCart = <div>
+                <Button size="small" onClick={handleShowCartDialogue}>Update Cart</Button>
+                
+        </div> 
         
     }
 
     let accessors: string[] = Object.keys(new Row());   // accessors allow the DataTable to access the properties of the Row object. 
     const detailPanelName: string = "detailPanel";  // Remove access to detailPanel property
     accessors = accessors.filter(accessor => accessor !== detailPanelName);
-    const columnNames: any[] = ["BidId", "Check Box", "Name", "Price per Item", "Quantity", "Average Delivery Charge", "Collection Address", "Remove"];
+    const columnNames: any[] = ["BidId", "Check Box", "Name", "Price per Item", "Quantity", "Average Delivery Charge", "Collection Address", "Remove", "Update"];
 
     return <Container maxWidth="xl">
         <OrderCheckoutComponent bids={bidsInCart} rowIds={selectedRowBidIds} handleOrder={handleOrder} />
@@ -194,6 +210,8 @@ export function CartPage(): JSX.Element {
             actionMessage="Make Order"  actionIcon={AddShoppingCartIcon}  
             enabledDetailPanel={true} detailPanelFieldName={detailPanelName} />
         <DialogueComponent open={open} setOpen={setOpen} message={notificationMessage} severity={"success"}/>
+        <CartDialog open={showCartDialogue} toggleOpen={() => setShowCartDialogue(!showCartDialogue)} discountSchemeId={bidToUpdate.discountSchemeId} bidId={bidToUpdate.bidId} />
+        
     </Container>
 }
 
