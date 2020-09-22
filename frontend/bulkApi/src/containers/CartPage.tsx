@@ -14,6 +14,7 @@ import { OrderCheckoutComponent } from "../components/OrderCheckoutComponent";
 import { ACTIONS } from "../store/actionEnums";
 import { SummaryDictComponent } from "../components/SummaryDictComponent";
 import { useHistory } from "react-router-dom";
+import { CartDialog } from "../components/CartDialog";
 
 
 class Row {
@@ -157,6 +158,11 @@ export function CartPage(): JSX.Element {
     accessors = accessors.filter(accessor => accessor !== detailPanelName);
     const columnNames: any[] = ["BidId", "Check Box", "Name", "Price per Item", "Quantity", "Delivery Charge", "Collection Address", "Remove"];
 
+    const [openDialog, setOpenDialog] = useState<boolean>(false);
+    const handleOpenDialog = () => {
+        setOpenDialog(!openDialog);
+    }
+
     return <Container maxWidth="xl">
         <OrderCheckoutComponent bids={bidsInCart} rowIds={selectedRowBidIds} handleOrder={handleOrder} />
         <br/>
@@ -165,6 +171,8 @@ export function CartPage(): JSX.Element {
             actionMessage="Make Order"  actionIcon={AddShoppingCartIcon}  
             enabledDetailPanel={true} detailPanelFieldName={detailPanelName} />
         <DialogueComponent open={open} setOpen={setOpen} message={notificationMessage} severity={"success"}/>
+        <CartDialog  open={openDialog} toggleOpen={handleOpenDialog}/>
+        <button onClick={handleOpenDialog}>Open dialog</button>
     </Container>
 }
 

@@ -5,6 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Button } from "@material-ui/core";
 import CardMedia from '@material-ui/core/CardMedia'; 
+import { DiscountSchemeDetailPage } from "../containers/DiscountSchemeDetailPage";
 
 interface IProps {
     open: boolean;  //open is part of useState(false)
@@ -20,12 +21,13 @@ export function CartDialog({open, toggleOpen, title, paras, actionTitle, action}
     return <Dialog open={open} onClose={toggleOpen} aria-labelledby="form-dialog-title" maxWidth="sm" fullWidth>
         <DialogTitle id="form-dialog-title">{title}</DialogTitle>
             <DialogContent>
-                <CardMedia 
+                {/* <CardMedia 
                     component="img"
                     height="140"
                     image="e_commerce.png"
-                    title="https://acowebs.com/impact-ecommerce-society/"/>
+                    title="https://acowebs.com/impact-ecommerce-society/"/> */}
                 {paras}
+                <DiscountSchemeDetailPage />
                 
             </DialogContent>
             {actionTitle &&

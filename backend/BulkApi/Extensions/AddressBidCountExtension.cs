@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 namespace BulkApi.Extensions
 {
     public static class AddressBidCountExtension
-    {
-      
-
+    { 
 
         public static IDictionary<string, int> _SetAddressBidCountDict(DiscountScheme discountScheme)
         {
