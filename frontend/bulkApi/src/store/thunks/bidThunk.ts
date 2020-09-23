@@ -103,7 +103,7 @@ export function deleteBidFromCartAsync(bidId: number) {
                 throw apiError;
             }
             
-            dispatch({ type: ACTIONS.GET_BIDSOFCUSTOMER_INCART_RECEIVED, message: response.statusText, httpMessage: ACTIONS.HTTP_DELETE_SUCCESS });
+            dispatch({ type: ACTIONS.DELETE_BID_IN_CART_RECEIVED, message: response.statusText, httpMessage: ACTIONS.HTTP_DELETE_SUCCESS });
         } catch(error) {
             dispatch(errorAction(ACTIONS.ERROR, error));
         }
