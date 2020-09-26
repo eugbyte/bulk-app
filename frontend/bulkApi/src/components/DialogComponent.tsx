@@ -10,27 +10,26 @@ import { DiscountSchemeDetailPage } from "../containers/DiscountSchemeDetailPage
 interface IProps {
     open: boolean;  //open is part of useState(false)
     toggleOpen: () => void; //toggleOpen is part of useState(false)
-    discountSchemeId: number;
-    bidId: number;
     title?: string;
-    paras?: JSX.Element[];  // paragraphs to display, e.g. [<p></p>, <p></p>]
+    showPicture?: boolean;
+    content?: JSX.Element;  // paragraphs to display, e.g. [<p></p>, <p></p>]
     actionTitle?: string,   //title of button
     action?: () => any; //callback function on button click
 }
 
-export function CartDialog({open, toggleOpen, title, paras, actionTitle, action, discountSchemeId, bidId}: IProps): JSX.Element {
+export function DialogComponent({open, toggleOpen, title, content, actionTitle, action, showPicture=false}: IProps): JSX.Element {
 
     return <Dialog open={open} onClose={toggleOpen} aria-labelledby="form-dialog-title" maxWidth="sm" fullWidth>
         <DialogTitle id="form-dialog-title">{title}</DialogTitle>
             <DialogContent>
-                {/* <CardMedia 
-                    component="img"
-                    height="140"
-                    image="e_commerce.png"
-                    title="https://acowebs.com/impact-ecommerce-society/"/> */}
-                {paras}
-                <DiscountSchemeDetailPage discountSchemeId={discountSchemeId} bidIdToUpdate={bidId} ACTION={ "UPDATE"} />
-                
+                { showPicture &&
+                    <CardMedia 
+                        component="img"
+                        height="140"
+                        image="e_commerce.png"
+                        title="https://acowebs.com/impact-ecommerce-society/"/>
+                }                
+                {content}                
             </DialogContent>
             {actionTitle &&
                 <DialogActions>

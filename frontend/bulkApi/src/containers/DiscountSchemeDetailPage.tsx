@@ -21,11 +21,11 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 
 export interface IProps {
     discountSchemeId: number;
-    ACTION: "CREATE" | "UPDATE";
+    MODE: "CREATE" | "UPDATE";
     bidIdToUpdate?: number;
 }
 
-export function DiscountSchemeDetailPage({discountSchemeId, ACTION, bidIdToUpdate=0}: IProps): JSX.Element {
+export function DiscountSchemeDetailPage({discountSchemeId, MODE, bidIdToUpdate=0}: IProps): JSX.Element {
     const dispatch: Dispatch<any> = useDispatch();  
 
     // Quantity to add to cart
@@ -73,10 +73,10 @@ export function DiscountSchemeDetailPage({discountSchemeId, ACTION, bidIdToUpdat
         bid.quantity = quantity;
 
         let action = null;
-        if (ACTION === "CREATE") {
+        if (MODE === "CREATE") {
             bid.discountSchemeId = ds.discountSchemeId;
             action = addBidToCartAsync(bid);
-        } else if (ACTION === "UPDATE") {
+        } else if (MODE === "UPDATE") {
             bid.bidId = bidIdToUpdate;
             action = updateBidInCartAsync(bid);
         }

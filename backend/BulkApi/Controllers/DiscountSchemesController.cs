@@ -41,16 +41,14 @@ namespace BulkApi.Controllers
             return discountSchemeVM;
         }
 
-        [HttpGet("success/{producerId}")]
-        public async Task<ActionResult> GetSuccessfulSchemesWithBids(int producerId)
+
+        [HttpGet("producer/{producerId}")]
+        public async Task<ActionResult<List<DiscountScheme>>> GetDiscountSchemesWithBidOfProducer(int producerId)
         {
-            List<DiscountScheme> discountSchemes = await discountSchemeService.GetSuccessfulSchemesWithBids(producerId);
-            return Ok(discountSchemes);
-        }
-
-        
-
-
+            List<DiscountScheme> discountSchemes = await discountSchemeService.GetDiscountSchemesWithBidOfProducer(producerId);
+            discountSchemes.Reverse();
+            return discountSchemes;
+        }      
 
     }
 }

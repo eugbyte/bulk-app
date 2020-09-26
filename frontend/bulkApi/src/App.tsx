@@ -7,6 +7,7 @@ import { Switch, BrowserRouter as Router } from 'react-router-dom';
 import { DiscountSchemeDetailHOC } from './containers/DiscountSchemeDetailHOC';
 import { CartPage } from './containers/CartPage';
 import { OrdersPage } from './containers/OrdersPage';
+import { ProducerPage } from './containers/ProducerPages';
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
           <Route path="/discountScheme/:discountSchemeId" component= { DiscountSchemeDetailHOC } />
           <Route path="/cart" component= { CartPage } />
           <Route path="/orders" component= { OrdersPage } />
+          <Route path="/producer/discountSchemes" component = { ProducerPage } />
           <Route exact path="/" component={ DiscountSchemesPage } />
         </Switch>
       </Router> 

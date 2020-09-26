@@ -12,5 +12,6 @@ namespace BulkApi.Services.DiscountSchemes
         Task<List<DiscountScheme>> GetSuccessfulSchemesWithBids(int producerId);
         Task<DiscountScheme> GetDiscountSchemeWithBids(int discountSchemeId);
         Task<List<DiscountScheme>> GetAllPendingDiscountSchemesWithBid();
+        Task<List<DiscountScheme>> GetDiscountSchemesWithBidOfProducer(int producerId);
     }
 }

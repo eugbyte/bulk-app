@@ -13,7 +13,6 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { OrderCheckoutComponent } from "../components/OrderCheckoutComponent";
 import { ACTIONS } from "../store/actionEnums";
 import { useHistory } from "react-router-dom";
-import { CartDialog } from "../components/CartDialog";
 import { SelectListItem } from "../models/SelectListItem";
 import { SelectComponent } from "../components/SelectComponent";
 import { Grid } from "@material-ui/core";
@@ -42,11 +41,7 @@ export function CartPage(): JSX.Element {
     const handleNotification = (isOpen: boolean, message: string) => {
         setOpen(isOpen);
         setNotificationMessage(message);
-    }
-
-    const [bidToUpdate, setBidToUpdate] = useState<Bid>(new Bid());
-    const [showCartDialogue, setShowCartDialogue] = useState<boolean>(false);
-    
+    }    
 
     // The Bids received from the GET request
     const bidsInCart: Bid[] = useSelector((action: RootState) => action.bidReducer.bids as Bid[] ) ?? [];  
@@ -85,7 +80,7 @@ export function CartPage(): JSX.Element {
         // if user successfully makes an order, redirect to orders page
         if (apiMessage.includes(ACTIONS.HTTP_UPDATE_ORDER_SUCCESS)) {
             console.log(apiMessage);
-            history.push("/orders")
+            history.push("/orders");
         }
     }, [apiMessage]);
 
@@ -99,7 +94,6 @@ export function CartPage(): JSX.Element {
 
         // Method reference to POST updated id to pass into CartButtons
         const handleUpdateCart = (newQuantity: number, collectionAddress: string) => {
-            //let bidToUpdate: Bid = createBid(bid.bidId, newQuantity, collectionAddress);
             let bidsCopy: Bid[] = cloneDeep(bidsInCart);    
             let bidCopy = bidsCopy[i];
             bidCopy.quantity = newQuantity;
@@ -201,20 +195,10 @@ export function CartPage(): JSX.Element {
             idColumnAccessorName={"bidId"}             
             actionMessage="Make Order"  actionIcon={AddShoppingCartIcon}  
             enabledDetailPanel={true} detailPanelFieldName={detailPanelName} />
-        <DialogueComponent open={open} setOpen={setOpen} message={notificationMessage} severity={"success"}/>
-        <CartDialog open={showCartDialogue} toggleOpen={() => setShowCartDialogue(!showCartDialogue)} discountSchemeId={bidToUpdate.discountSchemeId} bidId={bidToUpdate.bidId} />
-        
+        <DialogueComponent open={open} setOpen={setOpen} message={notificationMessage} severity={"success"}/>        
     </Container>
 }
 
-// Method reference to POST updated id to pass into CartButtons
-function createBid(bidId: number, newQuantity: number, collectionAddress: string): Bid {
-    let bid: Bid = new Bid();
-    bid.bidId = bidId;
-    bid.collectionAddress = collectionAddress;
-    bid.quantity = newQuantity;    
-    return bid;
-}
 
 function createRowFromBid(bid: Bid): Row {   
 

@@ -9,5 +9,5 @@ export function DiscountSchemeDetailHOC(): JSX.Element {
     let routeParams: Record<string, string>  = (useParams()) as Record<string, string>;
     const discountSchemeId: number = parseInt(routeParams["discountSchemeId"]);
 
-    return <DiscountSchemeDetailPage discountSchemeId={discountSchemeId} ACTION="CREATE" />
+    return <DiscountSchemeDetailPage discountSchemeId={discountSchemeId} MODE="CREATE" />
 }

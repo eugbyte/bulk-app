@@ -34,8 +34,8 @@ export function OrdersPage(): JSX.Element {
     const accessors: string[] = Object.keys(new Row());
     const rows: Row[] = bids.map(bid => createRowFromBid(bid));
 
-     return <Container>
-         <DataTable columnNames={columnNames} accessors={accessors} data={rows} title={"Submitted Bids"} enablePaging={true} />
+     return <Container maxWidth="lg">
+         <DataTable columnNames={columnNames} accessors={accessors} data={rows} title={"Submitted Bids"} enablePaging={true} pageSize={5} />
      </Container>
 }
 

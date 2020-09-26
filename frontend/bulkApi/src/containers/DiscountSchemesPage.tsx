@@ -45,7 +45,6 @@ export function DiscountSchemesPage(): JSX.Element {
 
         let textDict = {
             "Title": title,
-            "Original Price": "$" + ds.product?.originalPrice ?? "0",
             "Discounted Price": "$" + ds.discountedPrice,
             "Remaining Bids Needed": ds.minOrderQnty - currentBids,
             "Expiry Date": dateString
@@ -56,6 +55,13 @@ export function DiscountSchemesPage(): JSX.Element {
             let para: JSX.Element = <Typography variant="body2" color="textSecondary" component="p" align="left" key={key}>
                 <b>{key}&nbsp;</b>{value} 
             </Typography>
+
+            if (key === "Discounted Price") {
+                para = <Typography variant="body2" color="textSecondary" component="p" align="left" key={key}>
+                <b>{key}&nbsp;</b> ${ds.discountedPrice} $<del>{ds.product?.originalPrice}</del>
+            </Typography>
+            }
+
             paras.push(para)
         }
                  

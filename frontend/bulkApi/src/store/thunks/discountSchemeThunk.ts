@@ -53,3 +53,22 @@ export function getDiscountSchemeAsync(discountSchemeId: number): ThunkAction<Pr
         
     }
 }
+
+export function getDiscountSchemesWithBidOfProducer(producerId: number): ThunkAction<Promise<void>, {}, {}, IDiscountSchemeAction | IErrorAction> {
+    return async (dispatch: ThunkDispatch<{}, {}, IDiscountSchemeAction | IErrorAction>) => {
+        dispatch({ type: ACTIONS.GET_DISCOUNTSCHEME_OF_PRODUCER_REQUEST, message: "GET DiscountScheme of producer id: " + producerId });
+        try {
+            const response: Response = await fetch("https://localhost:44397/api/discountSchemes/producer/" + producerId);
+
+            if (!response.ok) {
+                let apiError: ApiError = await response.json();
+                throw apiError;
+            }
+            const discountSchemes: DiscountScheme[] = await response.json();
+            dispatch({ type: ACTIONS.GET_DISCOUNTSCHEME_OF_PRODUCER_RECEIVED, discountSchemes: discountSchemes, httpMessage: ACTIONS.HTTP_READ_SUCCESS });
+
+        } catch(error) {
+            dispatch(errorAction(ACTIONS.ERROR, error));
+        }
+    }
+}

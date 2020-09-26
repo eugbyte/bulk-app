@@ -100,5 +100,24 @@ namespace BulkApi.Services.DiscountSchemes
              
             return discountSchemes;
         }
+
+        public async Task <List<DiscountScheme>> GetDiscountSchemesWithBidOfProducer(int producerId)
+        {
+            List<DiscountScheme> discountSchemes = await GetAllDiscountSchemesWithBid();
+            List<Product> products = await db.Products.Where(prd => prd.ProducerId == producerId)
+                .IncludeOptimized(prd => prd.DiscountSchemes)
+                .ToListAsync();
+            List<int> productIds = products.Select(product => product.ProductId).ToList();
+            discountSchemes = discountSchemes.Where(ds => productIds.Contains(ds.ProductId)).ToList();
+
+            foreach(var ds in discountSchemes)
+            {
+                ds.Bids = ds.Bids.Where(bid => !bid.IsInCart).ToList();
+            }
+
+            return discountSchemes;
+        }
     }
+
+    
 }

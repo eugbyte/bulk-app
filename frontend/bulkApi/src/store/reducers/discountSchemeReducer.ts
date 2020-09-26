@@ -20,7 +20,7 @@ export default function discountSchemeReducer(prevState = initialState, action: 
             return newState;
         case(ACTIONS.GET_DISCOUNTSCHEMES_RECEIVED):
             console.log("GET_DISCOUNTSCHEMES_RECEIVED");
-            const discountSchemes: DiscountScheme[] = action.discountSchemes as DiscountScheme[];
+            let discountSchemes: DiscountScheme[] = action.discountSchemes as DiscountScheme[];
             newState.discountSchemes = discountSchemes;
             return newState;
         case(ACTIONS.GET_DISCOUNTSCHEME_REQUEST):
@@ -30,6 +30,13 @@ export default function discountSchemeReducer(prevState = initialState, action: 
             console.log("ACTIONS.GET_DISCOUNTSCHEME_RECEIVED")
             const discountScheme: DiscountScheme = action.discountScheme as DiscountScheme;
             newState.discountScheme = discountScheme;
+            return newState;
+        case(ACTIONS.GET_DISCOUNTSCHEME_OF_PRODUCER_REQUEST):
+            console.log(action.message);
+            return newState;
+        case(ACTIONS.GET_DISCOUNTSCHEME_OF_PRODUCER_RECEIVED):
+            console.log(action.discountSchemes);
+            newState.discountSchemes = action.discountSchemes as DiscountScheme[];
             return newState;
         default:
             return prevState;
