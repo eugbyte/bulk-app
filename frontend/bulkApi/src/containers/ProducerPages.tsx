@@ -13,6 +13,8 @@ import Select from '@material-ui/core/Select';
 import { cloneDeep } from "lodash";
 import Button from '@material-ui/core/Button';
 import { useHistory } from "react-router-dom";
+import { SelectControlledComponent } from "../components/SelectComponent";
+import { SelectListItem } from "../models/SelectListItem";
 
 type Status = "SUCCESS" | "PENDING" | "FAILED" | undefined;
 
@@ -56,6 +58,8 @@ export function ProducerPage(): JSX.Element {
         setStatus(selectedStatus);
     });
 
+    const selectListItems: SelectListItem[] = ["SUCCESS", "PENDING", "FAILED"].map((status) => new SelectListItem(status, status));
+
     useEffect(() => {
         let discountSchemesCopy: DiscountScheme[] = cloneDeep(immutableDiscountSchemes);
         discountSchemesCopy = discountSchemesCopy
@@ -68,21 +72,14 @@ export function ProducerPage(): JSX.Element {
 
     return <Container maxWidth="lg">
         <Grid container>
-            <Grid item xs={3}>
-                <FormControl style={{minWidth:"100px"}}>
-                    <InputLabel>Status</InputLabel>
-                    <Select value={status} onChange={handleStatusChange}>
-                        <MenuItem value={"SUCCESS"}>SUCCESS</MenuItem>
-                        <MenuItem value={"PENDING"}>PENDING</MenuItem>
-                        <MenuItem value={"FAILED"}>FAILED</MenuItem>
-                    </Select>
-                </FormControl>
+            <Grid item xs={2}>
+                <SelectControlledComponent title="Status" state={status} selectListItems={selectListItems} handleChange={handleStatusChange}  />
             </Grid> 
-            <Grid item xs={6}></Grid>     
-            <Grid item xs={3}>
-            <Button onClick={redirectToForm} variant="contained" color="primary">
-                Create Scheme
-            </Button>
+            <Grid item xs={8}></Grid>     
+            <Grid item xs={2}>
+                <Button onClick={redirectToForm} variant="contained" color="primary">
+                    Create Scheme
+                </Button>
             </Grid>        
         </Grid>
         <br/>

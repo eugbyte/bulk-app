@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import TextField from '@material-ui/core/TextField';
 import { Container, Grid } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux"; 
@@ -7,11 +6,11 @@ import { Product } from "../models/Product";
 import { RootState } from "../store/rootReducer";
 import { getProductsAsync } from "../store/thunks/productThunk";
 import { SelectListItem } from "../models/SelectListItem";
-import { SelectComponent } from "../components/SelectComponent";
-import { DatePickerComponent } from "../components/DatePickerComponent";
+import { SelectUncontrolledComponent } from "../components/SelectComponent";
+import { DatePickerUncontrolledComponent } from "../components/DatePickerComponent";
 import { useForm } from "react-hook-form";
-import { TextFieldComponent } from "../components/TextFieldComponent";
-import { DiscountScheme } from "../models/DiscountScheme";
+import { TextFieldUnControlledComponent } from "../components/TextFieldComponent";
+import Button from '@material-ui/core/Button';
 
 export function DiscountSchemeForm(): JSX.Element {
     document.title = "Create Discount Scheme";
@@ -28,26 +27,42 @@ export function DiscountSchemeForm(): JSX.Element {
         dispatch(action);
     }, []);
 
-    console.log(products);
-
-    const { register, errors, handleSubmit, control } = useForm();
+    const { errors, handleSubmit, control } = useForm();
     const onSubmit = (data: any) => console.log(data, errors);
 
     return <Container>
         <form onSubmit={handleSubmit(onSubmit)}>
-            <TextFieldComponent control={control} errors={errors} name={"minOrderQnty"} label={"Minimum order quantity"} errorMessage={"Minimum order quantity is required"} 
-                rules={{required: true, min: 1}}/>
-            <TextFieldComponent control={control} errors={errors} name={"discountedPrice"} label={"Discounted Price"} errorMessage={"Discounted Price is required"} 
-                rules={{required: true, min: 1}}/>
-            {/* <TextField id="minimum-order-qnty" label="Minimum Order Qnty" />
-            <TextField id="discounted-price" label="Discounted Price"  />
-            <TextField id="delivery-charge" label="Delivery Charge" />
+            <Grid container justify="flex-start">
+                <Grid item xs={1}>
+                    <SelectUncontrolledComponent title={"Product"} selectListItems={selectListItems} name={"discountSchemes"} errorMessage="Scheme is required"
+                    control={control} errors={errors} rules={{required: true}} />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextFieldUnControlledComponent isFullWidth={true} control={control} errors={errors} name={"discountedPrice"} label={"Discounted Price"} errorMessage={"Discounted Price is required"} 
+                        rules={{required: true, min: 1}}/>
+                </Grid>
+                <Grid item xs={12}>
+                    <TextFieldUnControlledComponent isFullWidth={true} control={control} errors={errors} name={"minOrderQnty"} label={"Minimum order quantity"} errorMessage={"Minimum order quantity is required"} 
+                        rules={{required: true, min: 1}}/>
+                </Grid>
+                <Grid item xs={12}>
+                    <TextFieldUnControlledComponent isFullWidth={true} control={control} errors={errors} name={"deliveryCharge"} label={"Delivery Charge"} errorMessage={"Delivery Charge is required"} 
+                        rules={{required: true, min: 1}}/>        
+                </Grid>
+                <Grid item xs={2}>
+                    <DatePickerUncontrolledComponent label={"Expiry Date"} name={"expiryDate"} 
+                        control={control} errors={errors} rules={{required: true}} errorMessage={"Expiry Date is required"} />
+                </Grid>
+                <Grid item xs={12}><br/></Grid>
+                <Grid item xs={12}>
+                    <Button variant="contained" color="primary" type="submit">
+                        Submit
+                    </Button> 
+                </Grid>
+            </Grid>
 
-            <DatePickerComponent label="Expiry Date" onChange={()=>{}}/>
-
-            <SelectComponent title="Product" state={null} selectListItems={selectListItems} handleChange={()=>{}} /> */}
-            <br/>
-            <input type="submit" value="Submit" />
+            
+                        
         </form>
 
     </Container>

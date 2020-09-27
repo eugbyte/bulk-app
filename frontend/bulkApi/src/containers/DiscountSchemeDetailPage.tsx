@@ -12,7 +12,7 @@ import e_commerce from '../images/e_commerce.png';
 import { Bid } from "../models/Bid";
 import { addBidToCartAsync, updateBidInCartAsync } from "../store/thunks/bidThunk";
 import { DialogueComponent } from "../components/DialogueComponent"; 
-import { SelectComponent } from "../components/SelectComponent";
+import { SelectControlledComponent } from "../components/SelectComponent";
 import { Grid } from "@material-ui/core";
 import { SelectListItem } from "../models/SelectListItem";
 import { TextComponent } from "../components/TextComponent";
@@ -157,7 +157,7 @@ export function DiscountSchemeDetailPage({discountSchemeId, MODE, bidIdToUpdate=
         <hr/>
         <Grid container>
             <Grid item xs={4}>        
-                <SelectComponent title={"Delivery"} state={address} selectListItems={selectListItems} handleChange={handleChangeAddress} />
+                <SelectControlledComponent title={"Delivery"} state={address} selectListItems={selectListItems} handleChange={handleChangeAddress} />
             </Grid>
             <Grid item xs={8}>
                 <TextComponent textDict={addressTextDict} />

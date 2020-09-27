@@ -14,7 +14,7 @@ import { OrderCheckoutComponent } from "../components/OrderCheckoutComponent";
 import { ACTIONS } from "../store/actionEnums";
 import { useHistory } from "react-router-dom";
 import { SelectListItem } from "../models/SelectListItem";
-import { SelectComponent } from "../components/SelectComponent";
+import { SelectControlledComponent } from "../components/SelectComponent";
 import { Grid } from "@material-ui/core";
 import { TextComponent } from "../components/TextComponent";
 import { cloneDeep } from "lodash";
@@ -152,7 +152,7 @@ export function CartPage(): JSX.Element {
             selectListItem.selected = bid.collectionAddress === address;
             selectListItems.push(selectListItem);
         }        
-        rows[i].collectionAddress = <SelectComponent title={"Delivery"} state={bid.collectionAddress} selectListItems={selectListItems} handleChange={handleChangeAddress} />
+        rows[i].collectionAddress = <SelectControlledComponent title={"Delivery"} state={bid.collectionAddress} selectListItems={selectListItems} handleChange={handleChangeAddress} />
 
         // Detail Panel
         let descriptionDict: Record<string, any> = {
