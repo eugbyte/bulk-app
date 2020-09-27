@@ -5,7 +5,7 @@ export class SelectListItem {
     value: any;
 
 
-    constructor(text = "", value = "") {
+    constructor(text = "", value: any) {
         this.text = text;
         this.value = value;
     }

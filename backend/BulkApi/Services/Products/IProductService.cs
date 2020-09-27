@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace BulkApi.Services.Products
 {
-    public interface IProduct
+    public interface IProductService
     {
         Task<Product> CreateProduct(string name, string category, string description, double originalPrice, int producerId);
+        Task<List<Product>> GetProducts(int producerId);
     }
 }

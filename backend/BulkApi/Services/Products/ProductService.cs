@@ -4,16 +4,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace BulkApi.Services.Products
 {
-    public class ProductService
+    public class ProductService : IProductService
     {
         private readonly BulkDbContext db;
 
         public ProductService(BulkDbContext db)
         {
             this.db = db;
+        }
+
+        public async Task<List<Product>> GetProducts(int producerId)
+        {
+            List<Product> products = await db.Products
+                .Where(product => product.ProducerId == producerId)
+                .ToListAsync();
+            return products;
         }
 
         public async Task<Product> CreateProduct(string name, string category, string description, double originalPrice, int producerId)

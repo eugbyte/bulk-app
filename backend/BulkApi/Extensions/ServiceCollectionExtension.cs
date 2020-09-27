@@ -12,6 +12,7 @@ using BulkApi.Services;
 using BulkApi.Services.DiscountSchemes;
 using BulkApi.Services.Bids;
 using BulkApi.Filters;
+using BulkApi.Services.Products;
 
 namespace BulkApi.Extensions
 {
@@ -61,6 +62,7 @@ namespace BulkApi.Extensions
         {
             services.AddTransient(typeof(IDiscountSchemeService), typeof(DiscountSchemeService));
             services.AddTransient(typeof(IBidService), typeof(BidService));
+            services.AddTransient(typeof(IProductService), typeof(ProductService));
         }
 
         public static void AddErrorFilterExtension(this IServiceCollection services)

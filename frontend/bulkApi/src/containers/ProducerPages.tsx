@@ -8,10 +8,11 @@ import { RootState } from "../store/rootReducer";
 import { getDiscountSchemesWithBidOfProducer } from "../store/thunks/discountSchemeThunk";
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { cloneDeep } from "lodash";
+import Button from '@material-ui/core/Button';
+import { useHistory } from "react-router-dom";
 
 type Status = "SUCCESS" | "PENDING" | "FAILED" | undefined;
 
@@ -29,6 +30,7 @@ export function ProducerPage(): JSX.Element {
 
     document.title = "Orders";
     const dispatch: Dispatch<any> = useDispatch();
+    const history = useHistory(); 
 
     // Single source of truth, avoid mutating it
     const immutableDiscountSchemes: DiscountScheme[] = useSelector((action: RootState) => action.discountSchemeReducer.discountSchemes as DiscountScheme[]) ?? [];
@@ -60,6 +62,8 @@ export function ProducerPage(): JSX.Element {
             .filter(ds => status ? determineStatusOfScheme(ds) === status : true );
         setDiscountSchemes(discountSchemesCopy);
     }, [status]);
+
+    const redirectToForm = () => history.push("/producer/discountSchemes/create");
    
 
     return <Container maxWidth="lg">
@@ -73,7 +77,13 @@ export function ProducerPage(): JSX.Element {
                         <MenuItem value={"FAILED"}>FAILED</MenuItem>
                     </Select>
                 </FormControl>
-            </Grid>            
+            </Grid> 
+            <Grid item xs={6}></Grid>     
+            <Grid item xs={3}>
+            <Button onClick={redirectToForm} variant="contained" color="primary">
+                Create Scheme
+            </Button>
+            </Grid>        
         </Grid>
         <br/>
         <DataTable columnNames={columnNames} accessors={accessors} data={rows} title={"Discount Schemes"} enablePaging={true} pageSize={5} />

@@ -48,7 +48,19 @@ namespace BulkApi.Controllers
             List<DiscountScheme> discountSchemes = await discountSchemeService.GetDiscountSchemesWithBidOfProducer(producerId);
             discountSchemes.Reverse();
             return discountSchemes;
-        }      
+        }   
+        
+        [HttpPost]
+        public async Task<ActionResult<DiscountScheme>> CreateDiscountScheme(DiscountScheme ds)
+        {
+            DiscountScheme createdDiscountScheme = await discountSchemeService.CreateDiscountScheme(
+                minOrderQnty: ds.MinOrderQnty,
+                discountedPrice: ds.DiscountedPrice,
+                expiryDate: ds.ExpiryDate,
+                deliveryCharge: ds.DeliveryCharge,
+                productId: ds.ProductId );
+            return Ok(createdDiscountScheme);
+        }
 
     }
 }

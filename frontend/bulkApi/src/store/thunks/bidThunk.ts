@@ -20,7 +20,7 @@ export interface IBidAction extends Action {
 
 export function addBidToCartAsync(bid: Bid): ThunkAction<Promise<void>, {}, {}, IBidAction | IErrorAction> {
     return async (dispatch: ThunkDispatch<{}, {}, IBidAction | IErrorAction>) => {
-        dispatch({ type: ACTIONS.ADD_BID_TO_CART_REQUEST, messages: ["Making post request to add bid to cart ..."] });
+        dispatch({ type: ACTIONS.ADD_BID_TO_CART_REQUEST, message: "Making post request to add bid to cart ..." });
 
         try {
             const response: Response = await fetch("https://localhost:44397/api/bids/addcart", {

@@ -117,6 +117,22 @@ namespace BulkApi.Services.DiscountSchemes
 
             return discountSchemes;
         }
+
+        public async Task<DiscountScheme> CreateDiscountScheme(int minOrderQnty, double discountedPrice, DateTime? expiryDate, double deliveryCharge, int productId)
+        {
+            DiscountScheme discountScheme = new DiscountScheme
+            {
+                MinOrderQnty = minOrderQnty,
+                DiscountedPrice = discountedPrice,
+                ExpiryDate = expiryDate,
+                DeliveryCharge = deliveryCharge,
+                ProductId = productId
+            };
+
+            db.DiscountSchemes.Add(discountScheme);
+            await db.SaveChangesAsync();
+            return discountScheme;
+        }
     }
 
     

@@ -24,10 +24,11 @@ export function NavBar() {
                 <Button color="inherit">
               <NavDropdown title="Admin Page" id="basic-nav-dropdown" >
                 <NavDropdown.Item >
-                  <Nav.Link as={NavLink} to="/producer/discountSchemes" style={{color: "black"}} className={classes.dropDownLink}>View Schemes</Nav.Link>
-                    {/* <NavLink to="/producer/discountSchemes">View Schemes</NavLink> */}
-                </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.1">Create Schemes</NavDropdown.Item>
+                  <Nav.Link as={NavLink} to="/producer/discountSchemes" style={{color: "black"}}>Manage Schemes</Nav.Link>
+                </NavDropdown.Item>  
+                <NavDropdown.Item >
+                  <Nav.Link as={NavLink} to="/producer/products" style={{color: "black"}}>Manage Products</Nav.Link>
+                </NavDropdown.Item>        
              </NavDropdown>
                 </Button>
               </Nav>          
