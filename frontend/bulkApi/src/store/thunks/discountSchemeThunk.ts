@@ -72,3 +72,26 @@ export function getDiscountSchemesWithBidOfProducer(producerId: number): ThunkAc
         }
     }
 }
+
+export function createDiscountSchemeAsync(discountScheme: DiscountScheme): ThunkAction<Promise<void>, {}, {}, IDiscountSchemeAction | IErrorAction> {
+    return async (dispatch: ThunkDispatch<{}, {}, IDiscountSchemeAction | IErrorAction>) => {
+        dispatch({ type: ACTIONS.CREATE_DISCOUNTSCHEME_REQUEST, message: "Creating Discount Scheme" });
+        try {
+            const response: Response = await fetch("https://localhost:44397/api/discountSchemes", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(discountScheme)
+            });
+
+            if (!response.ok) {
+                let apiError: ApiError = await response.json();
+                throw apiError;
+            }
+            const createdDiscountScheme: DiscountScheme = await response.json();
+            dispatch({ type: ACTIONS.CREATE_DISCOUNTSCHEME_RECEIVED, discountScheme: createdDiscountScheme, httpMessage: ACTIONS.HTTP_CREATE_SUCCESS });
+
+        } catch(error) {
+            dispatch(errorAction(ACTIONS.ERROR, error));
+        }
+    }
+}

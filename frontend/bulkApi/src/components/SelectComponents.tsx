@@ -52,8 +52,6 @@ interface IPropControlled {
 export function SelectControlledComponent({title, state, selectListItems, handleChange, isError=false, formHelperText=""}: IPropControlled): JSX.Element {
     const classes = useStyles();
 
-  console.log(selectListItems);
-
     return  <FormControl className={classes.formControl} error={isError}>
           <InputLabel id="demo-simple-select-label">{title}</InputLabel>
           <Select labelId="demo-simple-select-label"

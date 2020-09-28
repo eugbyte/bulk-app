@@ -25,10 +25,7 @@ export function NavBar() {
               <NavDropdown title="Admin Page" id="basic-nav-dropdown" >
                 <NavDropdown.Item >
                   <Nav.Link as={NavLink} to="/producer/discountSchemes" style={{color: "black"}}>Manage Schemes</Nav.Link>
-                </NavDropdown.Item>  
-                <NavDropdown.Item >
-                  <Nav.Link as={NavLink} to="/producer/products" style={{color: "black"}}>Manage Products</Nav.Link>
-                </NavDropdown.Item>        
+                </NavDropdown.Item>     
              </NavDropdown>
                 </Button>
               </Nav>          

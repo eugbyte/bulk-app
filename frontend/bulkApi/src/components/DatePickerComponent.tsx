@@ -36,6 +36,9 @@ interface IPropControlled {
 
 export function DatePickerControlledComponent({label, onChange, value, error=false, helperText=""}: IPropControlled): JSX.Element {
 
+    if (!value) {
+        value = new Date();
+    }
     return <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <KeyboardDatePicker
             error={error}
@@ -46,7 +49,7 @@ export function DatePickerControlledComponent({label, onChange, value, error=fal
             margin="normal"
             id={guid()}
             label={label}
-            value={value}
+            value={value }
             onChange={onChange}
             KeyboardButtonProps={{
                 'aria-label': 'change date',

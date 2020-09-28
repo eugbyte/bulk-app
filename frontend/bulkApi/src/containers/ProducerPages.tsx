@@ -6,20 +6,19 @@ import { DataTable } from "../components/DataTable";
 import { DiscountScheme } from "../models/DiscountScheme";
 import { RootState } from "../store/rootReducer";
 import { getDiscountSchemesWithBidOfProducer } from "../store/thunks/discountSchemeThunk";
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import { cloneDeep } from "lodash";
 import Button from '@material-ui/core/Button';
 import { useHistory } from "react-router-dom";
-import { SelectControlledComponent } from "../components/SelectComponent";
+import { SelectControlledComponent } from "../components/SelectComponents";
 import { SelectListItem } from "../models/SelectListItem";
+import { Product } from "../models/Product";
+import { DialogComponent } from "../components/DialogComponent";
+import { TextComponent } from "../components/TextComponent";
 
 type Status = "SUCCESS" | "PENDING" | "FAILED" | undefined;
 
 class Row {
-    name: string | undefined = "";
+    name: JSX.Element | undefined;
     discountedPrice: JSX.Element | undefined;
     deliveryCharge: string | undefined = "0";
     minOrderQnty: number | undefined = 0;
@@ -48,7 +47,32 @@ export function ProducerPage(): JSX.Element {
         setDiscountSchemes(immutableDiscountSchemes);
     }, [immutableDiscountSchemes.length]);
 
-    const rows: Row[] = discountSchemes.map(ds => createRowFromScheme(ds));
+    const [openDialog, setOpenDialog] = useState<boolean>(false);
+    const [product, setProduct] = useState<Product>(new Product());
+    let productTextDict: Record<string, any> = {
+        "Name": product.name,
+        "Original Price": "$" + product.originalPrice,
+        "Category": product.category,
+        "Description": product.description        
+    }
+    let productTextComponent: JSX.Element = <TextComponent textDict={productTextDict} />
+
+    const rows: Row[] = [];
+
+    for (let ds of discountSchemes) {
+        let row: Row = createRowFromScheme(ds);
+        const onClick = () => {
+            let product: Product = discountSchemes
+                .map(ds => ds.product)
+                .find(product => product?.productId === ds.productId) ?? new Product();
+            setProduct(product);
+
+            setOpenDialog(!openDialog);
+        };
+        row.name = <Button onClick={onClick} size="small" variant="outlined">{ds.product?.name}</Button> ;
+        rows.push(row);
+    }
+
     const columnNames: string[] = ["Name", "Discounted Price", "Delivery Charge",  "Min Order Qnty", "Current Bids","Expiry Date", "Bid Status"];
     const accessors: string[] = Object.keys(new Row());
 
@@ -84,6 +108,7 @@ export function ProducerPage(): JSX.Element {
         </Grid>
         <br/>
         <DataTable columnNames={columnNames} accessors={accessors} data={rows} title={"Discount Schemes"} enablePaging={true} pageSize={5} />
+        <DialogComponent open={openDialog} toggleOpen={() => setOpenDialog(!openDialog)} content={productTextComponent} showPicture />
     </Container>
 }
 
@@ -92,7 +117,7 @@ function createRowFromScheme(ds: DiscountScheme): Row {
     if (ds == null) {
         return row;
     }
-    row.name = ds.product?.name;
+    
     const discountedPrice = ds.discountedPrice;
     const originalPrice = ds.product?.originalPrice;
     row.discountedPrice = <span>${discountedPrice} <del>${originalPrice}</del></span>

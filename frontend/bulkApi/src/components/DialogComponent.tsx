@@ -5,7 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Button } from "@material-ui/core";
 import CardMedia from '@material-ui/core/CardMedia'; 
-import { DiscountSchemeDetailPage } from "../containers/DiscountSchemeDetailPage";
+import imageUrl  from  "../../src/images/e_commerce.png";
 
 interface IProps {
     open: boolean;  //open is part of useState(false)
@@ -26,9 +26,10 @@ export function DialogComponent({open, toggleOpen, title, content, actionTitle, 
                     <CardMedia 
                         component="img"
                         height="140"
-                        image="e_commerce.png"
+                        image={imageUrl}
                         title="https://acowebs.com/impact-ecommerce-society/"/>
-                }                
+                } 
+                <br/>               
                 {content}                
             </DialogContent>
             {actionTitle &&

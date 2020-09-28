@@ -12,7 +12,7 @@ import e_commerce from '../images/e_commerce.png';
 import { Bid } from "../models/Bid";
 import { addBidToCartAsync, updateBidInCartAsync } from "../store/thunks/bidThunk";
 import { DialogueComponent } from "../components/DialogueComponent"; 
-import { SelectControlledComponent } from "../components/SelectComponent";
+import { SelectControlledComponent } from "../components/SelectComponents";
 import { Grid } from "@material-ui/core";
 import { SelectListItem } from "../models/SelectListItem";
 import { TextComponent } from "../components/TextComponent";

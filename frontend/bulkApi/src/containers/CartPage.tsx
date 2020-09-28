@@ -14,7 +14,7 @@ import { OrderCheckoutComponent } from "../components/OrderCheckoutComponent";
 import { ACTIONS } from "../store/actionEnums";
 import { useHistory } from "react-router-dom";
 import { SelectListItem } from "../models/SelectListItem";
-import { SelectControlledComponent } from "../components/SelectComponent";
+import { SelectControlledComponent } from "../components/SelectComponents";
 import { Grid } from "@material-ui/core";
 import { TextComponent } from "../components/TextComponent";
 import { cloneDeep } from "lodash";
