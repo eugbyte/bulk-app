@@ -6,7 +6,7 @@ import { DataTable } from "../components/DataTable";
 import { DiscountScheme } from "../models/DiscountScheme";
 import { RootState } from "../store/rootReducer";
 import { getDiscountSchemesWithBidOfProducer } from "../store/thunks/discountSchemeThunk";
-import { cloneDeep } from "lodash";
+import { cloneDeep, uniqBy } from "lodash";
 import Button from '@material-ui/core/Button';
 import { useHistory } from "react-router-dom";
 import { SelectControlledComponent } from "../components/SelectComponents";
@@ -14,6 +14,8 @@ import { SelectListItem } from "../models/SelectListItem";
 import { Product } from "../models/Product";
 import { DialogComponent } from "../components/DialogComponent";
 import { TextComponent } from "../components/TextComponent";
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
 
 type Status = "SUCCESS" | "PENDING" | "FAILED" | undefined;
 
@@ -39,14 +41,44 @@ export function ProducerPage(): JSX.Element {
         const producerId: number = 1;
         const action = getDiscountSchemesWithBidOfProducer(producerId);
         dispatch(action);
-    }, [])
+    }, []);
 
+    // For the AutoComplete Filter
+    let products: Product[] = immutableDiscountSchemes.map(ds => ds.product ?? new Product());
+    products = uniqBy(products, (product) => product.name);    
+
+    // DiscountSchemes to dispaly to the data table, subject to filtering
     const [discountSchemes, setDiscountSchemes] = useState<DiscountScheme[]>([]);
     useEffect(() => {
         console.log(immutableDiscountSchemes);
-        setDiscountSchemes(immutableDiscountSchemes);
+        setDiscountSchemes(immutableDiscountSchemes);        
     }, [immutableDiscountSchemes.length]);
 
+    const [status, setStatus] = useState<Status>();
+    const handleStatusChange = ((event: React.ChangeEvent<any>) => {
+        let selectedStatus: Status = event.target.value as Status;
+        setStatus(selectedStatus);
+    });
+
+    //Status filtering
+    const selectListItems: SelectListItem[] = ["SUCCESS", "PENDING", "FAILED"].map((status) => new SelectListItem(status, status));
+    
+    // Product name filtering
+    const [productName, setProductName] = useState<string>("");
+    const handleChangeProductName = (name: string) => {
+        console.log(name);
+        setProductName(name);
+    }
+
+    useEffect(() => {
+        let discountSchemesCopy: DiscountScheme[] = cloneDeep(immutableDiscountSchemes);
+        discountSchemesCopy = discountSchemesCopy
+            .filter(ds => status ? determineStatusOfScheme(ds) === status : true )
+            .filter(ds => productName ? ds.product?.name?.includes(productName) : true)
+        setDiscountSchemes(discountSchemesCopy);
+    }, [status, productName]);
+
+    // To display the product as a dialog when user clicks on the link
     const [openDialog, setOpenDialog] = useState<boolean>(false);
     const [product, setProduct] = useState<Product>(new Product());
     let productTextDict: Record<string, any> = {
@@ -57,6 +89,10 @@ export function ProducerPage(): JSX.Element {
     }
     let productTextComponent: JSX.Element = <TextComponent textDict={productTextDict} />
 
+    // To redirect user to create discount Scheme
+    const redirectToForm = () => history.push("/producer/discountSchemes/create");   
+
+    // To create rows for the data table
     const rows: Row[] = [];
 
     for (let ds of discountSchemes) {
@@ -74,32 +110,24 @@ export function ProducerPage(): JSX.Element {
     }
 
     const columnNames: string[] = ["Name", "Discounted Price", "Delivery Charge",  "Min Order Qnty", "Current Bids","Expiry Date", "Bid Status"];
-    const accessors: string[] = Object.keys(new Row());
-
-    const [status, setStatus] = useState<Status>();
-    const handleStatusChange = ((event: React.ChangeEvent<any>) => {
-        let selectedStatus: Status = event.target.value as Status;
-        setStatus(selectedStatus);
-    });
-
-    const selectListItems: SelectListItem[] = ["SUCCESS", "PENDING", "FAILED"].map((status) => new SelectListItem(status, status));
-
-    useEffect(() => {
-        let discountSchemesCopy: DiscountScheme[] = cloneDeep(immutableDiscountSchemes);
-        discountSchemesCopy = discountSchemesCopy
-            .filter(ds => status ? determineStatusOfScheme(ds) === status : true );
-        setDiscountSchemes(discountSchemesCopy);
-    }, [status]);
-
-    const redirectToForm = () => history.push("/producer/discountSchemes/create");
-   
+    const accessors: string[] = Object.keys(new Row());        
 
     return <Container maxWidth="lg">
         <Grid container>
             <Grid item xs={2}>
                 <SelectControlledComponent title="Status" state={status} selectListItems={selectListItems} handleChange={handleStatusChange}  />
             </Grid> 
-            <Grid item xs={8}></Grid>     
+            <Grid item xs={3}>
+            <Autocomplete
+                id="combo-box-demo"
+                options={products}
+                getOptionLabel={(option: Product) => option.name ?? ""}
+                style={{ width: 300 }}
+                onInputChange={(event, value) => handleChangeProductName(value)}
+                renderInput={(params) => <TextField {...params} label="Products" variant="outlined" />}
+            />
+            </Grid>
+            <Grid item xs={5}></Grid>     
             <Grid item xs={2}>
                 <Button onClick={redirectToForm} variant="contained" color="primary">
                     Create Scheme

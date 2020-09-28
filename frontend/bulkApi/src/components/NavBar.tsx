@@ -18,18 +18,20 @@ export function NavBar() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="mr-auto">
-              <Button color="inherit" ><NavLink to="/" className={classes.navLink} >Products</NavLink></Button>
-              <Button color="inherit"><NavLink to="/cart" className={classes.navLink}>Cart</NavLink></Button>
-              <Button color="inherit"><NavLink to="/orders" className={classes.navLink}>Orders</NavLink></Button>
-                <Button color="inherit">
-              <NavDropdown title="Admin Page" id="basic-nav-dropdown" >
-                <NavDropdown.Item >
-                  <Nav.Link as={NavLink} to="/producer/discountSchemes" style={{color: "black"}}>Manage Schemes</Nav.Link>
-                </NavDropdown.Item>     
-             </NavDropdown>
-                </Button>
-              </Nav>          
+                <Button color="inherit" ><NavLink to="/" className={classes.navLink} >Products</NavLink></Button>
+                <Button color="inherit"><NavLink to="/cart" className={classes.navLink}>Cart</NavLink></Button>
+                <Button color="inherit"><NavLink to="/orders" className={classes.navLink}>Orders</NavLink></Button>
+                  <Button color="inherit">
+                    {/* <NavDropdown title="Admin Page" id="basic-nav-dropdown" >
+                        <NavDropdown.Item >
+                          <Nav.Link as={NavLink} to="/producer/discountSchemes" style={{color: "black"}}>Manage Schemes</Nav.Link>
+                        </NavDropdown.Item>     
+                    </NavDropdown> */}
+                  </Button>
+              </Nav>
+              <Button color="inherit"><NavLink to="/producer/discountSchemes" className={classes.navLink}>Manage Schemes</NavLink></Button>          
           </Navbar.Collapse>
+          
       </Navbar>
       <br/>
     </div>

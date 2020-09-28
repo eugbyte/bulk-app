@@ -25,7 +25,8 @@ export function DialogComponent({open, toggleOpen, title, content, actionTitle, 
                 { showPicture &&
                     <CardMedia 
                         component="img"
-                        height="140"
+                        
+                        //height="140"
                         image={imageUrl}
                         title="https://acowebs.com/impact-ecommerce-society/"/>
                 } 
