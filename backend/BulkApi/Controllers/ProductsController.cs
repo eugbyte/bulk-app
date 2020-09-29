@@ -39,9 +39,10 @@ namespace BulkApi.Controllers
 
         // POST: api/Products
         [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct(Product product)
+        public async Task<ActionResult<Product>> CreateProduct(Product product)
         {
-            return Ok();
+            Product createdProduct = await productService.CreateProduct(product.Name, product.Category, product.Description, product.OriginalPrice);
+            return Ok(createdProduct);
         }
 
         // DELETE: api/Products/5

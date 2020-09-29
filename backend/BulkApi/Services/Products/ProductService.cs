@@ -26,7 +26,7 @@ namespace BulkApi.Services.Products
             return products;
         }
 
-        public async Task<Product> CreateProduct(string name, string category, string description, double originalPrice, int producerId)
+        public async Task<Product> CreateProduct(string name, string category, string description, double originalPrice)
         {
             Product product = new Product
             {
@@ -34,7 +34,6 @@ namespace BulkApi.Services.Products
                 Category = category,
                 Description = description,
                 OriginalPrice = originalPrice,
-                ProducerId = producerId
             };
 
             db.Products.Add(product);

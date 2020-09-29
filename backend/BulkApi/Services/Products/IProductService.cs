@@ -8,7 +8,7 @@ namespace BulkApi.Services.Products
 {
     public interface IProductService
     {
-        Task<Product> CreateProduct(string name, string category, string description, double originalPrice, int producerId);
+        Task<Product> CreateProduct(string name, string category, string description, double originalPrice);
         Task<List<Product>> GetProducts(int producerId);
     }
 }

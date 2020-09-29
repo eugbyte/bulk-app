@@ -9,6 +9,7 @@ import { CartPage } from './containers/CartPage';
 import { OrdersPage } from './containers/OrdersPage';
 import { ProducerPage } from './containers/ProducerPages';
 import { DiscountSchemeForm } from './containers/DiscountSchemeForm';
+import { ProductForm } from './containers/ProductForm';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
           <Route path="/discountScheme/:discountSchemeId" component= { DiscountSchemeDetailHOC } />
           <Route path="/cart" component= { CartPage } />
           <Route path="/orders" component= { OrdersPage } />
+          <Route path="/producer/product/:productId" component = { ProductForm } />
           <Route path="/producer/discountSchemes/create" component = { DiscountSchemeForm } />
           <Route path="/producer/discountSchemes" component = { ProducerPage } />
           <Route exact path="/" component={ DiscountSchemesPage } />

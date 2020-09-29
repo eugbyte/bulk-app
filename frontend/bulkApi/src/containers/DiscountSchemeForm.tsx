@@ -41,7 +41,8 @@ export function DiscountSchemeForm(): JSX.Element {
         dispatch(action);
     }, []);  
 
-    const { errors, handleSubmit, control, getValues, register, watch } = useForm();    
+    // React hook form - uncontrolled state that uses useRef behind the scenes
+    const { errors, handleSubmit, control, getValues, watch } = useForm();    
 
     const watchProductId: number = watch(FORM_NAMES.productId, 0);
     const selectedProduct: Product = products.find(product => product.productId === watchProductId) ?? new Product();
@@ -61,12 +62,16 @@ export function DiscountSchemeForm(): JSX.Element {
         dispatch(action);
     }   
 
+    // If create is successful, redirect
     const apiMessage: string = useSelector( (action: RootState) => action.discountSchemeReducer.httpMessage as string ) ?? ""; 
     useEffect(() => {
         if (apiMessage.includes(ACTIONS.HTTP_CREATE_SUCCESS)) {
             history.push("/producer/discountSchemes");
         }
     }, [apiMessage]);
+
+    // Redirect to product form if user decides to create new product
+    const redirectToProductForm = () => history.push("/producer/product/" + "0");
 
     return <Container maxWidth="md">
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -76,7 +81,7 @@ export function DiscountSchemeForm(): JSX.Element {
                         control={control} errors={errors} rules={{required: true}} />
                 </Grid>                
                 <Grid item xs={3} alignItems="flex-end">
-                    <Button variant="outlined" size="small" style={{bottom: "-30%"}} >Or create one</Button>
+                    <Button onClick={redirectToProductForm} variant="outlined" size="small" style={{bottom: "-30%"}} >Or create one</Button>
                 </Grid>
                 <EmptyGridRow />
 

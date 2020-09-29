@@ -109,6 +109,9 @@ export function ProducerPage(): JSX.Element {
         rows.push(row);
     }
 
+    //For when the user opens the Product Dialog
+    const updateProduct = () => history.push("/producer/product/" + product.productId);
+
     const columnNames: string[] = ["Name", "Discounted Price", "Delivery Charge",  "Min Order Qnty", "Current Bids","Expiry Date", "Bid Status"];
     const accessors: string[] = Object.keys(new Row());        
 
@@ -136,7 +139,8 @@ export function ProducerPage(): JSX.Element {
         </Grid>
         <br/>
         <DataTable columnNames={columnNames} accessors={accessors} data={rows} title={"Discount Schemes"} enablePaging={true} pageSize={5} />
-        <DialogComponent open={openDialog} toggleOpen={() => setOpenDialog(!openDialog)} content={productTextComponent} showPicture />
+        <DialogComponent open={openDialog} toggleOpen={() => setOpenDialog(!openDialog)} content={productTextComponent} showPicture 
+            action={updateProduct} actionTitle="Update Product"/>
     </Container>
 }
 

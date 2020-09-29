@@ -27,6 +27,11 @@ export default function prdouctReducer(prevState = initialState, action: IProduc
         case (ACTIONS.GET_PRODUCTS_RECEIVED):
             newState.products = action.products;
             return newState;
+        case(ACTIONS.CREATE_PRODUCT_REQUEST):
+            return newState;
+        case(ACTIONS.CREATE_PRODUCT_RECEIVED):
+            newState.product = action.product;
+            return newState;
         default:
             return prevState;
     }
