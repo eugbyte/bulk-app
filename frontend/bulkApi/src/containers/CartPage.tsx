@@ -7,7 +7,7 @@ import { Dispatch } from "redux";
 import { DataTable } from "../components/DataTable";
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import { CartButtons } from "../components/CartButtons";
-import { DialogueComponent } from "../components/DialogueComponent";
+import { SnackbarComponent } from "../components/SnackbarComponent";
 import { Button, Container } from "@material-ui/core";
 import Checkbox from '@material-ui/core/Checkbox';
 import { OrderCheckoutComponent } from "../components/OrderCheckoutComponent";
@@ -195,7 +195,7 @@ export function CartPage(): JSX.Element {
             idColumnAccessorName={"bidId"}             
             actionMessage="Make Order"  actionIcon={AddShoppingCartIcon}  
             enabledDetailPanel={true} detailPanelFieldName={detailPanelName} />
-        <DialogueComponent open={open} setOpen={setOpen} message={notificationMessage} severity={"success"}/>        
+        <SnackbarComponent open={open} setOpen={setOpen} message={notificationMessage} severity={"success"}/>        
     </Container>
 }
 

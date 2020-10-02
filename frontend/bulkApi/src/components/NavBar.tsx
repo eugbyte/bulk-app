@@ -29,7 +29,7 @@ export function NavBar() {
                     </NavDropdown> */}
                   </Button>
               </Nav>
-              <Button color="inherit"><NavLink to="/producer/discountSchemes" className={classes.navLink}>Manage Schemes</NavLink></Button>          
+              <Button color="inherit"><NavLink to="/producer/discountSchemes" className={classes.navLink}>Producer Page</NavLink></Button>          
           </Navbar.Collapse>
           
       </Navbar>

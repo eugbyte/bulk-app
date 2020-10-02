@@ -29,12 +29,25 @@ namespace BulkApi.Controllers
             return await productService.GetProducts(producerId);
         }
 
-        
-        // PUT: api/Products/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(int id, Product product)
+        [HttpGet("{productId}")]
+        public async Task<ActionResult<Product>> GetProduct(int productId)
         {
-            return Ok();
+            return await productService.GetProduct(productId);            
+        }
+
+
+        // PUT: api/Products/5
+        [HttpPut("{productId}")]
+        public async Task<IActionResult> PutProduct(int productId, Product product)
+        {
+            if (productId != product.ProductId)
+            {
+                return BadRequest();
+            }
+
+            Product updatedProduct = await productService.UpdateProduct(productId, product);
+            return Ok(updatedProduct);
+
         }
 
         // POST: api/Products

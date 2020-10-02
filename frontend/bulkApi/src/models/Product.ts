@@ -7,6 +7,7 @@ export class Product {
     category: string = "";
     description: string = "";
     originalPrice: number = 0;
+    producerId: number = 0;
 
     discountSchemes: DiscountScheme[] = [];
 

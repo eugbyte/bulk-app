@@ -11,7 +11,7 @@ import { CartButtons } from "../components/CartButtons";
 import e_commerce from '../images/e_commerce.png';
 import { Bid } from "../models/Bid";
 import { addBidToCartAsync, updateBidInCartAsync } from "../store/thunks/bidThunk";
-import { DialogueComponent } from "../components/DialogueComponent"; 
+import { SnackbarComponent } from "../components/SnackbarComponent"; 
 import { SelectControlledComponent } from "../components/SelectComponents";
 import { Grid } from "@material-ui/core";
 import { SelectListItem } from "../models/SelectListItem";
@@ -170,6 +170,6 @@ export function DiscountSchemeDetailPage({discountSchemeId, MODE, bidIdToUpdate=
         <ButtonGroup size={"medium"}>            
             <Button  onClick={submitBid} color="primary" variant="contained" disabled={!address || quantity < 1}>Add To Cart</Button>           
           </ButtonGroup>
-        <DialogueComponent open={open} setOpen={setOpen} message={"Bid successfully created"} severity={"success"}/>
+        <SnackbarComponent open={open} setOpen={setOpen} message={"Bid successfully created"} severity={"success"}/>
     </Container>
 }

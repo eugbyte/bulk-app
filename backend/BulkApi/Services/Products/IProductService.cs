@@ -10,5 +10,7 @@ namespace BulkApi.Services.Products
     {
         Task<Product> CreateProduct(string name, string category, string description, double originalPrice);
         Task<List<Product>> GetProducts(int producerId);
+        Task<Product> GetProduct(int productId);
+        Task<Product> UpdateProduct(int productId, Product product);
     }
 }

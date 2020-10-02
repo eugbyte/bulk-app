@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-
+using Z.EntityFramework.Plus;
 
 namespace BulkApi.Services.Products
 {
@@ -16,6 +16,14 @@ namespace BulkApi.Services.Products
         public ProductService(BulkDbContext db)
         {
             this.db = db;
+        }
+
+        public async Task<Product> GetProduct(int productId)
+        {
+            Product product = await db.Products
+                .IncludeOptimized(product => product.DiscountSchemes)
+                .FirstOrDefaultAsync(product => product.ProductId == productId);
+            return product;
         }
 
         public async Task<List<Product>> GetProducts(int producerId)
@@ -40,6 +48,17 @@ namespace BulkApi.Services.Products
             await db.SaveChangesAsync();
             return product;
 
+        }
+
+        public async Task<Product> UpdateProduct(int productId, Product product)
+        {
+            Product existingProduct = await db.Products.FindAsync(productId);
+            existingProduct.Category = product.Category;
+            existingProduct.Description = product.Description;
+            existingProduct.Name = product.Name;
+            existingProduct.OriginalPrice = product.OriginalPrice;
+            await db.SaveChangesAsync();
+            return existingProduct;
         }
     }
 }

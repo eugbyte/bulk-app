@@ -10,7 +10,7 @@ const initialState: IProductAction = {
     httpMessage: "" // For API messages
 }
 
-export default function prdouctReducer(prevState = initialState, action: IProductAction): IProductAction {
+export default function productReducer(prevState = initialState, action: IProductAction): IProductAction {
 
     let newState: IProductAction = cloneDeep(prevState);
     
@@ -19,7 +19,7 @@ export default function prdouctReducer(prevState = initialState, action: IProduc
     newState.httpMessage = `${action.httpMessage} + ${new Date()}`;
 
     console.log("in bidReducer. Latest message", newState.message);
-    console.log("in bidReducer. Latest api message", newState.httpMessage);
+    console.log("in productReducer. Latest api message", newState.httpMessage);
 
     switch(action.type) {
         case(ACTIONS.GET_PRODUCTS_REQUEST):
@@ -30,6 +30,16 @@ export default function prdouctReducer(prevState = initialState, action: IProduc
         case(ACTIONS.CREATE_PRODUCT_REQUEST):
             return newState;
         case(ACTIONS.CREATE_PRODUCT_RECEIVED):
+            newState.product = action.product;
+            return newState;
+        case(ACTIONS.GET_PRODUCT_REQUEST):
+            return newState;
+        case(ACTIONS.GET_PRODUCT_RECEIVED):
+            newState.product = action.product;
+            return newState;
+        case(ACTIONS.UPDATE_PRODUCT_RECEIVED):
+            return newState;
+        case(ACTIONS.UPDATE_PRODUCT_REQUEST):
             newState.product = action.product;
             return newState;
         default:

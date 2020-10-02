@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React from "react";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 
@@ -10,7 +10,7 @@ interface IProps {
     cleanUp?: () => any;    // callback function when notification closes
 }
 
-export function DialogueComponent({open, setOpen, message, severity, cleanUp}: IProps): JSX.Element {
+export function SnackbarComponent({open, setOpen, message, severity, cleanUp}: IProps): JSX.Element {
 
     const handleClose = (reason: string) => { 
         setOpen(false); 

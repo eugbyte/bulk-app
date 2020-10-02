@@ -17,8 +17,8 @@ export default function bidReducer(prevState = initialState, action: IBidAction)
     newState.message = `${action.message} ${(new Date())}`;
     newState.httpMessage = `${action.httpMessage} + ${new Date()}`;
 
-    console.log("in bidReducer. Latest message", newState.message);
-    console.log("in bidReducer. Latest api message", newState.httpMessage);
+    //console.log("in bidReducer. Latest message", newState.message);
+    //console.log("in bidReducer. Latest api message", newState.httpMessage);
  
     switch(action.type) {    
         case(ACTIONS.ADD_BID_TO_CART_REQUEST):

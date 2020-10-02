@@ -74,7 +74,7 @@ export function ProducerPage(): JSX.Element {
         let discountSchemesCopy: DiscountScheme[] = cloneDeep(immutableDiscountSchemes);
         discountSchemesCopy = discountSchemesCopy
             .filter(ds => status ? determineStatusOfScheme(ds) === status : true )
-            .filter(ds => productName ? ds.product?.name?.includes(productName) : true)
+            .filter(ds => productName ? ds.product?.name?.toLowerCase()?.includes(productName.toLowerCase()) : true)
         setDiscountSchemes(discountSchemesCopy);
     }, [status, productName]);
 
