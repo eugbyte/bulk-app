@@ -1,4 +1,3 @@
-import React from "react";
 import { DiscountScheme } from "./DiscountScheme";
 
 export class Product {

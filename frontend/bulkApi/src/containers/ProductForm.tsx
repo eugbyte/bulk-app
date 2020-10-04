@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { ChangeEvent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux"; 
 import { useHistory, useParams } from "react-router-dom";
 import { Container, Grid } from "@material-ui/core";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { TextFieldUncontrolledComponent } from "../components/TextFieldComponents";
 import { Product } from "../models/Product";
 import { createProductsAsync, getProductAsync, updateProductAsync } from "../store/thunks/productThunk";
@@ -14,7 +14,6 @@ import { ACTIONS } from "../store/actionEnums";
 import { useState } from "react";
 import { SnackbarComponent } from "../components/SnackbarComponent";
 
-
 enum FORM_NAMES {
     productId = "productId",
     name = "name",
@@ -22,6 +21,15 @@ enum FORM_NAMES {
     description = "description",
     originalPrice = "originalPrice"
 }
+
+type FORM_DATA = {
+    "productId" : number,
+    "name": string;
+    "category": string;
+    "description": string;
+    "originalPrice": number;
+}
+
 
 // User can either Create or Update the product
 type MODE = "CREATE" | "UPDATE";
@@ -45,7 +53,7 @@ export function ProductForm(): JSX.Element {
 
     let productToUpdate: Product = useSelector((action: RootState) => action.productReducer.product as Product ) ?? new Product();
 
-    const { errors, handleSubmit, control, getValues, setValue } = useForm(); 
+    const { errors, handleSubmit, control, getValues, reset, setValue } = useForm<FORM_DATA>(); 
     
     if (mode === "UPDATE") {
         setValue(FORM_NAMES.productId, productToUpdate.productId);
@@ -55,10 +63,11 @@ export function ProductForm(): JSX.Element {
         setValue(FORM_NAMES.originalPrice, productToUpdate.originalPrice);
     }
 
-    const onSubmit = () => {
-        const {productId, name, category, description, originalPrice} = getValues([FORM_NAMES.productId, FORM_NAMES.name, 
-            FORM_NAMES.category, FORM_NAMES.description, FORM_NAMES.originalPrice]);
-        const product = initializeProduct(name, category, description, originalPrice, productId);
+    const onSubmit = (data: any) => {
+
+        const {productId, name, category, description, originalPrice} = data;        
+        //getValues([FORM_NAMES.productId, FORM_NAMES.name, FORM_NAMES.category, FORM_NAMES.description, FORM_NAMES.originalPrice]);
+        const product = initializeProduct(productId, name, category, description, originalPrice);
         console.log("submitting product", product);
         if (mode === "CREATE") {
             const action = createProductsAsync(product);
@@ -67,40 +76,43 @@ export function ProductForm(): JSX.Element {
             product.producerId = productToUpdate.producerId;
             const action = updateProductAsync(productId, product);
             dispatch(action);
+            reset(product);
         }        
+        
     };
-
+    
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
     const apiMessage: string = useSelector( (action: RootState) => action.productReducer.httpMessage as string ) ?? ""; 
     useEffect(() => {
         if (apiMessage.includes(ACTIONS.HTTP_CREATE_SUCCESS) || apiMessage.includes(ACTIONS.HTTP_UPDATE_SUCCESS)) {
             setOpenSnackbar(true);
-        }
+
+        }        
     }, [apiMessage]);
 
     return <Container maxWidth="md">
         <form onSubmit={handleSubmit(onSubmit)}>
-            <EmptyGridRow component={
+            <GridRow display="none" component={
                 <TextFieldUncontrolledComponent isFullWidth={true} control={control} errors={errors} name={FORM_NAMES.productId} label={"Product Id"} 
-                    rules={{required: false}} />
+                    rules={{required: false}}  />
             }/>
             
-            <EmptyGridRow component={
+            <GridRow component={
                 <TextFieldUncontrolledComponent isFullWidth={true} control={control} errors={errors} name={FORM_NAMES.name} label={"Name"} 
                     rules={{required: true}} />
             }/>
 
-            <EmptyGridRow component={
+            <GridRow component={
                 <TextFieldUncontrolledComponent isFullWidth={true} control={control} errors={errors} name={FORM_NAMES.originalPrice} label={"Original Price"} 
                     rules={{required: true, min: 1}} adornment={"$"} />
             } />
 
-            <EmptyGridRow component={
+            <GridRow component={
                 <TextFieldUncontrolledComponent isFullWidth={true} control={control} errors={errors} name={FORM_NAMES.category} label={"Category"} 
                     rules={{required: true}} />
             }/>
 
-            <EmptyGridRow component={
+            <GridRow component={
                 <TextFieldUncontrolledComponent isFullWidth={true} control={control} errors={errors} name={FORM_NAMES.description} label={"Description"} 
                     rules={{required: false}} />
             }/>                          
@@ -118,7 +130,7 @@ interface IRowProp {
     component: JSX.Element,
     display?: "initial" | "none"
 }
-function EmptyGridRow({component, display="initial"}: IRowProp): JSX.Element {
+function GridRow({component, display="initial"}: IRowProp): JSX.Element {
     return <div>
         <Grid item xs={12} style={{display: display}}>
             {component}
@@ -127,13 +139,14 @@ function EmptyGridRow({component, display="initial"}: IRowProp): JSX.Element {
     </div>;
 }
 
-function initializeProduct(name: string, category: string, description: string, originalPrice: number, productId=0): Product {
+function initializeProduct(productId: number, name: string, category: string, description: string, originalPrice: number): Product {
     let product: Product = new Product();
-    product.productId = productId;
+    product.productId = productId > 0 ? productId : 0;
     product.name = name;
     product.category = category;
     product.description = description;
     product.originalPrice = originalPrice;
+    product.producerId = 1;
     return product;
 }
  

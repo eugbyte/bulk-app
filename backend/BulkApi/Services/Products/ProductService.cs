@@ -26,7 +26,7 @@ namespace BulkApi.Services.Products
             return product;
         }
 
-        public async Task<List<Product>> GetProducts(int producerId)
+        public async Task<List<Product>> GetProductsOfProducer(int producerId)
         {
             List<Product> products = await db.Products
                 .Where(product => product.ProducerId == producerId)
@@ -34,7 +34,7 @@ namespace BulkApi.Services.Products
             return products;
         }
 
-        public async Task<Product> CreateProduct(string name, string category, string description, double originalPrice)
+        public async Task<Product> CreateProduct(string name, string category, string description, double originalPrice, int producerId)
         {
             Product product = new Product
             {
@@ -42,6 +42,7 @@ namespace BulkApi.Services.Products
                 Category = category,
                 Description = description,
                 OriginalPrice = originalPrice,
+                ProducerId = producerId
             };
 
             db.Products.Add(product);

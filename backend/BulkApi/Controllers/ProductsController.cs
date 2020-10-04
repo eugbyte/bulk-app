@@ -24,9 +24,9 @@ namespace BulkApi.Controllers
 
         // GET: api/Products
         [HttpGet("producer/{producerId}")]
-        public async Task<ActionResult<List<Product>>> GetProducts(int producerId)
+        public async Task<ActionResult<List<Product>>> GetProductsOfProducer(int producerId)
         {
-            return await productService.GetProducts(producerId);
+            return await productService.GetProductsOfProducer(producerId);
         }
 
         [HttpGet("{productId}")]
@@ -54,7 +54,7 @@ namespace BulkApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> CreateProduct(Product product)
         {
-            Product createdProduct = await productService.CreateProduct(product.Name, product.Category, product.Description, product.OriginalPrice);
+            Product createdProduct = await productService.CreateProduct(product.Name, product.Category, product.Description, product.OriginalPrice, product.ProducerId);
             return Ok(createdProduct);
         }
 

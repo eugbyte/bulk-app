@@ -69,6 +69,7 @@ export function createProductsAsync(product: Product): ThunkAction<Promise<void>
 
             if (!response.ok) {
                 let apiError: ApiError = await response.json();
+                console.log("apiError in createProductAsync", apiError);
                 throw apiError;
             }
             
