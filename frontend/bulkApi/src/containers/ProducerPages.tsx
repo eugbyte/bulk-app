@@ -16,6 +16,7 @@ import { DialogComponent } from "../components/DialogComponent";
 import { TextComponent } from "../components/TextComponent";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
+import { deleteProductAsync } from "../store/thunks/productThunk";
 
 type Status = "SUCCESS" | "PENDING" | "FAILED" | undefined;
 
@@ -79,7 +80,7 @@ export function ProducerPage(): JSX.Element {
     }, [status, productName]);
 
     // To display the product as a dialog when user clicks on the link
-    const [openDialog, setOpenDialog] = useState<boolean>(false);
+    const [openProductDialog, setOpenProductDialog] = useState<boolean>(false);
     const [product, setProduct] = useState<Product>(new Product());
     let productTextDict: Record<string, any> = {
         "Name": product.name,
@@ -103,7 +104,7 @@ export function ProducerPage(): JSX.Element {
                 .find(product => product?.productId === ds.productId) ?? new Product();
             setProduct(product);
 
-            setOpenDialog(!openDialog);
+            setOpenProductDialog(!openProductDialog);
         };
         row.name = <Button onClick={onClick} size="small" variant="outlined">{ds.product?.name}</Button> ;
         rows.push(row);
@@ -111,6 +112,20 @@ export function ProducerPage(): JSX.Element {
 
     //For when the user opens the Product Dialog
     const updateProduct = () => history.push("/producer/product/" + product.productId);
+    const deleteProduct = () => {
+        if (product.discountSchemes.length > 0) {
+            return;
+        }
+        const action = deleteProductAsync(product.productId);
+        dispatch(action);
+    }
+
+    // When user clicks delete in the opened product dialog, close it, then open another and confirm delete
+    const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
+    const handleOnDeleteClick = () => {
+        setOpenProductDialog(false);
+        setOpenDeleteDialog(true);
+    }
 
     const columnNames: string[] = ["Name", "Discounted Price", "Delivery Charge",  "Min Order Qnty", "Current Bids","Expiry Date", "Bid Status"];
     const accessors: string[] = Object.keys(new Row());        
@@ -139,8 +154,11 @@ export function ProducerPage(): JSX.Element {
         </Grid>
         <br/>
         <DataTable columnNames={columnNames} accessors={accessors} data={rows} title={"Discount Schemes"} enablePaging={true} pageSize={5} />
-        <DialogComponent open={openDialog} toggleOpen={() => setOpenDialog(!openDialog)} content={productTextComponent} showPicture 
-            action={updateProduct} actionTitle="Update Product"/>
+        <DialogComponent open={openProductDialog} toggleOpen={() => setOpenProductDialog(!openProductDialog)} content={productTextComponent} showPicture 
+            action={updateProduct} actionTitle="Update Product"
+            secondaryAction={handleOnDeleteClick} secondaryActionTitle="Delete Product"/>
+        <DialogComponent open={openDeleteDialog} toggleOpen={() => setOpenDeleteDialog(!openDeleteDialog)} content={<p>Confirm Delete?</p>}
+            action={deleteProduct} actionTitle="Delete Product"/>
     </Container>
 }
 

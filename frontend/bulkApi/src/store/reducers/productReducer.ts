@@ -43,6 +43,11 @@ export default function productReducer(prevState = initialState, action: IProduc
             console.log("received updatedProduct", action.product);
             newState.product = action.product;
             return newState;
+        case(ACTIONS.DELETE_PRODUCT_REQUEST):
+            return newState;
+        case(ACTIONS.DELETE_PRODUCT_RECEIVED):
+            newState.product = action.product;
+            return newState;
         default:
             return prevState;
     }

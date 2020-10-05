@@ -15,9 +15,11 @@ interface IProps {
     content?: JSX.Element;  // paragraphs to display, e.g. [<p></p>, <p></p>]
     actionTitle?: string,   //title of button
     action?: () => any; //callback function on button click
+    secondaryActionTitle?: string,
+    secondaryAction?: () => any;
 }
 
-export function DialogComponent({open, toggleOpen, title, content, actionTitle, action, showPicture=false}: IProps): JSX.Element {
+export function DialogComponent({open, toggleOpen, title, content, actionTitle, action, showPicture=false, secondaryActionTitle, secondaryAction}: IProps): JSX.Element {
 
     return <Dialog open={open} onClose={toggleOpen} aria-labelledby="form-dialog-title" maxWidth="sm" fullWidth>
         <DialogTitle id="form-dialog-title">{title}</DialogTitle>
@@ -35,13 +37,20 @@ export function DialogComponent({open, toggleOpen, title, content, actionTitle, 
             </DialogContent>
             {actionTitle &&
                 <DialogActions>
-                    <Button onClick={action} color="primary">
+                    <Button onClick={action} color="primary" variant="outlined">
                         {actionTitle}
                     </Button>
                 </DialogActions>
             }            
+            {secondaryActionTitle &&
+                <DialogActions>
+                    <Button onClick={secondaryAction as () => {}} color="secondary" variant="outlined">
+                        {secondaryActionTitle}
+                    </Button>
+                </DialogActions>
+            } 
             <DialogActions>                
-                <Button onClick={toggleOpen} color="primary">
+                <Button onClick={toggleOpen} color="primary" variant="outlined">
                     Close
                 </Button>
             </DialogActions>

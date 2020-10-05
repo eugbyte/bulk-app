@@ -107,3 +107,27 @@ export function updateProductAsync(productId: number, product: Product): ThunkAc
         
     }
 }
+
+export function deleteProductAsync(productId: number): ThunkAction<Promise<void>, {}, {}, IProductAction | IErrorAction> {
+    return async (dispatch: ThunkDispatch<{}, {}, IProductAction | IErrorAction>) => {
+        dispatch({ type: ACTIONS.DELETE_PRODUCT_REQUEST, message: "Updating product ..." });
+
+        try {
+            const response: Response = await fetch("https://localhost:44397/api/products/" + productId, {
+                method: "DELETE"
+            });
+
+            if (!response.ok) {
+                let apiError: ApiError = await response.json();
+                throw apiError;
+            }
+            
+            let deletedProduct: Product = (await response.json());
+            console.log("updatedProduct", deletedProduct);
+            dispatch({ type: ACTIONS.DELETE_PRODUCT_RECEIVED, product: deletedProduct, message: response.statusText,  httpMessage: ACTIONS.HTTP_DELETE_SUCCESS });
+        } catch(error) {
+            dispatch(errorAction(ACTIONS.ERROR, error));
+        }        
+        
+    }
+}

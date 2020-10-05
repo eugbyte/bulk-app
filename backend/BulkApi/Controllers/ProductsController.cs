@@ -59,10 +59,11 @@ namespace BulkApi.Controllers
         }
 
         // DELETE: api/Products/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Product>> DeleteProduct(int id)
+        [HttpDelete("{productId}")]
+        public async Task<ActionResult<Product>> DeleteProduct(int productId)
         {
-            return Ok();
+            Product deletedProduct = await productService.DeleteProduct(productId);
+            return Ok(deletedProduct);
         }
     }
 }

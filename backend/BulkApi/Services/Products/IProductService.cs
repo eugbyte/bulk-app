@@ -12,5 +12,6 @@ namespace BulkApi.Services.Products
         Task<List<Product>> GetProductsOfProducer(int producerId);
         Task<Product> GetProduct(int productId);
         Task<Product> UpdateProduct(int productId, Product product);
+        Task<Product> DeleteProduct(int productId);
     }
 }

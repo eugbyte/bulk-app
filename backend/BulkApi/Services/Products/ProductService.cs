@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Z.EntityFramework.Plus;
+using BulkApi.Exceptions;
 
 namespace BulkApi.Services.Products
 {
@@ -60,6 +61,26 @@ namespace BulkApi.Services.Products
             existingProduct.OriginalPrice = product.OriginalPrice;
             await db.SaveChangesAsync();
             return existingProduct;
+        }
+
+        public async Task<Product> DeleteProduct(int productId)
+        {
+            Product existingProduct = await db.Products
+                .IncludeOptimized(product => product.DiscountSchemes)
+                .FirstOrDefaultAsync(product => product.ProducerId == productId);
+
+            if (ProductHasSchemes(existingProduct)) {
+                throw new ProductNoCascadeDeleteException();
+            }
+
+            db.Products.Remove(existingProduct);
+            await db.SaveChangesAsync();
+            return existingProduct;
+        }
+
+        private bool ProductHasSchemes(Product existingProduct) 
+        {
+            return existingProduct.DiscountSchemes.Count > 0;
         }
     }
 }
