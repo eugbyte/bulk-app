@@ -9,7 +9,6 @@ import { Product } from "../models/Product";
 import { createProductsAsync, getProductAsync, updateProductAsync } from "../store/thunks/productThunk";
 import { RootState } from "../store/rootReducer";
 import Button from '@material-ui/core/Button';
-import { ModeComment } from "@material-ui/icons";
 import { ACTIONS } from "../store/actionEnums";
 import { useState } from "react";
 import { SnackbarComponent } from "../components/SnackbarComponent";
@@ -44,24 +43,28 @@ export function ProductForm(): JSX.Element {
     const productId: number = parseInt(routeParams["productId"]); 
     const mode: MODE = productId === 0 ? "CREATE" : "UPDATE";
 
+    let productToUpdate: Product = useSelector((action: RootState) => action.productReducer.product as Product ) ?? new Product();
+
     useEffect(() => {
         if (mode === "UPDATE") {
             const action = getProductAsync(productId);
             dispatch(action);
         }   
-    }, [productId]);
-
-    let productToUpdate: Product = useSelector((action: RootState) => action.productReducer.product as Product ) ?? new Product();
+    }, [productId]);   
 
     const { errors, handleSubmit, control, getValues, reset, setValue } = useForm<FORM_DATA>(); 
+
+    useEffect(() => {
+        if (mode === "UPDATE") {
+            setValue(FORM_NAMES.productId, productToUpdate.productId);
+            setValue(FORM_NAMES.name, productToUpdate.name);
+            setValue(FORM_NAMES.category, productToUpdate.category);
+            setValue(FORM_NAMES.description, productToUpdate.description);
+            setValue(FORM_NAMES.originalPrice, productToUpdate.originalPrice);
+        }
+    }, [JSON.stringify(productToUpdate)])
     
-    if (mode === "UPDATE") {
-        setValue(FORM_NAMES.productId, productToUpdate.productId);
-        setValue(FORM_NAMES.name, productToUpdate.name);
-        setValue(FORM_NAMES.category, productToUpdate.category);
-        setValue(FORM_NAMES.description, productToUpdate.description);
-        setValue(FORM_NAMES.originalPrice, productToUpdate.originalPrice);
-    }
+    
 
     const onSubmit = (data: any) => {
 
@@ -72,13 +75,13 @@ export function ProductForm(): JSX.Element {
         if (mode === "CREATE") {
             const action = createProductsAsync(product);
             dispatch(action);
+            reset({});
         } else if (mode === "UPDATE") {
             product.producerId = productToUpdate.producerId;
             const action = updateProductAsync(productId, product);
             dispatch(action);
-            reset(product);
-        }        
-        
+            //reset(product);
+        }                
     };
     
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
@@ -99,22 +102,22 @@ export function ProductForm(): JSX.Element {
             
             <GridRow component={
                 <TextFieldUncontrolledComponent isFullWidth={true} control={control} errors={errors} name={FORM_NAMES.name} label={"Name"} 
-                    rules={{required: true}} />
+                    rules={{required: true}} errorMessage="Name is required" />
             }/>
 
             <GridRow component={
                 <TextFieldUncontrolledComponent isFullWidth={true} control={control} errors={errors} name={FORM_NAMES.originalPrice} label={"Original Price"} 
-                    rules={{required: true, min: 1}} adornment={"$"} />
+                    rules={{required: true, min: 1}} adornment={"$"} errorMessage="Original Price is required" />
             } />
 
             <GridRow component={
                 <TextFieldUncontrolledComponent isFullWidth={true} control={control} errors={errors} name={FORM_NAMES.category} label={"Category"} 
-                    rules={{required: true}} />
+                    rules={{required: false}} />
             }/>
 
             <GridRow component={
                 <TextFieldUncontrolledComponent isFullWidth={true} control={control} errors={errors} name={FORM_NAMES.description} label={"Description"} 
-                    rules={{required: false}} />
+                    rules={{required: false}}  />
             }/>                          
 
             <Button variant="contained" color="primary" type="submit">
@@ -141,7 +144,7 @@ function GridRow({component, display="initial"}: IRowProp): JSX.Element {
 
 function initializeProduct(productId: number, name: string, category: string, description: string, originalPrice: number): Product {
     let product: Product = new Product();
-    product.productId = productId > 0 ? productId : 0;
+    product.productId = productId > 0 ? productId : 0;  //When creating product, productId is set to null from react hook form
     product.name = name;
     product.category = category;
     product.description = description;

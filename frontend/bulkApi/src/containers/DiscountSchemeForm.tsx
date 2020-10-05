@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Container, Grid } from "@material-ui/core";
+import { Container, Grid, TextField } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux"; 
 import { Product } from "../models/Product";
@@ -8,7 +8,7 @@ import { getProductsAsync } from "../store/thunks/productThunk";
 import { SelectListItem } from "../models/SelectListItem";
 import { SelectUncontrolledComponent } from "../components/SelectComponents";
 import { DatePickerUncontrolledComponent } from "../components/DatePickerComponent";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { TextFieldUncontrolledComponent } from "../components/TextFieldComponents";
 import Button from '@material-ui/core/Button';
 import { DiscountScheme } from "../models/DiscountScheme";
@@ -16,6 +16,7 @@ import { TextComponent } from "../components/TextComponent";
 import { createDiscountSchemeAsync } from "../store/thunks/discountSchemeThunk";
 import { ACTIONS } from "../store/actionEnums";
 import { useHistory } from "react-router-dom";
+import { Autocomplete } from "@material-ui/lab";
 
 enum FORM_NAMES {
     productId = "productId",
@@ -57,7 +58,6 @@ export function DiscountSchemeForm(): JSX.Element {
         const {productId, discountedPrice, minOrderQnty, deliveryCharge, expiryDate} = getValues([FORM_NAMES.productId, FORM_NAMES.discountedPrice, 
             FORM_NAMES.minOrderQnty, FORM_NAMES.deliveryCharge, FORM_NAMES.expiryDate]);
         const discountScheme: DiscountScheme = createDiscountScheme(productId, minOrderQnty, discountedPrice, expiryDate, deliveryCharge);
-        
         const action = createDiscountSchemeAsync(discountScheme);
         dispatch(action);
     }   
@@ -75,10 +75,29 @@ export function DiscountSchemeForm(): JSX.Element {
 
     return <Container maxWidth="md">
         <form onSubmit={handleSubmit(onSubmit)}>
+            
             <Grid container justify="flex-start">
-                <Grid item xs={2}>
-                    <SelectUncontrolledComponent title={"Choose Product"} selectListItems={selectListItems} name={FORM_NAMES.productId} errorMessage="Scheme is required"
-                        control={control} errors={errors} rules={{required: true}} />
+                <Grid item xs={4}>
+                    <Controller                     
+                        control={control}
+                        name={FORM_NAMES.productId}                
+                        rules={{"required": true }}
+                        render={({onChange}: any) =>  <Autocomplete
+                                id="combo-box-demo"
+                                options={products}
+                                getOptionLabel={(option: Product) => option.name ?? ""}
+                                style={{ width: 300 }} 
+                                onChange={(event: any, data) => onChange((data as Product).productId)}                                
+                                renderInput={(params) => <TextField {...params} label="Products" variant="outlined" />}  
+                                />
+                        }
+                    />
+                    {errors["productId"] &&
+                        <p style={{fontSize: "14px", color: "red", textAlign: "left"}}>Product is required</p>                                            
+                    }
+                
+                    {/* <SelectUncontrolledComponent title={"Choose Product"} selectListItems={selectListItems} name={FORM_NAMES.productId} errorMessage="Scheme is required"
+                        control={control} errors={errors} rules={{required: true}} /> */}
                 </Grid>                
                 <Grid item xs={3} alignItems="flex-end">
                     <Button onClick={redirectToProductForm} variant="outlined" size="small" style={{bottom: "-30%"}} >Or create one</Button>
