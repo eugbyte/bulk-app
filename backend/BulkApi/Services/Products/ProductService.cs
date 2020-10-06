@@ -67,9 +67,9 @@ namespace BulkApi.Services.Products
         {
             Product existingProduct = await db.Products
                 .IncludeOptimized(product => product.DiscountSchemes)
-                .FirstOrDefaultAsync(product => product.ProducerId == productId);
+                .FirstOrDefaultAsync(product => product.ProductId == productId);
 
-            if (ProductHasSchemes(existingProduct)) {
+            if (ProductHasPendingSchemes(existingProduct)) {
                 throw new ProductNoCascadeDeleteException();
             }
 
@@ -78,8 +78,12 @@ namespace BulkApi.Services.Products
             return existingProduct;
         }
 
-        private bool ProductHasSchemes(Product existingProduct) 
-        {
+        private bool ProductHasPendingSchemes(Product existingProduct) 
+        { 
+            if (existingProduct.DiscountSchemes == null)
+            {
+                return false;
+            }
             return existingProduct.DiscountSchemes.Count > 0;
         }
     }

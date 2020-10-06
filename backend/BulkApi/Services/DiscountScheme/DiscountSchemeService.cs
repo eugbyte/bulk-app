@@ -133,6 +133,17 @@ namespace BulkApi.Services.DiscountSchemes
             await db.SaveChangesAsync();
             return discountScheme;
         }
+
+        public async Task<DiscountScheme> DeleteDiscountScheme(int discountSchemeId)
+        {
+            DiscountScheme discountScheme = await db.DiscountSchemes
+                .IncludeOptimized(ds => ds.Bids)
+                .FirstOrDefaultAsync(ds => ds.DiscountSchemeId == discountSchemeId);
+
+            db.DiscountSchemes.Remove(discountScheme);
+            await db.SaveChangesAsync();
+            return discountScheme;
+        }
     }
 
     

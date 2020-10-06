@@ -33,6 +33,9 @@ namespace BulkApi.Filters
             if (context.Exception is EntityNotFoundException)
             {
                 response.StatusCode = StatusCodes.Status500InternalServerError;
+            } else if (context.Exception is ProductNoCascadeDeleteException)
+            {
+                response.StatusCode = StatusCodes.Status500InternalServerError;
             } else
             {
                 response.StatusCode = StatusCodes.Status500InternalServerError;

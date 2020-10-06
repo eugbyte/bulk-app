@@ -21,15 +21,18 @@ export function NavBar() {
                 <Button color="inherit" ><NavLink to="/" className={classes.navLink} >Products</NavLink></Button>
                 <Button color="inherit"><NavLink to="/cart" className={classes.navLink}>Cart</NavLink></Button>
                 <Button color="inherit"><NavLink to="/orders" className={classes.navLink}>Orders</NavLink></Button>
-                  <Button color="inherit">
-                    {/* <NavDropdown title="Admin Page" id="basic-nav-dropdown" >
-                        <NavDropdown.Item >
-                          <Nav.Link as={NavLink} to="/producer/discountSchemes" style={{color: "black"}}>Manage Schemes</Nav.Link>
-                        </NavDropdown.Item>     
-                    </NavDropdown> */}
-                  </Button>
+                  
               </Nav>
-              <Button color="inherit"><NavLink to="/producer/discountSchemes" className={classes.navLink}>Producer Page</NavLink></Button>          
+              <Button color="inherit" style={{marginRight: "100px"}}>
+                <NavDropdown title={<span className={classes.navLink}>Producer</span>} id="basic-nav-dropdown" style={{}} >
+                    <NavDropdown.Item >
+                      <Nav.Link as={NavLink} to="/producer/discountSchemes" style={{color: "black"}}>Manage Schemes</Nav.Link>
+                    </NavDropdown.Item> 
+                    <NavDropdown.Item >
+                      <Nav.Link as={NavLink} to="/producer/products" style={{color: "black"}}>Manage Products</Nav.Link>
+                    </NavDropdown.Item>      
+                </NavDropdown>
+              </Button>
           </Navbar.Collapse>
           
       </Navbar>

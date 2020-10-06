@@ -6,6 +6,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { Button } from "@material-ui/core";
 import CardMedia from '@material-ui/core/CardMedia'; 
 import imageUrl  from  "../../src/images/e_commerce.png";
+import Grid from '@material-ui/core/Grid';
+import Container from '@material-ui/core/Container';
 
 interface IProps {
     open: boolean;  //open is part of useState(false)
@@ -14,9 +16,9 @@ interface IProps {
     showPicture?: boolean;
     content?: JSX.Element;  // paragraphs to display, e.g. [<p></p>, <p></p>]
     actionTitle?: string,   //title of button
-    action?: () => any; //callback function on button click
+    action?: (arg?: any) => any; //callback function on button click
     secondaryActionTitle?: string,
-    secondaryAction?: () => any;
+    secondaryAction?: (arg?: any) => any;
 }
 
 export function DialogComponent({open, toggleOpen, title, content, actionTitle, action, showPicture=false, secondaryActionTitle, secondaryAction}: IProps): JSX.Element {
@@ -35,25 +37,44 @@ export function DialogComponent({open, toggleOpen, title, content, actionTitle, 
                 <br/>               
                 {content}                
             </DialogContent>
-            {actionTitle &&
-                <DialogActions>
-                    <Button onClick={action} color="primary" variant="outlined">
-                        {actionTitle}
-                    </Button>
-                </DialogActions>
-            }            
-            {secondaryActionTitle &&
-                <DialogActions>
-                    <Button onClick={secondaryAction as () => {}} color="secondary" variant="outlined">
-                        {secondaryActionTitle}
-                    </Button>
-                </DialogActions>
-            } 
-            <DialogActions>                
-                <Button onClick={toggleOpen} color="primary" variant="outlined">
-                    Close
-                </Button>
-            </DialogActions>
+
+            <Container>
+                <Grid container spacing={0}>
+                    <Grid item xs={8}></Grid>
+                    <Grid item xs={4}>
+                    {actionTitle &&
+                        <DialogActions>
+                            <Button onClick={action} color="primary" variant="outlined">
+                                {actionTitle}
+                            </Button>
+                        </DialogActions>
+                    } 
+                    </Grid>
+                </Grid>                       
+
+                <Grid container spacing={0}>
+                    <Grid item xs={4}>
+                    {secondaryActionTitle &&
+                        <DialogActions>
+                            <Button onClick={secondaryAction as () => {}} color="secondary" variant="outlined">
+                                {secondaryActionTitle}
+                            </Button>
+                        </DialogActions>
+                    }  
+                    </Grid>
+                    <Grid item xs={4}></Grid>
+                    <Grid item xs={4}>
+                        <DialogActions>                
+                            <Button onClick={toggleOpen} color="primary" variant="outlined">
+                                Close
+                            </Button>
+                        </DialogActions>
+                    </Grid>
+                </Grid>
+            </Container>
+            
+            
+            
     </Dialog>
 
 }

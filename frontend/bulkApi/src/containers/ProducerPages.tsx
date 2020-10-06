@@ -127,6 +127,10 @@ export function ProducerPage(): JSX.Element {
         setOpenDeleteDialog(true);
     }
 
+    // Error Handling
+    
+
+    // For the Data Table
     const columnNames: string[] = ["Name", "Discounted Price", "Delivery Charge",  "Min Order Qnty", "Current Bids","Expiry Date", "Bid Status"];
     const accessors: string[] = Object.keys(new Row());        
 
@@ -154,11 +158,14 @@ export function ProducerPage(): JSX.Element {
         </Grid>
         <br/>
         <DataTable columnNames={columnNames} accessors={accessors} data={rows} title={"Discount Schemes"} enablePaging={true} pageSize={5} />
-        <DialogComponent open={openProductDialog} toggleOpen={() => setOpenProductDialog(!openProductDialog)} content={productTextComponent} showPicture 
+        
+        <DialogComponent open={openProductDialog} toggleOpen={() => setOpenProductDialog(!openProductDialog)} 
+            content={productTextComponent} showPicture 
             action={updateProduct} actionTitle="Update Product"
             secondaryAction={handleOnDeleteClick} secondaryActionTitle="Delete Product"/>
+
         <DialogComponent open={openDeleteDialog} toggleOpen={() => setOpenDeleteDialog(!openDeleteDialog)} content={<p>Confirm Delete?</p>}
-            action={deleteProduct} actionTitle="Delete Product"/>
+            secondaryAction={deleteProduct} secondaryActionTitle="Delete Product"/>
     </Container>
 }
 
