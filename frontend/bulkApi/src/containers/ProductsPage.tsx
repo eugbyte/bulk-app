@@ -38,7 +38,7 @@ export function ProductsPage(): JSX.Element {
     const accessors: string[] = Object.keys(new Row());
     const rows: Row[] = [];
 
-    // When user clicks delete in the opened product dialog, close it, then open another and confirm delete
+    // When user clicks delete in the opened product dialog, confirm delete
     const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false); 
 
     const [targetProduct, setTargetProduct] = useState<Product>(new Product());
@@ -68,13 +68,15 @@ export function ProductsPage(): JSX.Element {
 
         // If product already has schemes, disallow delete
         const isDisableDelete: boolean = product.discountSchemes.length > 0;
-        let tooltipMessage: string = isDisableDelete ? "Cannot delete product as it has dependent discount schemes" : "Delete";
+        let tooltipMessage: string = isDisableDelete ? "Cannot delete product as it has dependent discount schemes" : "";
 
         row.update = <Button size="small" variant="outlined" onClick={updateProduct}>Update</Button>
-        row.delete = <div className="a">
+        row.delete = <div className="tooltip__div-visible">
             <Button color="secondary" size="small" variant="outlined"  
                 disabled={isDisableDelete} 
-                onClick={onDeleteClick}>Delete<span className="tooltiptext">{tooltipMessage}</span></Button> 
+                onClick={onDeleteClick}>Delete
+                <span className="tooltiptext">{tooltipMessage}</span>
+            </Button> 
         </div> 
         rows.push(row);
     }    

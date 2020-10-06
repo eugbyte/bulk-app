@@ -62,7 +62,7 @@ namespace BulkApi.Controllers
             return Ok(createdDiscountScheme);
         }
 
-        [HttpDelete("discountSchemeId")]
+        [HttpDelete("{discountSchemeId}")]
         public async Task<ActionResult<DiscountScheme>> DeleteDiscountScheme(int discountSchemeId)
         {
             DiscountScheme deletedDiscountScheme = await discountSchemeService.DeleteDiscountScheme(discountSchemeId);

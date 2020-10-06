@@ -102,6 +102,7 @@ export function deleteDiscountSchemeAsync(discountSchemeId: number): ThunkAction
         try {
             const response: Response = await fetch("https://localhost:44397/api/discountSchemes/" + discountSchemeId, {
                 method: "DELETE",
+                headers: { 'Content-Type': 'application/json' }
             });
 
             if (!response.ok) {

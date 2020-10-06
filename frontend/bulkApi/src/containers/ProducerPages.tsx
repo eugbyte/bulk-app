@@ -105,13 +105,14 @@ export function ProducerPage(): JSX.Element {
         if (targetDiscountScheme.bids.length > 0) {
             return;
         }
+        console.log("discountSchemeId", targetDiscountScheme.discountSchemeId);
         const action = deleteDiscountSchemeAsync(targetDiscountScheme.discountSchemeId);
         dispatch(action);
 
-        setOpenDeleteDialog(false);
-
         // Refresh and get updated products
         dispatch(getDiscountSchemesWithBidOfProducer(producerId));
+        setOpenDeleteDialog(false);
+
     } 
 
     for (let ds of discountSchemes) {
@@ -125,15 +126,21 @@ export function ProducerPage(): JSX.Element {
             setOpenProductDialog(!openProductDialog);
         };
         const onDeleteClick = () => {
+            setTargetDiscountScheme(ds);
             setOpenDeleteDialog(true);
         }
 
         // Disallow deleting of schemes which have bids
         const isDisableDelete: boolean = ds.bids.length > 0;
+        let tooltipMessage: string = isDisableDelete ? "Cannot delete scheme as it has dependent bids" : "";
 
         row.name = <Button onClick={onNameClick} size="small" variant="outlined">{ds.product?.name}</Button> ;
-        row.delete = <Button size="small" variant="outlined" color="secondary" disabled={isDisableDelete}
-            onClick={onDeleteClick}>Delete</Button>;
+        row.delete = <div className="tooltip__div-visible">
+            <Button size="small" variant="outlined" color="secondary" disabled={isDisableDelete}
+                onClick={onDeleteClick}>Delete
+                    <span className="tooltiptext">{tooltipMessage}</span>
+                </Button>
+        </div> ;
         rows.push(row);
     }
 
