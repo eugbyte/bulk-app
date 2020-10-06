@@ -31,6 +31,7 @@ namespace BulkApi.Services.Products
         {
             List<Product> products = await db.Products
                 .Where(product => product.ProducerId == producerId)
+                .IncludeOptimized(product => product.DiscountSchemes)
                 .ToListAsync();
             return products;
         }

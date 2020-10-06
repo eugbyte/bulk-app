@@ -5,7 +5,7 @@ import { Dispatch } from "redux";
 import { DataTable } from "../components/DataTable";
 import { DiscountScheme } from "../models/DiscountScheme";
 import { RootState } from "../store/rootReducer";
-import { getDiscountSchemesWithBidOfProducer } from "../store/thunks/discountSchemeThunk";
+import { deleteDiscountSchemeAsync, getDiscountSchemesWithBidOfProducer } from "../store/thunks/discountSchemeThunk";
 import { cloneDeep, uniqBy } from "lodash";
 import Button from '@material-ui/core/Button';
 import { useHistory } from "react-router-dom";
@@ -27,19 +27,21 @@ class Row {
     minOrderQnty: number | undefined = 0;
     currentBids: number | undefined = 0;    
     bidExpiryDate: string | undefined  = "";
-    bidStatus: Status
+    bidStatus: Status;
+    delete: JSX.Element | undefined;
 }
 
 export function ProducerPage(): JSX.Element {
 
     document.title = "Orders";
+    const producerId: number = 1;
     const dispatch: Dispatch<any> = useDispatch();
     const history = useHistory(); 
 
     // Single source of truth, avoid mutating it
     const immutableDiscountSchemes: DiscountScheme[] = useSelector((action: RootState) => action.discountSchemeReducer.discountSchemes as DiscountScheme[]) ?? [];
     useEffect(() => {
-        const producerId: number = 1;
+        
         const action = getDiscountSchemesWithBidOfProducer(producerId);
         dispatch(action);
     }, []);
@@ -96,9 +98,25 @@ export function ProducerPage(): JSX.Element {
     // To create rows for the data table
     const rows: Row[] = [];
 
+    // When user clicks delete in the opened product dialog, close it, then open another and confirm delete
+    const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false); 
+    const [targetDiscountScheme, setTargetDiscountScheme] = useState<DiscountScheme>(new DiscountScheme());
+    const deleteProduct = () => {
+        if (targetDiscountScheme.bids.length > 0) {
+            return;
+        }
+        const action = deleteDiscountSchemeAsync(targetDiscountScheme.discountSchemeId);
+        dispatch(action);
+
+        setOpenDeleteDialog(false);
+
+        // Refresh and get updated products
+        dispatch(getDiscountSchemesWithBidOfProducer(producerId));
+    } 
+
     for (let ds of discountSchemes) {
         let row: Row = createRowFromScheme(ds);
-        const onClick = () => {
+        const onNameClick = () => {
             let product: Product = discountSchemes
                 .map(ds => ds.product)
                 .find(product => product?.productId === ds.productId) ?? new Product();
@@ -106,32 +124,21 @@ export function ProducerPage(): JSX.Element {
 
             setOpenProductDialog(!openProductDialog);
         };
-        row.name = <Button onClick={onClick} size="small" variant="outlined">{ds.product?.name}</Button> ;
+        const onDeleteClick = () => {
+            setOpenDeleteDialog(true);
+        }
+
+        // Disallow deleting of schemes which have bids
+        const isDisableDelete: boolean = ds.bids.length > 0;
+
+        row.name = <Button onClick={onNameClick} size="small" variant="outlined">{ds.product?.name}</Button> ;
+        row.delete = <Button size="small" variant="outlined" color="secondary" disabled={isDisableDelete}
+            onClick={onDeleteClick}>Delete</Button>;
         rows.push(row);
     }
 
-    //For when the user opens the Product Dialog
-    const updateProduct = () => history.push("/producer/product/" + product.productId);
-    const deleteProduct = () => {
-        if (product.discountSchemes.length > 0) {
-            return;
-        }
-        const action = deleteProductAsync(product.productId);
-        dispatch(action);
-    }
-
-    // When user clicks delete in the opened product dialog, close it, then open another and confirm delete
-    const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
-    const handleOnDeleteClick = () => {
-        setOpenProductDialog(false);
-        setOpenDeleteDialog(true);
-    }
-
-    // Error Handling
     
-
-    // For the Data Table
-    const columnNames: string[] = ["Name", "Discounted Price", "Delivery Charge",  "Min Order Qnty", "Current Bids","Expiry Date", "Bid Status"];
+    const columnNames: string[] = ["Name", "Discounted Price", "Delivery Charge",  "Min Order Qnty", "Current Bids","Expiry Date", "Bid Status", "Delete"];
     const accessors: string[] = Object.keys(new Row());        
 
     return <Container maxWidth="lg">
@@ -160,10 +167,7 @@ export function ProducerPage(): JSX.Element {
         <DataTable columnNames={columnNames} accessors={accessors} data={rows} title={"Discount Schemes"} enablePaging={true} pageSize={5} />
         
         <DialogComponent open={openProductDialog} toggleOpen={() => setOpenProductDialog(!openProductDialog)} 
-            content={productTextComponent} showPicture 
-            action={updateProduct} actionTitle="Update Product"
-            secondaryAction={handleOnDeleteClick} secondaryActionTitle="Delete Product"/>
-
+            content={productTextComponent} showPicture />
         <DialogComponent open={openDeleteDialog} toggleOpen={() => setOpenDeleteDialog(!openDeleteDialog)} content={<p>Confirm Delete?</p>}
             secondaryAction={deleteProduct} secondaryActionTitle="Delete Product"/>
     </Container>

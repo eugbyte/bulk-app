@@ -42,6 +42,11 @@ export default function discountSchemeReducer(prevState = initialState, action: 
             console.log(action.message);
             newState.discountScheme = action.discountScheme as DiscountScheme;
             return newState;
+        case(ACTIONS.DELETE_PRODUCT_REQUEST):
+            return newState;
+        case(ACTIONS.DELETE_PRODUCT_RECEIVED):
+            newState.discountScheme = action.discountScheme;
+            return newState;
         default:
             return prevState;
     }

@@ -95,3 +95,24 @@ export function createDiscountSchemeAsync(discountScheme: DiscountScheme): Thunk
         }
     }
 }
+
+export function deleteDiscountSchemeAsync(discountSchemeId: number): ThunkAction<Promise<void>, {}, {}, IDiscountSchemeAction | IErrorAction> {
+    return async (dispatch: ThunkDispatch<{}, {}, IDiscountSchemeAction | IErrorAction>) => {
+        dispatch({ type: ACTIONS.DELETE_DISCOUNTSCHEME_REQUEST, message: "Deleting Discount Scheme" });
+        try {
+            const response: Response = await fetch("https://localhost:44397/api/discountSchemes/" + discountSchemeId, {
+                method: "DELETE",
+            });
+
+            if (!response.ok) {
+                let apiError: ApiError = await response.json();
+                throw apiError;
+            }
+            const deletedDiscountScheme: DiscountScheme = await response.json();
+            dispatch({ type: ACTIONS.DELETE_DISCOUNTSCHEME_RECEIVED, discountScheme: deletedDiscountScheme, httpMessage: ACTIONS.HTTP_CREATE_SUCCESS });
+
+        } catch(error) {
+            dispatch(errorAction(ACTIONS.ERROR, error));
+        }
+    }
+}
