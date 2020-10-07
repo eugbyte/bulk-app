@@ -17,6 +17,7 @@ import { TextComponent } from "../components/TextComponent";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import { deleteProductAsync } from "../store/thunks/productThunk";
+import { ACTIONS } from "../store/actionEnums";
 
 type Status = "SUCCESS" | "PENDING" | "FAILED" | undefined;
 
@@ -31,9 +32,9 @@ class Row {
     delete: JSX.Element | undefined;
 }
 
-export function ProducerPage(): JSX.Element {
+export function ProducerDiscountSchemePage(): JSX.Element {
 
-    document.title = "Orders";
+    document.title = "Schemes";
     const producerId: number = 1;
     const dispatch: Dispatch<any> = useDispatch();
     const history = useHistory(); 
@@ -106,14 +107,20 @@ export function ProducerPage(): JSX.Element {
             return;
         }
         console.log("discountSchemeId", targetDiscountScheme.discountSchemeId);
-        const action = deleteDiscountSchemeAsync(targetDiscountScheme.discountSchemeId);
-        dispatch(action);
-
-        // Refresh and get updated products
-        dispatch(getDiscountSchemesWithBidOfProducer(producerId));
+        const deleteAction = deleteDiscountSchemeAsync(targetDiscountScheme.discountSchemeId);
+        dispatch(deleteAction);
         setOpenDeleteDialog(false);
-
     } 
+
+    let httpResponseMessage: string = useSelector((action: RootState) => action.discountSchemeReducer.httpMessage as string) ?? "";
+    console.log("in ProductPage", httpResponseMessage);
+    useEffect(() => {
+        if (httpResponseMessage.includes(ACTIONS.HTTP_DELETE_SUCCESS)) {
+            
+            const action = getDiscountSchemesWithBidOfProducer(producerId);
+            dispatch(action);
+        }
+    }, [httpResponseMessage]);
 
     // Set the rows for the datatable
     for (let ds of discountSchemes) {

@@ -7,7 +7,7 @@ import { Switch, BrowserRouter as Router } from 'react-router-dom';
 import { DiscountSchemeDetailHOC } from './containers/DiscountSchemeDetailHOC';
 import { CartPage } from './containers/CartPage';
 import { OrdersPage } from './containers/OrdersPage';
-import { ProducerPage } from './containers/ProducerPages';
+import { ProducerDiscountSchemePage } from './containers/ProducerDiscountSchemePage';
 import { DiscountSchemeForm } from './containers/DiscountSchemeForm';
 import { ProductForm } from './containers/ProductForm';
 import { ProductsPage } from './containers/ProductsPage';
@@ -25,7 +25,7 @@ function App() {
           <Route path="/producer/products" component = { ProductsPage } />
           <Route path="/producer/product/:productId" component = { ProductForm } />
           <Route path="/producer/discountSchemes/create" component = { DiscountSchemeForm } />
-          <Route path="/producer/discountSchemes" component = { ProducerPage } />
+          <Route path="/producer/discountSchemes" component = { ProducerDiscountSchemePage } />
           <Route exact path="/" component={ DiscountSchemesPage } />
         </Switch>
       </Router> 

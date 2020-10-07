@@ -110,7 +110,7 @@ export function deleteDiscountSchemeAsync(discountSchemeId: number): ThunkAction
                 throw apiError;
             }
             const deletedDiscountScheme: DiscountScheme = await response.json();
-            dispatch({ type: ACTIONS.DELETE_DISCOUNTSCHEME_RECEIVED, discountScheme: deletedDiscountScheme, httpMessage: ACTIONS.HTTP_CREATE_SUCCESS });
+            dispatch({ type: ACTIONS.DELETE_DISCOUNTSCHEME_RECEIVED, discountScheme: deletedDiscountScheme, httpMessage: ACTIONS.HTTP_DELETE_SUCCESS });
 
         } catch(error) {
             dispatch(errorAction(ACTIONS.ERROR, error));

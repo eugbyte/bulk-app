@@ -10,6 +10,7 @@ import { Container, Grid } from "@material-ui/core";
 import { DialogComponent } from "../components/DialogComponent";
 import { DataTable } from "../components/DataTable";
 import "./toolTip.css";
+import { ACTIONS } from "../store/actionEnums";
 
 
 class Row {
@@ -49,14 +50,18 @@ export function ProductsPage(): JSX.Element {
         }
         const action = deleteProductAsync(targetProduct.productId);
         dispatch(action);
-
-        setOpenDeleteDialog(false);
-
-        // Refresh and get updated products
-        dispatch(getProductsAsync(producerId));
     } 
 
-    for(let i = 0; i < products.length; i++) {
+    let httpResponseMessage: string = useSelector((action: RootState) => action.productReducer.httpMessage as string);
+    useEffect(() => {
+        if (httpResponseMessage.includes(ACTIONS.HTTP_DELETE_SUCCESS)) {
+            console.log("in productsPage", httpResponseMessage);
+            const action = getProductsAsync(producerId);
+            dispatch(action);
+        }
+    }, [httpResponseMessage]); 
+
+    for (let i = 0; i < products.length; i++) {
         let product: Product = products[i];
         let row: Row = createRow(product);
 

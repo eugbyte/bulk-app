@@ -142,12 +142,9 @@ export function DiscountSchemeForm(): JSX.Element {
                 </Grid>
                 <EmptyGridRow />
 
-            </Grid>
-
-            
+            </Grid>            
                         
         </form>
-
     </Container>
 }
 

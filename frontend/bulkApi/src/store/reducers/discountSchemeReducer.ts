@@ -12,7 +12,8 @@ export default function discountSchemeReducer(prevState = initialState, action: 
     let newState: IDiscountSchemeAction = cloneDeep(prevState);
     newState.type = action.type;
     newState.message = `${action.message} ${(new Date())}`;
-    newState.httpMessage = `${action.httpMessage} + ${new Date()}`;
+    newState.httpMessage = `${action.httpMessage} ${new Date()}`;
+    console.log("in discountSchemeReducer", newState.httpMessage);
 
     switch(action.type) {        
         case(ACTIONS.GET_DISCOUNTSCHEMES_REQUEST):
@@ -39,12 +40,14 @@ export default function discountSchemeReducer(prevState = initialState, action: 
             newState.discountSchemes = action.discountSchemes as DiscountScheme[];
             return newState;
         case(ACTIONS.CREATE_DISCOUNTSCHEME_REQUEST):
-            console.log(action.message);
+            console.log(action.message);           
+            return newState;
+        case(ACTIONS.CREATE_DISCOUNTSCHEME_RECEIVED):
             newState.discountScheme = action.discountScheme as DiscountScheme;
             return newState;
-        case(ACTIONS.DELETE_PRODUCT_REQUEST):
+        case(ACTIONS.DELETE_DISCOUNTSCHEME_REQUEST):
             return newState;
-        case(ACTIONS.DELETE_PRODUCT_RECEIVED):
+        case(ACTIONS.DELETE_DISCOUNTSCHEME_RECEIVED):
             newState.discountScheme = action.discountScheme;
             return newState;
         default:

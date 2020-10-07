@@ -18,7 +18,7 @@ export default function productReducer(prevState = initialState, action: IProduc
     newState.message = `${action.message} ${(new Date())}`;
     newState.httpMessage = `${action.httpMessage} + ${new Date()}`;
 
-    console.log("in bidReducer. Latest message", newState.message);
+    console.log("in productReducer. Latest message", newState.message);
     console.log("in productReducer. Latest api message", newState.httpMessage);
 
     switch(action.type) {

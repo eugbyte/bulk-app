@@ -89,7 +89,6 @@ export function ProductForm(): JSX.Element {
     useEffect(() => {
         if (apiMessage.includes(ACTIONS.HTTP_CREATE_SUCCESS) || apiMessage.includes(ACTIONS.HTTP_UPDATE_SUCCESS)) {
             setOpenSnackbar(true);
-
         }        
     }, [apiMessage]);
 
