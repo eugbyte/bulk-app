@@ -115,6 +115,7 @@ export function ProducerPage(): JSX.Element {
 
     } 
 
+    // Set the rows for the datatable
     for (let ds of discountSchemes) {
         let row: Row = createRowFromScheme(ds);
         const onNameClick = () => {

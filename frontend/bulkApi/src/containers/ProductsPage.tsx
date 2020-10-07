@@ -81,7 +81,16 @@ export function ProductsPage(): JSX.Element {
         rows.push(row);
     }    
 
+    const redirectToProductForm = () => history.push("/producer/product/" + 0);
+
     return <Container>
+        <Grid container>
+            <Grid item xs={10}></Grid>
+            <Grid item xs={2}>
+                <Button variant="outlined" onClick={redirectToProductForm}>Create Product</Button>
+            </Grid>
+        </Grid>
+        <Grid item xs={12}><br/></Grid>
         <DataTable columnNames={columnNames} accessors={accessors} data={rows} title={"Products"} enablePaging={true} pageSize={5} />
         <DialogComponent open={openDeleteDialog} toggleOpen={() => setOpenDeleteDialog(!openDeleteDialog)} content={<p>Confirm Delete?</p>}
             secondaryAction={deleteProduct} secondaryActionTitle="Delete Product"/>

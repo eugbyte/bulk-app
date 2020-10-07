@@ -3,7 +3,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { NavLink } from "react-router-dom";
 import Button from '@material-ui/core/Button';
-import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, DropdownButton } from 'react-bootstrap';
 import "./NavBar.css";
 
 
@@ -23,16 +23,14 @@ export function NavBar() {
                 <Button color="inherit"><NavLink to="/orders" className={classes.navLink}>Orders</NavLink></Button>
                   
               </Nav>
-              <Button color="inherit" style={{marginRight: "100px"}}>
-                <NavDropdown title={<span className={classes.navLink}>Producer</span>} id="basic-nav-dropdown" style={{}} >
-                    <NavDropdown.Item >
-                      <Nav.Link as={NavLink} to="/producer/discountSchemes" style={{color: "black"}}>Manage Schemes</Nav.Link>
-                    </NavDropdown.Item> 
-                    <NavDropdown.Item >
-                      <Nav.Link as={NavLink} to="/producer/products" style={{color: "black"}}>Manage Products</Nav.Link>
-                    </NavDropdown.Item>      
-                </NavDropdown>
-              </Button>
+              <DropdownButton alignRight title="PRODUCER">
+                <NavDropdown.Item >
+                  <Nav.Link as={NavLink} to="/producer/discountSchemes" style={{color: "black"}}>MANAGE SCHEMES</Nav.Link>
+                </NavDropdown.Item> 
+                <NavDropdown.Item >
+                  <Nav.Link as={NavLink} to="/producer/products" style={{color: "black"}}>MANAGE PRODUCTS</Nav.Link>
+                </NavDropdown.Item>      
+              </DropdownButton>
           </Navbar.Collapse>
           
       </Navbar>
