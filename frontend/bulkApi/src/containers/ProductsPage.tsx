@@ -50,6 +50,7 @@ export function ProductsPage(): JSX.Element {
         }
         const action = deleteProductAsync(targetProduct.productId);
         dispatch(action);
+        setOpenDeleteDialog(false);
     } 
 
     let httpResponseMessage: string = useSelector((action: RootState) => action.productReducer.httpMessage as string);
