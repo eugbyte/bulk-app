@@ -18,12 +18,12 @@ namespace BulkApi.Services.Bids
             this.db = db;
         }
 
-        private bool IsCustomerExists(int customerId)
+        private bool IsCustomerExists(string customerId)
         {
-            return db.Customers.Any(customer => customer.CustomerId == customerId);
+            return db.Customers.Any(customer => customer.Id == customerId.ToString());
         }               
 
-        public async Task<List<Bid>> GetBidsOfCustomerInCart(int customerId)
+        public async Task<List<Bid>> GetBidsOfCustomerInCart(string customerId)
         {
             if (!IsCustomerExists(customerId))
                 throw new EntityNotFoundException(customerId, typeof(Customer));
@@ -39,7 +39,7 @@ namespace BulkApi.Services.Bids
         }
 
         // Bascially, GetBidsOfCustomers Not InCart
-        public async Task<List<Bid>> GetPendingOrSuccessfulBidsOfCustomer(int customerId)
+        public async Task<List<Bid>> GetPendingOrSuccessfulBidsOfCustomer(string customerId)
         {
             if (!IsCustomerExists(customerId))
                 throw new EntityNotFoundException(customerId, typeof(Customer));
@@ -110,7 +110,7 @@ namespace BulkApi.Services.Bids
             return currentNumBids;
         }
 
-        public async Task<Bid> AddBidToCart(int schemeId, int quantity, string collectionAddress, int customerId)
+        public async Task<Bid> AddBidToCart(int schemeId, int quantity, string collectionAddress, string customerId)
         {             
             
             // Check whether the bid for the same discountScheme exist in cart
@@ -134,7 +134,7 @@ namespace BulkApi.Services.Bids
             return newBid;
         }
 
-        private async Task<Bid> AddBid(bool isInCart=true,int quantity=0, DateTime? bidSuccessDate=null, string collectionAddress="", int customerId=0, int discountSchemeId=0)
+        private async Task<Bid> AddBid(bool isInCart=true,int quantity=0, DateTime? bidSuccessDate=null, string collectionAddress="", string customerId="0", int discountSchemeId=0)
         {
             Bid newBid = new Bid
             {

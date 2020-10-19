@@ -5,16 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200905172332_Producer_Added.cs" />
-    <Compile Remove="Migrations\20200905172332_Producer_Added.Designer.cs" />
-    <Compile Remove="Migrations\20200905172906_Producer_Added.cs" />
-    <Compile Remove="Migrations\20200905172906_Producer_Added.Designer.cs" />
-    <Compile Remove="Migrations\20200905172953_Producer_Added_nullable_ID.cs" />
-    <Compile Remove="Migrations\20200905172953_Producer_Added_nullable_ID.Designer.cs" />
-    <Compile Remove="Migrations\20200905173035_Producer_Added_nullable_ID.cs" />
-    <Compile Remove="Migrations\20200905173035_Producer_Added_nullable_ID.Designer.cs" />
-    <Compile Remove="Migrations\20200905173744_EditedCustomer.cs" />
-    <Compile Remove="Migrations\20200905173744_EditedCustomer.Designer.cs" />
+    <Compile Remove="Migrations\20201019133814_ProducerIdentity.cs" />
+    <Compile Remove="Migrations\20201019133814_ProducerIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20201019135402_FixedIdentityDb.cs" />
+    <Compile Remove="Migrations\20201019135402_FixedIdentityDb.Designer.cs" />
+    <Compile Remove="Migrations\20201019135621_FixedIdentityDb.cs" />
+    <Compile Remove="Migrations\20201019135621_FixedIdentityDb.Designer.cs" />
+    <Compile Remove="Migrations\20201019140740_FixedIdentityDbForConsumerAndProducer.cs" />
+    <Compile Remove="Migrations\20201019140740_FixedIdentityDbForConsumerAndProducer.Designer.cs" />
+    <Compile Remove="Migrations\20201019142238_FixedIdentityDbForConsumerAndProducer.cs" />
+    <Compile Remove="Migrations\20201019142238_FixedIdentityDbForConsumerAndProducer.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

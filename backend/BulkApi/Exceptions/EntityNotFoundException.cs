@@ -15,6 +15,10 @@ namespace BulkApi.Exceptions
         {
         }
 
+        public EntityNotFoundException(string id, Type entityType) : base($"{entityType.Name} wtih id {id} cannot be found")
+        {
+        }
+
         public EntityNotFoundException(string message) : base(message)
         {
         }

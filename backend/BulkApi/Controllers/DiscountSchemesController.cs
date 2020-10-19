@@ -43,7 +43,7 @@ namespace BulkApi.Controllers
 
 
         [HttpGet("producer/{producerId}")]
-        public async Task<ActionResult<List<DiscountScheme>>> GetDiscountSchemesWithBidOfProducer(int producerId)
+        public async Task<ActionResult<List<DiscountScheme>>> GetDiscountSchemesWithBidOfProducer(string producerId)
         {
             List<DiscountScheme> discountSchemes = await discountSchemeService.GetDiscountSchemesWithBidOfProducer(producerId);
             discountSchemes.Reverse();

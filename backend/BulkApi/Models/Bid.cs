@@ -14,7 +14,7 @@ namespace BulkApi.Models
         public string CollectionAddress { get; set; }
 
         //CustomerFK
-        public int CustomerId { get; set; }
+        public string CustomerId { get; set; }
         public Customer Customer { get; set; }
 
         //DiscountSchemeFk

@@ -74,11 +74,11 @@ namespace BulkApi.Services.DiscountSchemes
             return discountScheme;
         }
 
-        public async Task <List<DiscountScheme>> GetSuccessfulSchemesWithBids(int producerId)
+        public async Task <List<DiscountScheme>> GetSuccessfulSchemesWithBids(string producerId)
         {            
 
             List<Product> products = await db.Producers
-                .Where(producer => producer.ProducerId == producerId)
+                .Where(producer => producer.Id == producerId.ToString())
                 .SelectMany((Producer producer) => producer.Products)
                 .ToListAsync();
 
@@ -87,7 +87,7 @@ namespace BulkApi.Services.DiscountSchemes
                 throw new Exception($"Either producer with producerId {producerId} does not exists, or producer has no products yet");
             }
 
-            int[] productIds = products.Select(p => p.ProducerId).ToArray();
+            int[] productIds = products.Select(p => p.ProductId).ToArray();
 
             List<DiscountScheme> discountSchemes = await db.DiscountSchemes
                 .Where(ds => productIds.Contains(ds.ProductId))
@@ -101,7 +101,7 @@ namespace BulkApi.Services.DiscountSchemes
             return discountSchemes;
         }
 
-        public async Task <List<DiscountScheme>> GetDiscountSchemesWithBidOfProducer(int producerId)
+        public async Task <List<DiscountScheme>> GetDiscountSchemesWithBidOfProducer(string producerId)
         {
             List<DiscountScheme> discountSchemes = await GetAllDiscountSchemesWithBid();
             List<Product> products = await db.Products.Where(prd => prd.ProducerId == producerId)

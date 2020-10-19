@@ -32,7 +32,10 @@ namespace BulkApi.Migrations
                     b.Property<string>("CollectionAddress")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CustomerId")
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CustomerId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("DiscountSchemeId")
@@ -46,7 +49,7 @@ namespace BulkApi.Migrations
 
                     b.HasKey("BidId");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("CustomerId1");
 
                     b.HasIndex("DiscountSchemeId");
 
@@ -57,7 +60,7 @@ namespace BulkApi.Migrations
                         {
                             BidId = 1,
                             CollectionAddress = "AMK MRT",
-                            CustomerId = "1",
+                            CustomerId = 1,
                             DiscountSchemeId = 1,
                             IsInCart = false,
                             Quantity = 2
@@ -77,6 +80,9 @@ namespace BulkApi.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -121,15 +127,16 @@ namespace BulkApi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1",
+                            Id = "67c9f78b-8fb5-49a0-9657-4c8755261766",
                             AccessFailedCount = 0,
                             Address = "",
-                            ConcurrencyStamp = "2c235c9d-da30-450f-ae77-4ac80ce9e2fe",
+                            ConcurrencyStamp = "2cba753c-ca09-4ed6-b888-9b98a1cee056",
+                            CustomerId = 1,
                             Email = "john@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "3ccba325-f55b-4344-a920-e81f826a5f37",
+                            SecurityStamp = "635b468d-126f-463b-bb5d-5431619ef1c7",
                             TwoFactorEnabled = false,
                             UserName = "John"
                         });
@@ -169,7 +176,7 @@ namespace BulkApi.Migrations
                             DiscountSchemeId = 1,
                             DeliveryCharge = 10.0,
                             DiscountedPrice = 70.0,
-                            ExpiryDate = new DateTime(2020, 11, 19, 22, 29, 14, 68, DateTimeKind.Local).AddTicks(374),
+                            ExpiryDate = new DateTime(2020, 11, 19, 21, 30, 58, 97, DateTimeKind.Local).AddTicks(3423),
                             MinOrderQnty = 5,
                             ProductId = 1
                         });
@@ -219,6 +226,9 @@ namespace BulkApi.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("ProducerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -231,19 +241,6 @@ namespace BulkApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Producers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "1",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "52e930d7-2230-486d-b8de-58f2fa863793",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "98effcc4-32a0-4826-9b84-1fe68c2ac1f7",
-                            TwoFactorEnabled = false
-                        });
                 });
 
             modelBuilder.Entity("BulkApi.Models.Product", b =>
@@ -265,12 +262,15 @@ namespace BulkApi.Migrations
                     b.Property<double>("OriginalPrice")
                         .HasColumnType("float");
 
-                    b.Property<string>("ProducerId")
+                    b.Property<int?>("ProducerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProducerId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ProductId");
 
-                    b.HasIndex("ProducerId");
+                    b.HasIndex("ProducerId1");
 
                     b.ToTable("Products");
 
@@ -289,7 +289,7 @@ namespace BulkApi.Migrations
                 {
                     b.HasOne("BulkApi.Models.Customer", "Customer")
                         .WithMany("Bids")
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("CustomerId1");
 
                     b.HasOne("BulkApi.Models.DiscountScheme", "DiscountScheme")
                         .WithMany("Bids")
@@ -311,7 +311,7 @@ namespace BulkApi.Migrations
                 {
                     b.HasOne("BulkApi.Models.Producer", "Producer")
                         .WithMany("Products")
-                        .HasForeignKey("ProducerId");
+                        .HasForeignKey("ProducerId1");
                 });
 #pragma warning restore 612, 618
         }

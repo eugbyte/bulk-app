@@ -14,7 +14,7 @@ namespace BulkApi.Models
         public double OriginalPrice { get; set; }
 
         //FK ProducerId
-        public int ProducerId { get; set; }
+        public string ProducerId { get; set; }
         public Producer Producer { get; set; }
 
         public List<DiscountScheme> DiscountSchemes { get; set; }

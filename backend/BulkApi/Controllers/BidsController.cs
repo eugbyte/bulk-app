@@ -28,7 +28,7 @@ namespace BulkApi.Controllers
         }
 
         [HttpGet("cart/{customerId}")]
-        public async Task<ActionResult<List<BidVM>>> GetBidsOfCustomerInCart(int customerId)
+        public async Task<ActionResult<List<BidVM>>> GetBidsOfCustomerInCart(string customerId)
         {
             List<Bid> bids = await bidService.GetBidsOfCustomerInCart(customerId);
             int[] dsIds = bids.Select(bid => bid.DiscountSchemeId).ToArray();
@@ -78,7 +78,7 @@ namespace BulkApi.Controllers
         }
 
         [HttpGet("orders/{customerId}")]
-        public async Task<ActionResult<List<BidVM>>> GetPendingOrSuccessfulBidsOfCustomer(int customerId)
+        public async Task<ActionResult<List<BidVM>>> GetPendingOrSuccessfulBidsOfCustomer(string customerId)
         {
             List<Bid> pendingOrSuccessfulBids = await bidService.GetPendingOrSuccessfulBidsOfCustomer(customerId);
             List<BidVM> bidVms = pendingOrSuccessfulBids.Select(bid => new BidVM(bid)).ToList();

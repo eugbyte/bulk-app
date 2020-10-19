@@ -13,7 +13,7 @@ namespace BulkApi.Extensions
         {
             Customer customer = new Customer
             {
-                CustomerId = 1,
+                Id = "1",
                 UserName = "John",
                 Address = "",
                 Email = "john@gmail.com"
@@ -25,7 +25,7 @@ namespace BulkApi.Extensions
                 Name = "Awesome Shoes",
                 Category = "Shoe",
                 Description = "white shoe",
-                OriginalPrice = 100             
+                OriginalPrice = 100,
             };
 
             DiscountScheme discountScheme = new DiscountScheme
@@ -43,14 +43,20 @@ namespace BulkApi.Extensions
                 BidId = 1,
                 Quantity = 2,
                 CollectionAddress = "AMK MRT",
-                CustomerId = 1,
+                CustomerId = "1",
                 DiscountSchemeId = 1
+            };
+
+            Producer producer = new Producer
+            {
+                Id = "1"
             };
 
             modelBuilder.Entity<Customer>().HasData(customer);
             modelBuilder.Entity<Product>().HasData(product);
             modelBuilder.Entity<DiscountScheme>().HasData(discountScheme);
             modelBuilder.Entity<Bid>().HasData(bid);
+            modelBuilder.Entity<Producer>().HasData(producer);
         }
     }
 }

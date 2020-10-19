@@ -8,7 +8,6 @@ namespace BulkApi.Models
 {
     public class Customer : IdentityUser
     {
-        public int CustomerId { get; set; }
         public string Address { get; set; }
 
         public List<Bid> Bids { get; set; }
