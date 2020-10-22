@@ -29,6 +29,7 @@ namespace BulkApi
             //services.AddCorsExtension();
             services.AddDbContextExtension(Configuration);
             services.AddIdentityExtension();
+            services.AddAuthorizationExtension();
             services.AddServicesExtension();
             services.AddControllersExtension();
             services.AddErrorFilterExtension();

@@ -1,5 +1,7 @@
 ﻿using BulkApi.Extensions;
 using BulkApi.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BulkApi.Data
 {
-    public class BulkDbContext : DbContext
+    public class BulkDbContext : IdentityDbContext<IdentityUser>
     {
         public BulkDbContext(DbContextOptions<BulkDbContext> options) : base(options)
         {

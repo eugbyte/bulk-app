@@ -49,7 +49,7 @@ namespace BulkApi.Extensions
 
             Producer producer = new Producer
             {
-                Id = "1"
+                Id = "2"
             };
 
             modelBuilder.Entity<Customer>().HasData(customer);

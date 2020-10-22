@@ -58,6 +58,15 @@ namespace BulkApi.Extensions
             }).AddEntityFrameworkStores<BulkDbContext>();
         }
 
+        public static void AddAuthorizationExtension(this IServiceCollection services)
+        {
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("UserPolicy",
+                    policy => policy.RequireClaim("USER_CLASS", "PRODUCER"));  //if you want the ROLE claim to only be PRODUCER  
+            });
+        }
+
         public static void AddServicesExtension(this IServiceCollection services)
         {
             services.AddTransient(typeof(IDiscountSchemeService), typeof(DiscountSchemeService));
