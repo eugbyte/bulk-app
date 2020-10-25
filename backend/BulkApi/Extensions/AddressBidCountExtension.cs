@@ -12,6 +12,7 @@ namespace BulkApi.Extensions
 
         public static IDictionary<string, int> _SetAddressBidCountDict(DiscountScheme discountScheme)
         {
+
             IDictionary<string, int> addressBidCountDict = new Dictionary<string, int>()
             {
                 { "AMK", 0 },
@@ -29,11 +30,11 @@ namespace BulkApi.Extensions
 
                 if (addressBidCountDict.ContainsKey(bid.CollectionAddress))
                 {
-                    addressBidCountDict[bid.CollectionAddress] += bid.Quantity;
+                    addressBidCountDict[bid.CollectionAddress] += 1;
                 }
                 else
                 {
-                    addressBidCountDict[bid.CollectionAddress] = bid.Quantity;
+                    addressBidCountDict[bid.CollectionAddress] = 1;
                 }
             }
             return addressBidCountDict;

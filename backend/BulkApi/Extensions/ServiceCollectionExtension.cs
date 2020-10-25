@@ -13,6 +13,7 @@ using BulkApi.Services.DiscountSchemes;
 using BulkApi.Services.Bids;
 using BulkApi.Filters;
 using BulkApi.Services.Products;
+using BulkApi.Services.Auth;
 
 namespace BulkApi.Extensions
 {
@@ -48,14 +49,16 @@ namespace BulkApi.Extensions
 
         public static void AddIdentityExtension(this IServiceCollection services)
         {
-            services.AddIdentity<Customer, IdentityRole>((IdentityOptions options) =>
+            services.AddIdentity<IdentityUser, IdentityRole>((IdentityOptions options) =>
             {
                 options.Password.RequireDigit = false;
                 options.Password.RequiredLength = 1;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
-            }).AddEntityFrameworkStores<BulkDbContext>();
+            })
+            .AddEntityFrameworkStores<BulkDbContext>()
+            .AddDefaultTokenProviders();
         }
 
         public static void AddAuthorizationExtension(this IServiceCollection services)
@@ -72,6 +75,7 @@ namespace BulkApi.Extensions
             services.AddTransient(typeof(IDiscountSchemeService), typeof(DiscountSchemeService));
             services.AddTransient(typeof(IBidService), typeof(BidService));
             services.AddTransient(typeof(IProductService), typeof(ProductService));
+            services.AddTransient(typeof(IAuthService), typeof(AuthService));
         }
 
         public static void AddErrorFilterExtension(this IServiceCollection services)

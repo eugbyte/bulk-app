@@ -37,7 +37,7 @@ export function DiscountSchemeForm(): JSX.Element {
     let selectListItems: SelectListItem[] = products.map(product => new SelectListItem(product.name, product.productId));
 
     useEffect(() => {
-        const producerId: number = 1;
+        const producerId: number = 2;
         const action = getProductsAsync(producerId);
         dispatch(action);
     }, []);  

@@ -213,7 +213,7 @@ function createRowFromBid(bid: Bid): Row {
     const addressBidCountDict = bid.addressBidCountDict as Record<string, number>; 
     const numBidsAtAddress: number = addressBidCountDict[bid.collectionAddress];
     const deliveryCharge: number = bid?.discountScheme?.deliveryCharge ?? 0;
-    const avgDeliveryCharge: number = (!numBidsAtAddress) ? deliveryCharge : deliveryCharge / numBidsAtAddress;
+    const avgDeliveryCharge: number = (!numBidsAtAddress) ? deliveryCharge : deliveryCharge / (numBidsAtAddress + 1);
     row.deliveryCharge = <Grid container>
         <Grid item xs={6}>
             <span>{`$${avgDeliveryCharge}`}</span>

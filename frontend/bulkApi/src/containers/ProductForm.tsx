@@ -148,7 +148,7 @@ function initializeProduct(productId: number, name: string, category: string, de
     product.category = category;
     product.description = description;
     product.originalPrice = originalPrice;
-    product.producerId = 1;
+    product.producerId = 2;
     return product;
 }
  

@@ -26,7 +26,7 @@ export function ProductsPage(): JSX.Element {
     document.title = "Products";
     const dispatch: Dispatch<any> = useDispatch();
     const history = useHistory(); 
-    const producerId = 1;
+    const producerId = 2;
 
     const products: Product[] = useSelector((action: RootState) => action.productReducer.products as Product[]) ?? [];
     useEffect(() => {

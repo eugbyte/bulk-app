@@ -35,7 +35,7 @@ class Row {
 export function ProducerDiscountSchemePage(): JSX.Element {
 
     document.title = "Schemes";
-    const producerId: number = 1;
+    const producerId: number = 2;
     const dispatch: Dispatch<any> = useDispatch();
     const history = useHistory(); 
 

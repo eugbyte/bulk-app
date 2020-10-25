@@ -63,7 +63,7 @@ export function DiscountSchemeDetailPage({discountSchemeId, MODE, bidIdToUpdate=
         setAddress(selectedAddress);
     }
     const numBidsAtAddress: number = addressBidCountDict[address];
-    const avgDeliveryCharge: number = (!numBidsAtAddress) ? ds.deliveryCharge : ds.deliveryCharge / numBidsAtAddress;
+    const avgDeliveryCharge: number = (!numBidsAtAddress) ? ds.deliveryCharge : ds.deliveryCharge / (numBidsAtAddress + 1);
  
     // POST bid when user bids for the discountScheme
     const submitBid = () => {

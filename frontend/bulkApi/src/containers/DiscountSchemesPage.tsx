@@ -96,7 +96,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     fullWidth: {
         width: "100vw",
-        margin: "auto"
+        margin: "auto",
+        paddingLeft: "100px",
+        paddingRight: "100px"
     }
   })
 );
