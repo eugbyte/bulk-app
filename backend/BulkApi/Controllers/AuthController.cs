@@ -25,7 +25,9 @@ namespace BulkApi.Controllers
         [HttpPost("signIn")]
         public async Task<ActionResult<bool>> SignIn(IdentityUser user)
         {
-            return await authService.AuthenticateUser(user.Id, user.PasswordHash);
+            Console.WriteLine(user);
+            bool isAuth = await authService.AuthenticateUser(user.UserName, user.PasswordHash);
+            return Ok(isAuth);
         }
 
         [HttpPost("resetPassword")]

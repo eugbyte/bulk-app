@@ -11,6 +11,7 @@ import { ProducerDiscountSchemePage } from './containers/ProducerDiscountSchemeP
 import { DiscountSchemeForm } from './containers/DiscountSchemeForm';
 import { ProductForm } from './containers/ProductForm';
 import { ProductsPage } from './containers/ProductsPage';
+import { LoginForm } from './containers/LoginForm';
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
       <Router>
         <NavBar/>
         <Switch>
+          <Route path="/login" component={ LoginForm } />
           <Route path="/discountScheme/:discountSchemeId" component= { DiscountSchemeDetailHOC } />
           <Route path="/cart" component= { CartPage } />
           <Route path="/orders" component= { OrdersPage } />
