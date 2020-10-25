@@ -12,6 +12,7 @@ namespace BulkApi.Models
         public int Quantity { get; set; }
         public DateTime? BidSuccessDate { get; set; }
         public string CollectionAddress { get; set; }
+        public double FinalDeliveryCharge { get; set; }
 
         //CustomerFK
         public string CustomerId { get; set; }

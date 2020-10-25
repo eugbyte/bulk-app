@@ -57,7 +57,11 @@ namespace BulkApi.Services.Bids
         {
             List<Bid> bids = await db.Bids
                 .Where(bid => bidIds.Contains(bid.BidId))
-                .ToListAsync();            
+                .ToListAsync();
+
+            List<DiscountScheme> discountSchemes = await db.DiscountSchemes
+                .IncludeOptimized(ds => ds.Bids)
+                .ToListAsync();
 
             foreach(Bid bid in bids)
             {
@@ -65,9 +69,8 @@ namespace BulkApi.Services.Bids
                 //2. update the bidStatus that it is no longer in the cart
 
                 //DiscountScheme has Bid property eager loaded
-                DiscountScheme discountScheme = await db.DiscountSchemes
-                    .IncludeOptimized(ds => ds.Bids)
-                    .FirstOrDefaultAsync(ds => ds.DiscountSchemeId == bid.DiscountSchemeId);
+                DiscountScheme discountScheme = discountSchemes
+                    .FirstOrDefault(ds => ds.DiscountSchemeId == bid.DiscountSchemeId);
 
                 int currentNumBids = GetNumberOfPendingBidsOfScheme(discountScheme);
 
@@ -81,19 +84,23 @@ namespace BulkApi.Services.Bids
                 // If the minOrderQuantity is reached, bid is successful ...
                 if (currentNumBids >= discountScheme.MinOrderQnty)
                 {
-                    await SetBidStatusOfSchemeToSuccess(discountScheme);
+                    await SetBidSuccessDateAndDeliveryCharge(discountScheme);
                 }
                
             }
 
         }
 
-        private async Task SetBidStatusOfSchemeToSuccess(DiscountScheme discountScheme)
+        private async Task SetBidSuccessDateAndDeliveryCharge(DiscountScheme discountScheme)
         {
             if (discountScheme.Bids == null || discountScheme.Bids.Count == 0)
                 throw new NullReferenceException("discount scheme does not have any bids.\n Check that the bids are eagerly loaded");
 
             discountScheme.Bids.ForEach(bid => bid.BidSuccessDate = DateTime.Now);
+
+            double finalDeliveryCharge = discountScheme.DeliveryCharge / discountScheme.Bids.Count();
+            discountScheme.Bids.ForEach(bid => bid.FinalDeliveryCharge = finalDeliveryCharge);
+
             db.DiscountSchemes.Update(discountScheme);
             await db.SaveChangesAsync();
         }
