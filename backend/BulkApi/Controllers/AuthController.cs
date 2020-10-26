@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BulkApi.Services.Auth;
+using BulkApi.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,11 +24,22 @@ namespace BulkApi.Controllers
 
         // POST api/<AuthController>
         [HttpPost("signIn")]
-        public async Task<ActionResult<bool>> SignIn(IdentityUser user)
+        public async Task<ActionResult<AuthVM>> SignIn(IdentityUser user)
         {
             Console.WriteLine(user);
-            bool isAuth = await authService.AuthenticateUser(user.UserName, user.PasswordHash);
-            return Ok(isAuth);
+            AuthVM authVM = new AuthVM();
+            authVM.IsAuth = await authService.AuthenticateUser(user.UserName, user.PasswordHash); 
+
+            if (authVM.IsAuth)
+            {
+                authVM.JWT = await authService.CreateJWT(user.UserName);
+                IdentityUser identityUser = await authService.FindUser(user.UserName);
+                authVM.Id = identityUser.Id;
+                authVM.UserName = identityUser.UserName;
+                authVM.Email = identityUser.Email;
+            }
+
+            return Ok(authVM);
         }
 
         [HttpPost("resetPassword")]

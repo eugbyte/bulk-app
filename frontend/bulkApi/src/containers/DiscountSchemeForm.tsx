@@ -6,7 +6,6 @@ import { Product } from "../models/Product";
 import { RootState } from "../store/rootReducer";
 import { getProductsAsync } from "../store/thunks/productThunk";
 import { SelectListItem } from "../models/SelectListItem";
-import { SelectUncontrolledComponent } from "../components/SelectComponents";
 import { DatePickerUncontrolledComponent } from "../components/DatePickerComponent";
 import { useForm, Controller } from "react-hook-form";
 import { TextFieldUncontrolledComponent } from "../components/TextFieldComponents";

@@ -14,6 +14,9 @@ using BulkApi.Services.Bids;
 using BulkApi.Filters;
 using BulkApi.Services.Products;
 using BulkApi.Services.Auth;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace BulkApi.Extensions
 {
@@ -67,6 +70,32 @@ namespace BulkApi.Extensions
             {
                 options.AddPolicy("UserPolicy",
                     policy => policy.RequireClaim("USER_CLASS", "PRODUCER"));  //if you want the ROLE claim to only be PRODUCER  
+            });
+        }
+
+        public static void AddJWTAuthenticationExtension(this IServiceCollection services, IConfiguration configuration)
+        {
+
+            string issuerUrl = configuration.GetSection("JWT").GetValue<string>("IssuerUrl");
+            string jwtKeyString = configuration.GetSection("JWT").GetValue<string>("JwtKey");
+            byte[] jwtKey = Encoding.UTF8.GetBytes(jwtKeyString);
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+
+                    ValidIssuer = issuerUrl,
+                    IssuerSigningKey = new SymmetricSecurityKey(jwtKey)
+                };
             });
         }
 

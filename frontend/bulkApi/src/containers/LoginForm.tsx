@@ -24,7 +24,7 @@ export function LoginForm(): JSX.Element {
     const dispatch: Dispatch<any> = useDispatch();
     const history = useHistory();
 
-    const { errors, handleSubmit, control, getValues, reset, setValue } = useForm<FORM_DATA>(); 
+    const { errors, handleSubmit, control } = useForm<FORM_DATA>(); 
 
     const onSubmit = (data: FORM_DATA) => {
         console.log(data);

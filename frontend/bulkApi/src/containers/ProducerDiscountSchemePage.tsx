@@ -16,7 +16,6 @@ import { DialogComponent } from "../components/DialogComponent";
 import { TextComponent } from "../components/TextComponent";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
-import { deleteProductAsync } from "../store/thunks/productThunk";
 import { ACTIONS } from "../store/actionEnums";
 
 type Status = "SUCCESS" | "PENDING" | "FAILED" | undefined;

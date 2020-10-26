@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,5 +11,7 @@ namespace BulkApi.Services.Auth
         Task<bool> AuthenticateUser(string username, string password);
         Task<bool> ResetPassword(string id, string newPassword);
         Task<bool> SignIn(string username, string password);
+        Task<string> CreateJWT(string username);
+        Task<IdentityUser> FindUser(string userName);
     }
 }

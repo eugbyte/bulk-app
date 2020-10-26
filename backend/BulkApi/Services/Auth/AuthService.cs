@@ -1,10 +1,16 @@
 ﻿using BulkApi.Data;
+using BulkApi.Exceptions;
 using BulkApi.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Authentication;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BulkApi.Services.Auth
@@ -14,12 +20,14 @@ namespace BulkApi.Services.Auth
         private readonly BulkDbContext db;
         private readonly UserManager<IdentityUser> userManager;
         private readonly SignInManager<IdentityUser> signInManager;
+        private readonly IConfiguration configuration;
 
-        public AuthService(BulkDbContext db, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public AuthService(BulkDbContext db, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration)
         {
             this.db = db;
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.configuration = configuration;
         }
 
         public async Task<bool> AuthenticateUser(string username, string password)
@@ -47,6 +55,41 @@ namespace BulkApi.Services.Auth
         {
             SignInResult result = await signInManager.PasswordSignInAsync(username, password, false, false);
             return result.Succeeded;
+        }
+
+        public async Task<string> CreateJWT(string username)
+        {
+            IdentityUser authUser = await userManager.FindByNameAsync(username);
+            List<Claim> userClaims = await userManager.GetClaimsAsync(authUser) as List<Claim> ?? new List<Claim>();
+
+            string issuerUrl = configuration.GetSection("JWT").GetValue<string>("IssuerUrl");
+            string jwtKeyString = configuration.GetSection("JWT").GetValue<string>("JwtKey");
+            byte[] jwtKey = Encoding.UTF8.GetBytes(jwtKeyString);
+
+            //Key and SecurityAlgorithm is to salt and hash the jwt
+            SymmetricSecurityKey secretKey = new SymmetricSecurityKey(jwtKey);
+            SigningCredentials signInCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+
+            //To create the jwt body and signature
+            JwtSecurityToken tokenOptions = new JwtSecurityToken(
+                issuer: issuerUrl,
+                claims: userClaims,
+                expires: DateTime.Now.AddMinutes(60),   //expires in 60 minutes
+                signingCredentials: signInCredentials);
+
+            string tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            return tokenString;
+        }
+
+        public async Task<IdentityUser> FindUser(string userName)
+        {
+            IdentityUser identityUser = await userManager.FindByNameAsync(userName);
+            if (identityUser == null)
+            {
+                string errorMessage = typeof(IdentityUser).Name + $" with userName {userName} not found";
+                throw new EntityNotFoundException(errorMessage);
+            }
+            return identityUser;
         }
 
         private AggregateException CreateIdentityException(IdentityResult identityResult)

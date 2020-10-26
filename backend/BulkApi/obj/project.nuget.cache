@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "R4ZuvjY4yZExv/bpgCn7ZJDu+iSJHKnoRG+YyKLMRCS7ZaSOvo3l0bhEjlmjeTi+jx4+91LTS8cuYOqPVC4lMg==",
+  "dgSpecHash": "70qoJKovsY2kSN1qNQp2RYa2N51FgCl7f+enuI0ULOBLr4/sQkUNJqmy3nD9coPRy5gJQaoPJn/8BuDp2ooFOw==",
   "success": true,
   "projectFilePath": "C:\\Users\\eugen\\Codes\\BulkApi\\backend\\BulkApi\\BulkApi.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\eugen\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\3.1.9\\microsoft.aspnetcore.authentication.jwtbearer.3.1.9.nupkg.sha512",
     "C:\\Users\\eugen\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\3.1.7\\microsoft.aspnetcore.cryptography.internal.3.1.7.nupkg.sha512",
     "C:\\Users\\eugen\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\3.1.7\\microsoft.aspnetcore.cryptography.keyderivation.3.1.7.nupkg.sha512",
     "C:\\Users\\eugen\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",

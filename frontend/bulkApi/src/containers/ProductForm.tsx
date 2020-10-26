@@ -1,9 +1,9 @@
-import React, { ChangeEvent, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux"; 
 import { useHistory, useParams } from "react-router-dom";
 import { Container, Grid } from "@material-ui/core";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { TextFieldUncontrolledComponent } from "../components/TextFieldComponents";
 import { Product } from "../models/Product";
 import { createProductsAsync, getProductAsync, updateProductAsync } from "../store/thunks/productThunk";

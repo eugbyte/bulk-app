@@ -1,6 +1,6 @@
 import React from "react";
 import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, KeyboardTimePicker, KeyboardDatePicker} from '@material-ui/pickers';
+import { MuiPickersUtilsProvider, KeyboardDatePicker} from '@material-ui/pickers';
 import { v4 as guid } from 'uuid';
 import { Control, Controller, DeepMap, FieldError } from "react-hook-form";
 
