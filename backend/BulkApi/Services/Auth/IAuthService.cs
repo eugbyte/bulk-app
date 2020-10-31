@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
+
 
 namespace BulkApi.Services.Auth
 {
@@ -12,6 +14,8 @@ namespace BulkApi.Services.Auth
         Task<bool> ResetPassword(string id, string newPassword);
         Task<bool> SignIn(string username, string password);
         Task<string> CreateJWT(string username);
-        Task<IdentityUser> FindUser(string userName);
+        Task<IdentityUser> FindUserByUserName(string userName);
+        Task<bool> AddClaim(string id, string claimValue);
+        Task<List<Claim>> GetClaims(string userId);
     }
 }

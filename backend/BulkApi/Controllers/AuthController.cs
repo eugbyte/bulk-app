@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using BulkApi.Services.Auth;
 using BulkApi.ViewModels;
@@ -28,15 +29,18 @@ namespace BulkApi.Controllers
         {
             Console.WriteLine(user);
             AuthVM authVM = new AuthVM();
-            authVM.IsAuth = await authService.AuthenticateUser(user.UserName, user.PasswordHash); 
+            authVM.IsAuthenticated = await authService.AuthenticateUser(user.UserName, user.PasswordHash); 
 
-            if (authVM.IsAuth)
+            if (authVM.IsAuthenticated)
             {
                 authVM.JWT = await authService.CreateJWT(user.UserName);
-                IdentityUser identityUser = await authService.FindUser(user.UserName);
+                IdentityUser identityUser = await authService.FindUserByUserName(user.UserName);
                 authVM.Id = identityUser.Id;
                 authVM.UserName = identityUser.UserName;
                 authVM.Email = identityUser.Email;
+                authVM.Claims = (await authService.GetClaims(identityUser.Id))
+                    .Select((Claim claim) => claim.Value)
+                    .ToList();
             }
 
             return Ok(authVM);
@@ -51,12 +55,32 @@ namespace BulkApi.Controllers
             return Ok(result);
         }
 
-        // GET: api/<AuthController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpPost("createClaim")]
+        public async Task<ActionResult> AddClaim(AuthVM authVM)
         {
-            return new string[] { "value1", "value2" };
+            string userId = authVM.Id;
+            string claimValue = authVM.Claims.First();
+            bool isSucceed = await authService.AddClaim(userId, claimValue);
+            if (!isSucceed)
+            {
+                return StatusCode(500);
+            }
+            return Ok();
+        }
+
+        // GET: api/<AuthController>
+        [HttpGet("{userName}")]
+        public async Task<IdentityUser> GetUser(string userName)
+        {
+            return await authService.FindUserByUserName(userName);
         } 
+
+        [HttpGet("claims/{userId}")]
+        public async Task<List<Claim>> GetClaims(string userId)
+        {
+            List<Claim> claims = await authService.GetClaims(userId);
+            return claims;
+        }
 
         // PUT api/<AuthController>/5
         [HttpPut("{id}")]

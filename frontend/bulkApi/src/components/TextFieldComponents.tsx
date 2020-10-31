@@ -12,10 +12,16 @@ interface IProp {
     errors: DeepMap<Record<string, any>, FieldError>,
     rules: object,
     isFullWidth?: boolean,
-    adornment?: string | null
+    adornment?: string | null,
+    variant?: "outlined" | "filled" | "standard",
+    type?: "text" | "number" | "password"
 }
 
-export function TextFieldUncontrolledComponent({ isFullWidth=false, control, errors, label, name, defaultValue="", errorMessage="", rules={}, adornment=null}: IProp): JSX.Element {
+export function TextFieldUncontrolledComponent({ label, name, defaultValue="", 
+    isFullWidth=false, variant="standard", type="text",
+    adornment=null,
+    control, errors, 
+    errorMessage="", rules={}}: IProp): JSX.Element {
     console.log("errors", errors);
     let isError: boolean = errors[name] != null;
     let helperText: string = isError ? errorMessage : "";
@@ -26,7 +32,8 @@ export function TextFieldUncontrolledComponent({ isFullWidth=false, control, err
             defaultValue={defaultValue}
             control={control}
             rules={rules}
-            render={props => <TextField {...props} label={label} error={isError} helperText={helperText} fullWidth={isFullWidth} 
+            render={props => <TextField {...props} label={label} error={isError} helperText={helperText} 
+                fullWidth={isFullWidth} variant={variant} type={type}
                 InputProps={{
                     startAdornment: adornment ? <InputAdornment position="start">{adornment}</InputAdornment> : null
                 }}

@@ -14,7 +14,7 @@ export interface IAuthAction extends Action {
     httpMessage?: string // For API messages
 }
 
-export function loginAsync(identityUser: IdentityUser): ThunkAction<Promise<void>, {}, {}, IAuthAction | IErrorAction> {
+ export function loginAsync(identityUser: IdentityUser): ThunkAction<Promise<void>, {}, {}, IAuthAction | IErrorAction> {
     return async (dispatch: ThunkDispatch<{}, {}, IAuthAction | IErrorAction>) => {
         dispatch({ type: ACTIONS.LOGIN_REQUEST, message: "Attempting login..."});
 
@@ -41,5 +41,17 @@ export function loginAsync(identityUser: IdentityUser): ThunkAction<Promise<void
             dispatch(errorAction(ACTIONS.ERROR, error));
         }        
         
+    }
+}
+
+export function logoutSync(): IAuthAction {
+    let authVM: AuthVM = new AuthVM("USER");
+    return { type: ACTIONS.LOGOUT, message: "Logout ...", authVM: authVM}; 
+}
+
+export function logoutAsync(): ThunkAction<Promise<void>, {}, {}, IAuthAction | IErrorAction> {
+    return async (dispatch: ThunkDispatch<{}, {}, IAuthAction | IErrorAction>) => {
+        let authVM: AuthVM = new AuthVM("USER");
+        dispatch({ type: ACTIONS.LOGOUT, message: "Logout ...", authVM: authVM});        
     }
 }

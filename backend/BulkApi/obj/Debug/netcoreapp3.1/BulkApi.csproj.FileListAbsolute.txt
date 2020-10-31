@@ -821,5 +821,6 @@ C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.pdb
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.genruntimeconfig.cache
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.csprojAssemblyReference.cache
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\IdentityModel.dll
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.csproj.CoreCompileInputs.cache
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.MvcApplicationPartsAssemblyInfo.cache

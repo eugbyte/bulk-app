@@ -1,6 +1,7 @@
 ﻿using BulkApi.Data;
 using BulkApi.Exceptions;
 using BulkApi.Models;
+using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -81,7 +82,7 @@ namespace BulkApi.Services.Auth
             return tokenString;
         }
 
-        public async Task<IdentityUser> FindUser(string userName)
+        public async Task<IdentityUser> FindUserByUserName(string userName)
         {
             IdentityUser identityUser = await userManager.FindByNameAsync(userName);
             if (identityUser == null)
@@ -90,6 +91,21 @@ namespace BulkApi.Services.Auth
                 throw new EntityNotFoundException(errorMessage);
             }
             return identityUser;
+        }
+
+        public async Task<bool> AddClaim(string id, string claimValue)
+        {
+            IdentityUser identityUser = await userManager.FindByIdAsync(id);
+            Claim claim = new Claim(JwtClaimTypes.Role, claimValue);
+            IdentityResult identityResult = await userManager.AddClaimAsync(identityUser, claim);
+            return identityResult.Succeeded;
+        }
+
+        public async Task<List<Claim>> GetClaims(string userId)
+        {
+            IdentityUser identityUser = await userManager.FindByIdAsync(userId);
+            List<Claim> claims = (await userManager.GetClaimsAsync(identityUser)).ToList();
+            return claims;
         }
 
         private AggregateException CreateIdentityException(IdentityResult identityResult)
