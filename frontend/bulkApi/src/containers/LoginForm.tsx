@@ -9,8 +9,7 @@ import { useHistory } from "react-router-dom";
 import { Dispatch } from "redux"; 
 import { AuthVM } from "../models/AuthVM";
 import { RootState } from "../store/rootReducer";
-import { SnackbarComponent } from "../components/SnackbarComponent";
-import { AuthContext } from "../components/contexts/AuthContext";
+import { SnackbarComponent } from "../components/SnackbarComponent"; 
 
 enum FORM_NAMES {
     userName = "userName",
@@ -30,15 +29,21 @@ export function LoginForm(): JSX.Element {
 
     let [openSnackBar, setOpenSnackBar] = useState<boolean>(false);
 
-    let authVM: AuthVM = useSelector((action: RootState) => action.authReducer.authVM) ?? new AuthVM();
+    let defaultAuthVM = new AuthVM();
+    defaultAuthVM.isAuthenticated = "UNTOUCHED";
+
+    let authVM: AuthVM = useSelector((action: RootState) => action.authReducer.authVM) ?? defaultAuthVM;
 
     useEffect(() => { 
+        if (authVM.isAuthenticated === "UNTOUCHED") {
+            return;
+        }
+
         if (authVM.isAuthenticated) {
-            history.push(""); 
+            history.push("");
         } else {
             setOpenSnackBar(true);
         }
-
     }, [authVM.isAuthenticated]);
   
 

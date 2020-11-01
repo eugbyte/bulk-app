@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using BulkApi.Services.Auth;
@@ -41,9 +42,10 @@ namespace BulkApi.Controllers
                 authVM.Claims = (await authService.GetClaims(identityUser.Id))
                     .Select((Claim claim) => claim.Value)
                     .ToList();
+                
             }
-
             return Ok(authVM);
+
         }
 
         [HttpPost("resetPassword")]

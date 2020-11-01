@@ -10,7 +10,7 @@ import { CLAIMS } from '../enums/Claims';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/rootReducer';
 import { AuthContext } from './contexts/AuthContext';
-import { logoutAsync, logoutSync } from '../store/thunks/authThunk';
+import { logoutSync } from '../store/thunks/authThunk';
 import { ACTIONS } from '../store/actionEnums';
 
 
@@ -44,7 +44,7 @@ export function NavBar() {
   return (
     <div>
       <Navbar expand="lg" variant="dark" className={classes.blueBg}>
-          <Navbar.Brand>BulkApi</Navbar.Brand>
+          <Navbar.Brand><NavLink to="/" className={classes.navLink} >BulkApi</NavLink></Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="mr-auto">

@@ -25,8 +25,10 @@ export default function authReducer(prevState = initialState, action: IAuthActio
     switch(action.type) {    
         case(ACTIONS.LOGIN_REQUEST):
             return newState;
-        case(ACTIONS.LOGIN_RECEIVED): 
+        case(ACTIONS.LOGIN_SUCCESS): 
             localStorage.setItem("authVM", JSON.stringify(action.authVM)); 
+            return newState;
+        case(ACTIONS.LOGIN_FAILED):
             return newState;
         case(ACTIONS.LOGOUT):
             localStorage.removeItem("authVM");

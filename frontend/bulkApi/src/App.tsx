@@ -14,7 +14,7 @@ import { ProductsPage } from './containers/ProductsPage';
 import { LoginForm } from './containers/LoginForm';
 import { PrivateRoute } from './components/PrivateRoute';
 import { AuthContext } from './components/contexts/AuthContext';
-import { AuthVM } from './models/AuthVM';
+import { AuthVM, Claims } from './models/AuthVM';
 
 function App() {
 
@@ -23,17 +23,20 @@ function App() {
         <Router>
           <NavBar/>
           <Switch>
+            {/* Public Paths */}
             <Route path="/login" component={ LoginForm } />
-            <Route path="/discountScheme/:discountSchemeId" component= { DiscountSchemeDetailHOC } />
-            <Route path="/cart" component= { CartPage } />
-            <Route path="/orders" component= { OrdersPage } />
-            <Route path="/producer/products" component = { ProductsPage } />
-
-            <PrivateRoute path="/producer/product/:productId" component = { ProductForm } />
-            
-            <Route path="/producer/discountSchemes/create" component = { DiscountSchemeForm } />
-            <Route path="/producer/discountSchemes" component = { ProducerDiscountSchemePage } />
             <Route exact path="/" component={ DiscountSchemesPage } />
+
+            {/* Consumer paths */}
+            <PrivateRoute path="/discountScheme/:discountSchemeId" component= { DiscountSchemeDetailHOC } requiredClaims={[Claims.CONSUMER]} />
+            <PrivateRoute path="/cart" component= { CartPage } requiredClaims={[Claims.CONSUMER]} />
+            <PrivateRoute path="/orders" component= { OrdersPage } requiredClaims={[Claims.CONSUMER]} />
+
+            {/* Producer paths */}
+            <PrivateRoute path="/producer/products" component = { ProductsPage } requiredClaims={[Claims.PRODUCER]} />
+            <PrivateRoute path="/producer/product/:productId" component = { ProductForm } requiredClaims={[Claims.PRODUCER]} />            
+            <PrivateRoute path="/producer/discountSchemes/create" component = { DiscountSchemeForm } requiredClaims={[Claims.PRODUCER]} />
+            <PrivateRoute path="/producer/discountSchemes" component = { ProducerDiscountSchemePage } requiredClaims={[Claims.PRODUCER]} />
           </Switch>
         </Router> 
       </div>    

@@ -6,7 +6,7 @@ export enum Claims {
 
 export class AuthVM {
     jwt: string = "";
-    isAuthenticated: boolean = false;
+    isAuthenticated: boolean | "UNTOUCHED" = false;
     id: string = "";
     userName: string = "";
     email: string = "";

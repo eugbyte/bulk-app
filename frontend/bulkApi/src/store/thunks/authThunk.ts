@@ -30,14 +30,26 @@ export interface IAuthAction extends Action {
                 throw apiError;
             }
             
-            let authVM: AuthVM = (await response.json());
+            // If authentication succeeds, server sends authVM. Otherwise, AuthenticationException raised
+            let authVM: AuthVM = await response.json();
             console.log("IAuthVM", authVM);
-            dispatch({ type: ACTIONS.LOGIN_RECEIVED, 
+
+            if (authVM.isAuthenticated === false) {
+                authVM.userName = "ACCOUNT";
+                dispatch({ type: ACTIONS.LOGIN_FAILED,
+                    authVM: authVM,
+                    message: response.statusText,  
+                    httpMessage: ACTIONS.HTTP_UPDATE_SUCCESS 
+                });
+              return;
+            }
+
+            dispatch({ type: ACTIONS.LOGIN_SUCCESS, 
                 authVM: authVM,
                 message: response.statusText,  
                 httpMessage: ACTIONS.HTTP_UPDATE_SUCCESS 
             });
-        } catch(error) {
+        } catch(error) {          
             dispatch(errorAction(ACTIONS.ERROR, error));
         }        
         
@@ -45,13 +57,7 @@ export interface IAuthAction extends Action {
 }
 
 export function logoutSync(): IAuthAction {
-    let authVM: AuthVM = new AuthVM("USER");
+    let authVM: AuthVM = new AuthVM("ACCOUNT");
+    authVM.isAuthenticated = "UNTOUCHED";
     return { type: ACTIONS.LOGOUT, message: "Logout ...", authVM: authVM}; 
-}
-
-export function logoutAsync(): ThunkAction<Promise<void>, {}, {}, IAuthAction | IErrorAction> {
-    return async (dispatch: ThunkDispatch<{}, {}, IAuthAction | IErrorAction>) => {
-        let authVM: AuthVM = new AuthVM("USER");
-        dispatch({ type: ACTIONS.LOGOUT, message: "Logout ...", authVM: authVM});        
-    }
 }

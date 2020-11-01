@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Route, useHistory } from 'react-router-dom';
 import { AuthVM } from "../models/AuthVM";
 import { RootState } from "../store/rootReducer";
+import { SnackbarComponent } from "./SnackbarComponent";
 
 interface IProp {
     component: FunctionComponent;
@@ -12,13 +13,10 @@ interface IProp {
 
 export function PrivateRoute({component, path, requiredClaims=[]}: IProp): JSX.Element {    
 
-    let authVM: AuthVM;
+    let authVM: AuthVM = new AuthVM();
 
-    try {
+    if (localStorage.getItem("authVM")) {
         authVM = JSON.parse(localStorage.getItem("authVM") as string);
-    } catch (error) {
-        console.log(error);
-        authVM = new AuthVM();
     }
      
     let isAuthenticated: boolean = authVM.isAuthenticated === true ? true : false;
@@ -37,6 +35,8 @@ export function PrivateRoute({component, path, requiredClaims=[]}: IProp): JSX.E
         history.push("/login");
     }
 
-    return <Route path={path} component= { component } />
+    return <Fragment>
+        <Route path={path} component= { component } />
+    </Fragment>
      
 }
