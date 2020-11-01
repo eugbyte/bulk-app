@@ -1,6 +1,8 @@
-import React, { Fragment, FunctionComponent, useState } from "react";
+import { Container } from "@material-ui/core";
+import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Route, useHistory } from 'react-router-dom';
+import { NavLink, Route, useHistory } from 'react-router-dom';
+import { ErrorPage } from "../containers/ErrorPage";
 import { AuthVM } from "../models/AuthVM";
 import { RootState } from "../store/rootReducer";
 import { SnackbarComponent } from "./SnackbarComponent";
@@ -28,15 +30,32 @@ export function PrivateRoute({component, path, requiredClaims=[]}: IProp): JSX.E
         history.push("/login");
     }
 
+    let [openSnackBar, setOpenSnackBar] = useState<boolean>(false);
+
     let isAuthorized: boolean = requiredClaims.every(requiredClaim => claims.includes(requiredClaim));
 
-    if (!isAuthorized) {
-        console.log("not authorized");
-        history.push("/login");
-    }
+    let linkToLoginForm: JSX.Element = <Fragment>
+        <span>Not Authorized </span>
+        <NavLink to="/login" style={{color: "white"}}><b>Click here to login</b></NavLink>
+    </Fragment> 
+
+    useEffect(() => {
+        if (!isAuthorized) {
+            console.log("not authorized");
+            setOpenSnackBar(true);
+            return;
+            // history.push("/login");
+        }
+    }, [isAuthorized]);
+
+    
 
     return <Fragment>
-        <Route path={path} component= { component } />
+        {  isAuthorized
+            ? <Route path={path} component= { component } />
+            : <ErrorPage />
+        }        
+        <SnackbarComponent open={openSnackBar} setOpen={setOpenSnackBar} message={linkToLoginForm} severity="warning" autoHideDuration={10000}/>
     </Fragment>
      
 }

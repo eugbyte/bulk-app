@@ -5,12 +5,13 @@ import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 interface IProps { 
     open: boolean;  // useState(true)
     setOpen: (val: boolean) => void;    //useState(true)
-    message: string;
+    message: string | JSX.Element;
     severity: "error" | "warning" | "info" | "success",
-    cleanUp?: () => any;    // callback function when notification closes
+    cleanUp?: () => any;    // callback function when notification closes;
+    autoHideDuration?: number;
 }
 
-export function SnackbarComponent({open, setOpen, message, severity, cleanUp}: IProps): JSX.Element {
+export function SnackbarComponent({open, setOpen, message, severity, cleanUp, autoHideDuration=6000}: IProps): JSX.Element {
 
     const handleClose = (reason: string) => { 
         setOpen(false); 
@@ -19,7 +20,7 @@ export function SnackbarComponent({open, setOpen, message, severity, cleanUp}: I
         }
     }; 
     
-    return <Snackbar open={open} autoHideDuration={6000} onClose={() => handleClose("clickaway")}>
+    return <Snackbar open={open} autoHideDuration={autoHideDuration} onClose={() => handleClose("clickaway")}>
         <Alert onClose={() => handleClose("clickaway")} severity={severity} >
             {message}
         </Alert>

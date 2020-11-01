@@ -11,7 +11,8 @@ export interface IAuthAction extends Action {
     identityUser?: IdentityUser | undefined;
     message?: string; // All internal messages and for response messages received on GET request 
     authVM?: AuthVM;
-    httpMessage?: string // For API messages
+    httpMessage?: string; // For API messages
+
 }
 
  export function loginAsync(identityUser: IdentityUser): ThunkAction<Promise<void>, {}, {}, IAuthAction | IErrorAction> {
