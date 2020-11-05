@@ -39,5 +39,16 @@
     <PackageReference Include="Z.EntityFramework.Plus.EFCore" Version="3.0.60" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\static\css\2.d9ad5f5c.chunk.css.map" />
+    <None Include="wwwroot\static\css\main.078dd7fc.chunk.css.map" />
+    <None Include="wwwroot\static\js\2.fbc59a88.chunk.js" />
+    <None Include="wwwroot\static\js\2.fbc59a88.chunk.js.map" />
+    <None Include="wwwroot\static\js\main.262c2a86.chunk.js" />
+    <None Include="wwwroot\static\js\main.262c2a86.chunk.js.map" />
+    <None Include="wwwroot\static\js\runtime-main.83c3e0c4.js" />
+    <None Include="wwwroot\static\js\runtime-main.83c3e0c4.js.map" />
+  </ItemGroup>
+
 
 </Project>

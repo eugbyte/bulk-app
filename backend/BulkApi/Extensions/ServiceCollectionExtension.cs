@@ -17,6 +17,9 @@ using BulkApi.Services.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using System.Security.Claims;
 
 namespace BulkApi.Extensions
 {
@@ -68,8 +71,10 @@ namespace BulkApi.Extensions
         {
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("UserPolicy",
-                    policy => policy.RequireClaim("USER_CLASS", "PRODUCER"));  //if you want the ROLE claim to only be PRODUCER  
+                options.AddPolicy("ConsumerPolicy",
+                    policy => policy.RequireClaim(ClaimTypes.Role, "CONSUMER"));
+                options.AddPolicy("ProducerPolicy",
+                    policy => policy.RequireClaim(ClaimTypes.Role, "PRODUCER"));
             });
         }
 
@@ -98,6 +103,19 @@ namespace BulkApi.Extensions
                 };
             });
         }
+
+        //Apply the authorization policy to all controllers by default
+        public static void AddControllersWithGlobalAuthorizationExtension(this IServiceCollection services)
+        {
+            services.AddControllers(options => {
+                AuthorizationPolicy policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .RequireClaim(ClaimTypes.Role)    
+                    .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
+        }
+
 
         public static void AddServicesExtension(this IServiceCollection services)
         {

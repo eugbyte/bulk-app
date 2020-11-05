@@ -9,7 +9,7 @@ import { AuthVM } from '../models/AuthVM';
 import { CLAIMS } from '../enums/Claims';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/rootReducer';
-import { AuthContext } from './contexts/AuthContext';
+import { AuthContext } from '../contexts/AuthContext';
 import { logoutSync } from '../store/thunks/authThunk';
 import { ACTIONS } from '../store/actionEnums';
 

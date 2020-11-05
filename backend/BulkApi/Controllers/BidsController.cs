@@ -11,9 +11,11 @@ using BulkApi.Services.Bids;
 using BulkApi.ViewModels;
 using BulkApi.Services.DiscountSchemes;
 using BulkApi.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BulkApi.Controllers
 {
+    [Authorize(Policy = "ConsumerPolicy")]
     [Route("api/[controller]")]
     [ApiController]
     public class BidsController : ControllerBase

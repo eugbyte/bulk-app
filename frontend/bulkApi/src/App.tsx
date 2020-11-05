@@ -13,7 +13,7 @@ import { ProductForm } from './containers/ProductForm';
 import { ProductsPage } from './containers/ProductsPage';
 import { LoginForm } from './containers/LoginForm';
 import { PrivateRoute } from './components/PrivateRoute';
-import { AuthContext } from './components/contexts/AuthContext';
+import { AuthContext } from './contexts/AuthContext';
 import { AuthVM, Claims } from './models/AuthVM';
 
 function App() {

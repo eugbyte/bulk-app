@@ -11,6 +11,7 @@ import { useHistory } from "react-router-dom";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import { ApiError } from "../models/ApiError";
 import { ErrorNotification } from "../components/ErrorNotification";
+import { InterceptorService } from "../services/InterceptorService";
  
 export function DiscountSchemesPage(): JSX.Element {
     const dispatch: Dispatch<any> = useDispatch();  

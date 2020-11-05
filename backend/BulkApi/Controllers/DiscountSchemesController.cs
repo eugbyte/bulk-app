@@ -10,9 +10,11 @@ using BulkApi.Models;
 using BulkApi.Extensions;
 using BulkApi.Services.DiscountSchemes;
 using BulkApi.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BulkApi.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class DiscountSchemesController : ControllerBase
@@ -26,12 +28,14 @@ namespace BulkApi.Controllers
 
         // GET: api/DiscountSchemes
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<DiscountScheme>>> GetAllPendingDiscountSchemesWithBid()
         {
             return await discountSchemeService.GetAllPendingDiscountSchemesWithBid();
         }
 
         [HttpGet("{bidId}")]
+        [Authorize(Policy = "ConsumerPolicy")]
         public async Task<ActionResult<DiscountSchemeVM>> GetDiscountSchemeWithBid(int bidId)
         {
             DiscountScheme discountScheme = await discountSchemeService.GetDiscountSchemeWithBids(bidId);
@@ -40,9 +44,9 @@ namespace BulkApi.Controllers
 
             return discountSchemeVM;
         }
-
-
+        
         [HttpGet("producer/{producerId}")]
+        [Authorize(Policy = "ProducerPolicy")]
         public async Task<ActionResult<List<DiscountScheme>>> GetDiscountSchemesWithBidOfProducer(string producerId)
         {
             List<DiscountScheme> discountSchemes = await discountSchemeService.GetDiscountSchemesWithBidOfProducer(producerId);
@@ -51,6 +55,7 @@ namespace BulkApi.Controllers
         }   
         
         [HttpPost]
+        [Authorize(Policy = "ProducerPolicy")]
         public async Task<ActionResult<DiscountScheme>> CreateDiscountScheme(DiscountScheme ds)
         {
             DiscountScheme createdDiscountScheme = await discountSchemeService.CreateDiscountScheme(
@@ -63,6 +68,7 @@ namespace BulkApi.Controllers
         }
 
         [HttpDelete("{discountSchemeId}")]
+        [Authorize(Policy = "ProducerPolicy")]
         public async Task<ActionResult<DiscountScheme>> DeleteDiscountScheme(int discountSchemeId)
         {
             DiscountScheme deletedDiscountScheme = await discountSchemeService.DeleteDiscountScheme(discountSchemeId);

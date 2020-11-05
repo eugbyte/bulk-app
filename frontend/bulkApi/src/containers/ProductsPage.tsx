@@ -15,7 +15,7 @@ import { ACTIONS } from "../store/actionEnums";
 
 class Row {
     name: string | undefined;
-    originalPrice: number | undefined;
+    originalPrice: string | undefined;
     category: string | undefined;
     description: string | undefined;
     update: JSX.Element | undefined;
@@ -93,7 +93,7 @@ export function ProductsPage(): JSX.Element {
         <Grid container>
             <Grid item xs={10}></Grid>
             <Grid item xs={2}>
-                <Button variant="outlined" onClick={redirectToProductForm}>Create Product</Button>
+                <Button variant="contained" onClick={redirectToProductForm} color="primary">Create Product</Button>
             </Grid>
         </Grid>
         <Grid item xs={12}><br/></Grid>
@@ -106,7 +106,7 @@ export function ProductsPage(): JSX.Element {
 function createRow(product: Product): Row {
     let row: Row = new Row();
     row.name = product.name;
-    row.originalPrice = product.originalPrice;
+    row.originalPrice = "$" + product.originalPrice;
     row.category = product.category;
     row.description = product.description;
     return row;

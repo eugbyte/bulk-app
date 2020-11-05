@@ -4,6 +4,7 @@ import { DiscountScheme } from "../../models/DiscountScheme";
 import { Action } from "redux";
 import { IErrorAction, errorAction } from "../actions/errorAction";
 import { ApiError } from "../../models/ApiError";
+import { InterceptorService } from "../../services/InterceptorService";
 
 export interface IDiscountSchemeAction extends Action {
     type: string;
@@ -16,9 +17,13 @@ export interface IDiscountSchemeAction extends Action {
 
 export function getAllDiscountSchemesWithBidsAsync(): ThunkAction<Promise<void>, {}, {}, IDiscountSchemeAction | IErrorAction> {
     return async (dispatch: ThunkDispatch<{}, {}, IDiscountSchemeAction | IErrorAction> ) => {
+        console.log("JWT", InterceptorService.getJWT());
         dispatch({ type: ACTIONS.GET_DISCOUNTSCHEMES_REQUEST, message: "GET DiscountSchemes..."});
         try {            
-            const response: Response = await fetch("https://localhost:44397/api/discountSchemes");
+            
+            const response: Response = await fetch("https://localhost:44397/api/discountSchemes", {
+                headers: InterceptorService.getAuthHeader()
+            });
 
             if (!response.ok) {
                 let apiError: ApiError = await response.json();
@@ -38,7 +43,9 @@ export function getDiscountSchemeAsync(discountSchemeId: number): ThunkAction<Pr
     return async (dispatch: ThunkDispatch<{}, {}, IDiscountSchemeAction | IErrorAction>) => {
         dispatch({ type: ACTIONS.GET_DISCOUNTSCHEME_REQUEST, message: "GET DiscountScheme with id: " + discountSchemeId});
         try {            
-            const response: Response = await fetch("https://localhost:44397/api/discountSchemes/" + discountSchemeId);
+            const response: Response = await fetch("https://localhost:44397/api/discountSchemes/" + discountSchemeId, {
+                headers: InterceptorService.getAuthHeader()
+            });
             
             if (!response.ok) {
                 let apiError: ApiError = await response.json();
@@ -58,7 +65,9 @@ export function getDiscountSchemesWithBidOfProducer(producerId: number): ThunkAc
     return async (dispatch: ThunkDispatch<{}, {}, IDiscountSchemeAction | IErrorAction>) => {
         dispatch({ type: ACTIONS.GET_DISCOUNTSCHEME_OF_PRODUCER_REQUEST, message: "GET DiscountScheme of producer id: " + producerId });
         try {
-            const response: Response = await fetch("https://localhost:44397/api/discountSchemes/producer/" + producerId);
+            const response: Response = await fetch("https://localhost:44397/api/discountSchemes/producer/" + producerId, {
+                headers: InterceptorService.getAuthHeader()
+            });
 
             if (!response.ok) {
                 let apiError: ApiError = await response.json();
@@ -79,7 +88,7 @@ export function createDiscountSchemeAsync(discountScheme: DiscountScheme): Thunk
         try {
             const response: Response = await fetch("https://localhost:44397/api/discountSchemes", {
                 method: "POST",
-                headers: { 'Content-Type': 'application/json' },
+                headers: InterceptorService.getAuthHeader(),
                 body: JSON.stringify(discountScheme)
             });
 
@@ -102,7 +111,7 @@ export function deleteDiscountSchemeAsync(discountSchemeId: number): ThunkAction
         try {
             const response: Response = await fetch("https://localhost:44397/api/discountSchemes/" + discountSchemeId, {
                 method: "DELETE",
-                headers: { 'Content-Type': 'application/json' }
+                headers: InterceptorService.getAuthHeader()
             });
 
             if (!response.ok) {

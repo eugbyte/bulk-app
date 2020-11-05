@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using BulkApi.Extensions;
+using System.IO;
 
 namespace BulkApi
 {
@@ -35,6 +36,8 @@ namespace BulkApi
             services.AddErrorFilterExtension();
             services.AddJWTAuthenticationExtension(Configuration);
 
+            services.AddControllersWithGlobalAuthorizationExtension();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +47,8 @@ namespace BulkApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // app.LoadStaticFiles();
 
             app.UseHttpsRedirection();
 

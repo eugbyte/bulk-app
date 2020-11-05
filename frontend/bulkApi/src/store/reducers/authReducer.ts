@@ -1,6 +1,6 @@
 import { cloneDeep } from "lodash";
 import { useContext } from "react";
-import { AuthContext } from "../../components/contexts/AuthContext";
+import { AuthContext } from "../../contexts/AuthContext";
 import { AuthVM } from "../../models/AuthVM";
 import { ACTIONS } from "../actionEnums";
 import { IAuthAction } from "../thunks/authThunk";
