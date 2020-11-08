@@ -13,3 +13,8 @@ Sellers have the discretion to set their own discount schemes, ensuring that sel
 ## Producer
 * *username:* TestProducer  
 * *password:* TestPassword  
+
+# How to run locally
+1. *Data:* Run the latest sql script
+2. *Backend Api* Run the ASP.NET Core application
+3. *Frontend* Run `npm install` and then `npm start`
