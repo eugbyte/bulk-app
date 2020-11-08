@@ -28,7 +28,7 @@ namespace BulkApi.Controllers
 
         // GET: api/DiscountSchemes
         [HttpGet]
-        [Authorize]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<DiscountScheme>>> GetAllPendingDiscountSchemesWithBid()
         {
             return await discountSchemeService.GetAllPendingDiscountSchemesWithBid();

@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "mssql2": {
+      "restored": true,
+      "restoreTime": "2020-11-08T08:07:19.7176853Z"
+    },
+    "mssql1": {
+      "restored": true,
+      "restoreTime": "2020-11-08T05:35:46.0383259Z"
+    }
+  },
+  "parameters": {
+    "resourceGroup": {
+      "Type": "resourceGroup",
+      "Value": "BulkApi"
+    },
+    "subscriptionId": {
+      "Type": "subscription",
+      "Value": "910fddd8-7570-4837-a9a1-b3d5eff297d2"
+    }
+  }
+}

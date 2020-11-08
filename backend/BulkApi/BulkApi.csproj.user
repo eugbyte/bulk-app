@@ -11,5 +11,6 @@
     <WebStackScaffolding_DbContextTypeFullName>BulkApi.Data.BulkDbContext</WebStackScaffolding_DbContextTypeFullName>
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
     <ShowAllFiles>false</ShowAllFiles>
+    <NameOfLastUsedPublishProfile>BulkApi20201108130318 - Web Deploy</NameOfLastUsedPublishProfile>
   </PropertyGroup>
 </Project>

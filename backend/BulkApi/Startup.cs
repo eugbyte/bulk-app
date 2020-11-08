@@ -48,7 +48,7 @@ namespace BulkApi
                 app.UseDeveloperExceptionPage();
             }
 
-            // app.LoadStaticFiles();
+            app.LoadStaticFiles();
 
             app.UseHttpsRedirection();
 

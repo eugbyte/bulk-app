@@ -666,6 +666,8 @@ C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\BulkApi.run
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\BulkApi.runtimeconfig.dev.json
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\BulkApi.dll
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\BulkApi.pdb
+C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\IdentityModel.dll
+C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.Internal.dll
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
@@ -812,6 +814,8 @@ C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\runtimes\wi
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.AssemblyInfoInputs.cache
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.AssemblyInfo.cs
+C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.csproj.CoreCompileInputs.cache
+C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.RazorTargetAssemblyInfo.cache
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.csproj.CopyComplete
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\staticwebassets\BulkApi.StaticWebAssets.Manifest.cache
@@ -819,8 +823,6 @@ C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\staticwebas
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.dll
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.pdb
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.genruntimeconfig.cache
+C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.BulkApi20201108130318 - Web Deploy.json
+C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.json
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.csprojAssemblyReference.cache
-C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
-C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\IdentityModel.dll
-C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.csproj.CoreCompileInputs.cache
-C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.MvcApplicationPartsAssemblyInfo.cache
