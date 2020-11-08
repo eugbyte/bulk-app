@@ -7,14 +7,14 @@ Sellers have the discretion to set their own discount schemes, ensuring that sel
 
 # How to login to the website
 ## Consumer
-* *username:* TestConsumer  
-* *password:* TestPassword  
+* **username:** TestConsumer  
+* **password:** TestPassword  
 
 ## Producer
-* *username:* TestProducer  
-* *password:* TestPassword  
+* **username:** TestProducer  
+* **password:** TestPassword  
 
 # How to run locally
-1. *Data:* Run the latest sql script
-2. *Backend Api* Run the ASP.NET Core application
-3. *Frontend* Run `npm install` and then `npm start`
+1. **Data:** Run the latest sql script
+2. **Backend Api:** Run the ASP.NET Core application
+3. **Frontend:** Run `npm install` and then `npm start`
