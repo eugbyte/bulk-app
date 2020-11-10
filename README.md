@@ -7,7 +7,8 @@ Sellers have the discretion to set their own discount schemes, ensuring that sel
 
 # How to login to the website
 
-*Clear your cookies first, as otherwise, you might cross-site cookies error*  
+*Clear your cookies first, as otherwise, you might cross-site cookies error*    
+Go to https://bulkapi20201108130318.azurewebsites.net/  
 
 ## Consumer
 * **username:** TestConsumer  
@@ -23,8 +24,8 @@ Sellers have the discretion to set their own discount schemes, ensuring that sel
 3. **Frontend:** Run `npm install` and then `npm start`
 
 # Tech stack and features
-1. React, Redux Thunk for the front end
-2. ASP.NET Core for the backend
+1. React, Redux Thunk, JS for the front end
+2. ASP.NET Core, C# for the backend
 3. SQL Server for the database
 4. JWT Authentication and Authorization
 5. REST API for CRUD operations
