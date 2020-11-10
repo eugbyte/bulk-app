@@ -7,7 +7,7 @@ Sellers have the discretion to set their own discount schemes, ensuring that sel
 
 # How to login to the website
 
-Clear your cookies first, as otherwise, you might cross-site cookies error  
+*Clear your cookies first, as otherwise, you might cross-site cookies error*  
 
 ## Consumer
 * **username:** TestConsumer  
