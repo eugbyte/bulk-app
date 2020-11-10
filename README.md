@@ -18,6 +18,13 @@ Clear your cookies first, as otherwise, you might cross-site cookies error
 * **password:** TestPassword  
 
 # How to run locally
-1. **Data:** Run the latest sql script
+1. **Database:** Run the latest sql script
 2. **Backend Api:** Run the ASP.NET Core application
 3. **Frontend:** Run `npm install` and then `npm start`
+
+# Tech stack and features
+1. React, Redux Thunk for the front end
+2. ASP.NET Core for the backend
+3. SQL Server for the database
+4. JWT Authentication and Authorization
+5. REST API for CRUD operations
