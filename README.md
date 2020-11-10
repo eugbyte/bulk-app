@@ -6,6 +6,9 @@ BulkApi also aims to reduce delivery cost. Buyers are encouraged to select a com
 Sellers have the discretion to set their own discount schemes, ensuring that sellers can offer a discount that is optimal and sustainable for their business.
 
 # How to login to the website
+
+Clear your cookies first, as otherwise, you might cross-site cookies error  
+
 ## Consumer
 * **username:** TestConsumer  
 * **password:** TestPassword  
