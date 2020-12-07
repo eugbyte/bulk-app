@@ -152,7 +152,8 @@ export function CartPage(): JSX.Element {
             selectListItem.selected = bid.collectionAddress === address;
             selectListItems.push(selectListItem);
         }        
-        rows[i].collectionAddress = <SelectControlledComponent title={"Delivery"} state={bid.collectionAddress} selectListItems={selectListItems} handleChange={handleChangeAddress} />
+        rows[i].collectionAddress = <SelectControlledComponent title={"Delivery"} state={bid.collectionAddress + ""} 
+            selectListItems={selectListItems} handleChange={handleChangeAddress} />
 
         // Detail Panel
         let descriptionDict: Record<string, any> = {
