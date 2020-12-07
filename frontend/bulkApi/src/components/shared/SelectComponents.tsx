@@ -4,7 +4,7 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import { SelectListItem } from "../models/SelectListItem";
+import { SelectListItem } from "../../models/SelectListItem";
 import { Control, Controller, DeepMap, FieldError } from "react-hook-form";
 import { FormHelperText } from "@material-ui/core";
 

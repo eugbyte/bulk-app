@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
-import { DiscountScheme } from "../models/DiscountScheme";
-import { RootState } from "../store/rootReducer";
-import { getDiscountSchemeAsync } from "../store/thunks/discountSchemeThunk";
+
 import Typography from '@material-ui/core/Typography';
 import CardMedia from '@material-ui/core/CardMedia';
 import Container from '@material-ui/core/Container';
-import { CartButtons } from "../components/CartButtons";
-import e_commerce from '../images/e_commerce.png';
-import { Bid } from "../models/Bid";
-import { addBidToCartAsync, updateBidInCartAsync } from "../store/thunks/bidThunk";
-import { SnackbarComponent } from "../components/SnackbarComponent"; 
-import { SelectControlledComponent } from "../components/SelectComponents";
+import e_commerce from '../../images/e_commerce.png';
+
 import { Grid } from "@material-ui/core";
-import { SelectListItem } from "../models/SelectListItem";
-import { TextComponent } from "../components/TextComponent";
+
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import { CartButtons } from "../../components/shared/CartButtons";
+import { SelectControlledComponent } from "../../components/shared/SelectComponents";
+import { SnackbarComponent } from "../../components/shared/SnackbarComponent";
+import { TextComponent } from "../../components/shared/TextComponent";
+import { Bid } from "../../models/Bid";
+import { DiscountScheme } from "../../models/DiscountScheme";
+import { SelectListItem } from "../../models/SelectListItem";
+import { RootState } from "../../store/rootReducer";
+import { addBidToCartAsync, updateBidInCartAsync } from "../../store/thunks/bidThunk";
+import { getDiscountSchemeAsync } from "../../store/thunks/discountSchemeThunk";
 
 export interface IProps {
     discountSchemeId: number;
@@ -33,6 +36,7 @@ export function DiscountSchemeDetailPage({discountSchemeId, MODE, bidIdToUpdate=
 
     // State to determine whether to show notification
     const [open, setOpen] = useState(false);
+    
   
     // The discountScheme retrieved through a GET request
     useEffect(() => {

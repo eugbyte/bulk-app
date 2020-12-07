@@ -4,7 +4,7 @@ import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { ACTIONS } from "../actionEnums";
 import { IErrorAction, errorAction } from "../actions/errorAction";
 import { ApiError } from "../../models/ApiError";
-import { InterceptorService } from "../../services/InterceptorService";
+import { UtilService } from "../../services/UtilService";
 
 
 export interface IBidAction extends Action {
@@ -24,9 +24,9 @@ export function addBidToCartAsync(bid: Bid): ThunkAction<Promise<void>, {}, {}, 
         dispatch({ type: ACTIONS.ADD_BID_TO_CART_REQUEST, message: "Making post request to add bid to cart ..." });
 
         try {
-            const response: Response = await fetch("https://localhost:44397/api/bids/addcart", {
+            const response: Response = await fetch(UtilService.getApiUrl() + "bids/addcart", {
                 method: "POST",
-                headers: InterceptorService.getAuthHeader(),
+                headers: UtilService.getAuthHeader(),
                 body: JSON.stringify(bid)
             });
 
@@ -47,12 +47,12 @@ export function addBidToCartAsync(bid: Bid): ThunkAction<Promise<void>, {}, {}, 
 export function updateBidInCartAsync(bid: Bid): ThunkAction<Promise<void>, {}, {}, IBidAction | IErrorAction> {
     return async (dispatch: ThunkDispatch<{}, {}, IBidAction | IErrorAction>) => {
         console.log("in thunk. bid to update", bid.bidId)
-        dispatch({ type: ACTIONS.UPDATE_BID_IN_CART_REQUEST, messages: ["Request to update bid in cart"] });
+        dispatch({ type: ACTIONS.UPDATE_BID_IN_CART_REQUEST, messages: "Request to update bid in cart" });
 
         try {
-            const response: Response = await fetch("https://localhost:44397/api/bids/updatecart", {
+            const response: Response = await fetch(UtilService.getApiUrl() + "bids/updatecart", {
                 method: "PUT",
-                headers: InterceptorService.getAuthHeader(),
+                headers: UtilService.getAuthHeader(),
                 body: JSON.stringify(bid)
             });
 
@@ -72,11 +72,11 @@ export function updateBidInCartAsync(bid: Bid): ThunkAction<Promise<void>, {}, {
 
 export function getBidsOfCustomerInCartAsync(customerId: number) {
     return async (dispatch: ThunkDispatch<{}, {}, IBidAction | IErrorAction>) => { 
-        dispatch({ type: ACTIONS.GET_BIDSOFCUSTOMER_INCART_REQUEST, messages: ["Fetching bids in cart for customer " + customerId]});
+        dispatch({ type: ACTIONS.GET_BIDSOFCUSTOMER_INCART_REQUEST, messages: "Fetching bids in cart for customer " + customerId});
 
         try {
-            const response: Response = await fetch("https://localhost:44397/api/bids/cart/" + customerId, {
-                headers: InterceptorService.getAuthHeader()
+            const response: Response = await fetch(UtilService.getApiUrl() + "bids/cart/" + customerId, {
+                headers: UtilService.getAuthHeader()
             });
 
             if (!response.ok) {
@@ -94,12 +94,12 @@ export function getBidsOfCustomerInCartAsync(customerId: number) {
 
 export function deleteBidFromCartAsync(bidId: number) {
     return async (dispatch: ThunkDispatch<{}, {}, IBidAction | IErrorAction>) => { 
-        dispatch({ type: ACTIONS.DELETE_BID_IN_CART_REQUEST, messages: ["deleting bids in cart with bidId" + bidId]});
+        dispatch({ type: ACTIONS.DELETE_BID_IN_CART_REQUEST, messages: "deleting bids in cart with bidId" + bidId});
 
         try {
-            const response: Response = await fetch("https://localhost:44397/api/bids/cart/" + bidId, {
+            const response: Response = await fetch(UtilService.getApiUrl() + "bids/cart/" + bidId, {
                 method: "DELETE",
-                headers: InterceptorService.getAuthHeader()
+                headers: UtilService.getAuthHeader()
             });
 
             if (!response.ok) {
@@ -116,11 +116,11 @@ export function deleteBidFromCartAsync(bidId: number) {
 
 export function orderBidsFromCart(bids: Bid[]) {
     return async (dispatch: ThunkDispatch<{}, {}, IBidAction | IErrorAction>) => { 
-        dispatch({ type: ACTIONS.ORDER_BIDS_IN_CART_REQUEST, messages: ["ordering bids in cart " + bids.toString()]});
+        dispatch({ type: ACTIONS.ORDER_BIDS_IN_CART_REQUEST, messages: "ordering bids in cart " + bids.toString()});
         try {
-            const response: Response = await fetch("https://localhost:44397/api/bids/cart/order", {
+            const response: Response = await fetch(UtilService.getApiUrl() + "bids/cart/order", {
                 method: "PUT",
-                headers: InterceptorService.getAuthHeader(),
+                headers: UtilService.getAuthHeader(),
                 body: JSON.stringify(bids)
             });
 
@@ -138,10 +138,10 @@ export function orderBidsFromCart(bids: Bid[]) {
 
 export function getPendingOrSuccessfulBids(customerId: number) {
     return async (dispatch: ThunkDispatch<{}, {}, IBidAction | IErrorAction>) => { 
-        dispatch({ type: ACTIONS.GET_PENDING_OR_SUCCESSFUL_BIDS_REQUEST, messages: ["getting  PendingOrSuccessfulBids of customer " + customerId]});
+        dispatch({ type: ACTIONS.GET_PENDING_OR_SUCCESSFUL_BIDS_REQUEST, messages: "getting  PendingOrSuccessfulBids of customer " + customerId});
         try {
-            const response: Response = await fetch("https://localhost:44397/api/bids/orders/" + 1, {
-                headers: InterceptorService.getAuthHeader()
+            const response: Response = await fetch(UtilService.getApiUrl() + "bids/orders/" + 1, {
+                headers: UtilService.getAuthHeader()
             });
 
             if (!response.ok) {

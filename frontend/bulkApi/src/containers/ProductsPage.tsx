@@ -7,8 +7,8 @@ import { Dispatch } from "redux";
 import { useHistory } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import { Container, Grid } from "@material-ui/core";
-import { DialogComponent } from "../components/DialogComponent";
-import { DataTable } from "../components/DataTable";
+import { DialogComponent } from "../components/shared/DialogComponent";
+import { DataTable } from "../components/shared/DataTable";
 import "./toolTip.css";
 import { ACTIONS } from "../store/actionEnums";
 

@@ -3,6 +3,7 @@ import { Action } from "redux";
 import { ApiError } from "../../models/ApiError";
 import { AuthVM } from "../../models/AuthVM";
 import { IdentityUser } from "../../models/IdentityUser";
+import { UtilService } from "../../services/UtilService";
 import { ACTIONS } from "../actionEnums";
 import { errorAction, IErrorAction } from "../actions/errorAction";
 
@@ -20,7 +21,7 @@ export interface IAuthAction extends Action {
         dispatch({ type: ACTIONS.LOGIN_REQUEST, message: "Attempting login..."});
 
         try {
-            const response: Response = await fetch("https://localhost:44397/api/auth/signIn", {
+            const response: Response = await fetch(UtilService.getApiUrl() + "auth/signIn", {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(identityUser)

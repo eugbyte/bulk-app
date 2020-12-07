@@ -5,7 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Button } from "@material-ui/core";
 import CardMedia from '@material-ui/core/CardMedia'; 
-import imageUrl  from  "../../src/images/e_commerce.png";
+import imageUrl  from  "../../images/e_commerce.png";
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 

@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import './App.css';
 import { DiscountSchemesPage } from './containers/DiscountSchemesPage';
-import { NavBar } from './components/NavBar';
 import { Route } from 'react-router-dom';
 import { Switch, BrowserRouter as Router } from 'react-router-dom';
-import { DiscountSchemeDetailHOC } from './containers/DiscountSchemeDetailHOC';
 import { CartPage } from './containers/CartPage';
 import { OrdersPage } from './containers/OrdersPage';
 import { ProducerDiscountSchemePage } from './containers/ProducerDiscountSchemePage';
@@ -12,9 +10,11 @@ import { DiscountSchemeForm } from './containers/DiscountSchemeForm';
 import { ProductForm } from './containers/ProductForm';
 import { ProductsPage } from './containers/ProductsPage';
 import { LoginForm } from './containers/LoginForm';
-import { PrivateRoute } from './components/PrivateRoute';
+import { PrivateRoute } from './components/app/PrivateRoute';
 import { AuthContext } from './contexts/AuthContext';
 import { AuthVM, Claims } from './models/AuthVM';
+import { NavBar } from './components/app/NavBar';
+import { DiscountSchemeDetailHOC } from './containers/DiscountSchemeDetail/DiscountSchemeDetailHOC';
 
 function App() {
 

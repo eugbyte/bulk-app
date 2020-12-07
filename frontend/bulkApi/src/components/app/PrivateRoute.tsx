@@ -2,10 +2,10 @@ import { Container } from "@material-ui/core";
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { NavLink, Route, useHistory } from 'react-router-dom';
-import { ErrorPage } from "../containers/ErrorPage";
-import { AuthVM } from "../models/AuthVM";
-import { RootState } from "../store/rootReducer";
-import { SnackbarComponent } from "./SnackbarComponent";
+import { ErrorPage } from "../../containers/ErrorPage";
+import { AuthVM } from "../../models/AuthVM";
+import { RootState } from "../../store/rootReducer";
+import { SnackbarComponent } from "../shared/SnackbarComponent";
 
 interface IProp {
     component: FunctionComponent;

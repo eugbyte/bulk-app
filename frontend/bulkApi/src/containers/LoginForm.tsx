@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Container, Grid } from "@material-ui/core";
 import { useForm } from "react-hook-form";
-import { TextFieldUncontrolledComponent } from "../components/TextFieldComponents";
 import { IdentityUser } from "../models/IdentityUser";
 import { loginAsync } from "../store/thunks/authThunk";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +8,8 @@ import { useHistory } from "react-router-dom";
 import { Dispatch } from "redux"; 
 import { AuthVM } from "../models/AuthVM";
 import { RootState } from "../store/rootReducer";
-import { SnackbarComponent } from "../components/SnackbarComponent"; 
+import { SnackbarComponent } from "../components/shared/SnackbarComponent"; 
+import { TextFieldUncontrolledComponent } from "../components/shared/TextFieldComponents";
 
 enum FORM_NAMES {
     userName = "userName",

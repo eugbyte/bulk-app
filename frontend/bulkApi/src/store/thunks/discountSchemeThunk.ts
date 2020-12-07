@@ -4,7 +4,7 @@ import { DiscountScheme } from "../../models/DiscountScheme";
 import { Action } from "redux";
 import { IErrorAction, errorAction } from "../actions/errorAction";
 import { ApiError } from "../../models/ApiError";
-import { InterceptorService } from "../../services/InterceptorService";
+import { UtilService } from "../../services/UtilService";
 
 export interface IDiscountSchemeAction extends Action {
     type: string;
@@ -17,12 +17,12 @@ export interface IDiscountSchemeAction extends Action {
 
 export function getAllDiscountSchemesWithBidsAsync(): ThunkAction<Promise<void>, {}, {}, IDiscountSchemeAction | IErrorAction> {
     return async (dispatch: ThunkDispatch<{}, {}, IDiscountSchemeAction | IErrorAction> ) => {
-        console.log("JWT", InterceptorService.getJWT());
+        console.log("JWT", UtilService.getJWT());
         dispatch({ type: ACTIONS.GET_DISCOUNTSCHEMES_REQUEST, message: "GET DiscountSchemes..."});
         try {            
             
-            const response: Response = await fetch("https://localhost:44397/api/discountSchemes", {
-                headers: InterceptorService.getAuthHeader()
+            const response: Response = await fetch(UtilService.getApiUrl() + "discountSchemes", {
+                headers: UtilService.getAuthHeader()
             });
 
             if (!response.ok) {
@@ -43,8 +43,8 @@ export function getDiscountSchemeAsync(discountSchemeId: number): ThunkAction<Pr
     return async (dispatch: ThunkDispatch<{}, {}, IDiscountSchemeAction | IErrorAction>) => {
         dispatch({ type: ACTIONS.GET_DISCOUNTSCHEME_REQUEST, message: "GET DiscountScheme with id: " + discountSchemeId});
         try {            
-            const response: Response = await fetch("https://localhost:44397/api/discountSchemes/" + discountSchemeId, {
-                headers: InterceptorService.getAuthHeader()
+            const response: Response = await fetch(UtilService.getApiUrl() + "discountSchemes/" + discountSchemeId, {
+                headers: UtilService.getAuthHeader()
             });
             
             if (!response.ok) {
@@ -65,8 +65,8 @@ export function getDiscountSchemesWithBidOfProducer(producerId: number): ThunkAc
     return async (dispatch: ThunkDispatch<{}, {}, IDiscountSchemeAction | IErrorAction>) => {
         dispatch({ type: ACTIONS.GET_DISCOUNTSCHEME_OF_PRODUCER_REQUEST, message: "GET DiscountScheme of producer id: " + producerId });
         try {
-            const response: Response = await fetch("https://localhost:44397/api/discountSchemes/producer/" + producerId, {
-                headers: InterceptorService.getAuthHeader()
+            const response: Response = await fetch(UtilService.getApiUrl() + "discountSchemes/producer/" + producerId, {
+                headers: UtilService.getAuthHeader()
             });
 
             if (!response.ok) {
@@ -86,9 +86,9 @@ export function createDiscountSchemeAsync(discountScheme: DiscountScheme): Thunk
     return async (dispatch: ThunkDispatch<{}, {}, IDiscountSchemeAction | IErrorAction>) => {
         dispatch({ type: ACTIONS.CREATE_DISCOUNTSCHEME_REQUEST, message: "Creating Discount Scheme" });
         try {
-            const response: Response = await fetch("https://localhost:44397/api/discountSchemes", {
+            const response: Response = await fetch(UtilService.getApiUrl() + "discountSchemes", {
                 method: "POST",
-                headers: InterceptorService.getAuthHeader(),
+                headers: UtilService.getAuthHeader(),
                 body: JSON.stringify(discountScheme)
             });
 
@@ -109,9 +109,9 @@ export function deleteDiscountSchemeAsync(discountSchemeId: number): ThunkAction
     return async (dispatch: ThunkDispatch<{}, {}, IDiscountSchemeAction | IErrorAction>) => {
         dispatch({ type: ACTIONS.DELETE_DISCOUNTSCHEME_REQUEST, message: "Deleting Discount Scheme" });
         try {
-            const response: Response = await fetch("https://localhost:44397/api/discountSchemes/" + discountSchemeId, {
+            const response: Response = await fetch(UtilService.getApiUrl() + "discountSchemes/" + discountSchemeId, {
                 method: "DELETE",
-                headers: InterceptorService.getAuthHeader()
+                headers: UtilService.getAuthHeader()
             });
 
             if (!response.ok) {

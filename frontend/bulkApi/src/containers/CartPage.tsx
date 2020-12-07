@@ -4,19 +4,19 @@ import { RootState } from "../store/rootReducer";
 import { deleteBidFromCartAsync, getBidsOfCustomerInCartAsync, orderBidsFromCart, updateBidInCartAsync } from "../store/thunks/bidThunk";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux"; 
-import { DataTable } from "../components/DataTable";
+import { DataTable } from "../components/shared/DataTable";
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
-import { CartButtons } from "../components/CartButtons";
-import { SnackbarComponent } from "../components/SnackbarComponent";
+import { CartButtons } from "../components/shared/CartButtons";
+import { SnackbarComponent } from "../components/shared/SnackbarComponent";
 import { Button, Container } from "@material-ui/core";
 import Checkbox from '@material-ui/core/Checkbox';
-import { OrderCheckoutComponent } from "../components/OrderCheckoutComponent";
+import { OrderCheckoutComponent } from "../components/cartPage/OrderCheckoutComponent";
 import { ACTIONS } from "../store/actionEnums";
 import { useHistory } from "react-router-dom";
 import { SelectListItem } from "../models/SelectListItem";
-import { SelectControlledComponent } from "../components/SelectComponents";
+import { SelectControlledComponent } from "../components/shared/SelectComponents";
 import { Grid } from "@material-ui/core";
-import { TextComponent } from "../components/TextComponent";
+import { TextComponent } from "../components/shared/TextComponent";
 import { cloneDeep } from "lodash";
 
 class Row {

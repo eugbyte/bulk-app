@@ -1,5 +1,5 @@
 import React from "react";
-import { Bid } from "../models/Bid";
+import { Bid } from "../../models/Bid";
 import Typography from '@material-ui/core/Typography';
 import { Button } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';

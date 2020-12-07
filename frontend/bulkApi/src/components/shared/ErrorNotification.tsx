@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Snackbar } from "@material-ui/core";
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
-import { ApiError } from "../models/ApiError";
-import { errorAction } from "../store/actions/errorAction";
-import { ACTIONS } from "../store/actionEnums";
+import { ApiError } from "../../models/ApiError";
+import { errorAction } from "../../store/actions/errorAction";
+import { ACTIONS } from "../../store/actionEnums";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
-import { ErrorCollection } from "../models/ErrorCollection";
+import { ErrorCollection } from "../../models/ErrorCollection";
 
 interface IProp {
     autoHideDuration?: number;

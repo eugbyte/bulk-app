@@ -4,7 +4,7 @@ import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { ACTIONS } from "../actionEnums";
 import { IErrorAction, errorAction } from "../actions/errorAction";
 import { ApiError } from "../../models/ApiError";
-import { InterceptorService } from "../../services/InterceptorService";
+import { UtilService } from "../../services/UtilService";
 
 export interface IProductAction extends Action {
     type: string;
@@ -19,8 +19,8 @@ export function getProductsAsync(producerId: number): ThunkAction<Promise<void>,
         dispatch({ type: ACTIONS.GET_PRODUCTS_REQUEST, message: "Getting products of producer ..." });
 
         try {
-            const response: Response = await fetch("https://localhost:44397/api/products/producer/" + producerId, {
-                headers: InterceptorService.getAuthHeader()
+            const response: Response = await fetch(UtilService.getApiUrl() + "products/producer/" + producerId, {
+                headers: UtilService.getAuthHeader()
             });
 
             if (!response.ok) {
@@ -42,8 +42,8 @@ export function getProductAsync(productId: number): ThunkAction<Promise<void>, {
         dispatch({ type: ACTIONS.GET_PRODUCT_REQUEST, message: "Getting products of producer ..." });
 
         try {
-            const response: Response = await fetch("https://localhost:44397/api/products/" + productId, {
-                headers: InterceptorService.getAuthHeader()
+            const response: Response = await fetch(UtilService.getApiUrl() + "products/" + productId, {
+                headers: UtilService.getAuthHeader()
             });
 
             if (!response.ok) {
@@ -66,9 +66,9 @@ export function createProductsAsync(product: Product): ThunkAction<Promise<void>
         dispatch({ type: ACTIONS.GET_PRODUCTS_REQUEST, message: "Creating product ..." });
 
         try {
-            const response: Response = await fetch("https://localhost:44397/api/products/", {
+            const response: Response = await fetch(UtilService.getApiUrl() + "products/", {
                 method: "POST",
-                headers: InterceptorService.getAuthHeader(),
+                headers: UtilService.getAuthHeader(),
                 body: JSON.stringify(product)
             });
 
@@ -92,9 +92,9 @@ export function updateProductAsync(productId: number, product: Product): ThunkAc
         dispatch({ type: ACTIONS.UPDATE_PRODUCT_REQUEST, message: "Updating product ..." });
 
         try {
-            const response: Response = await fetch("https://localhost:44397/api/products/" + productId, {
+            const response: Response = await fetch(UtilService.getApiUrl() + "products/" + productId, {
                 method: "PUT",
-                headers: InterceptorService.getAuthHeader(),
+                headers: UtilService.getAuthHeader(),
                 body: JSON.stringify(product)
             });
 
@@ -118,9 +118,9 @@ export function deleteProductAsync(productId: number): ThunkAction<Promise<void>
         dispatch({ type: ACTIONS.DELETE_PRODUCT_REQUEST, message: "Deleting product ..." });
 
         try {
-            const response: Response = await fetch("https://localhost:44397/api/products/" + productId, {
+            const response: Response = await fetch(UtilService.getApiUrl() + "products/" + productId, {
                 method: "DELETE",
-                headers: InterceptorService.getAuthHeader()
+                headers: UtilService.getAuthHeader()
             });
 
             if (!response.ok) {

@@ -32,7 +32,7 @@ namespace BulkApi.Extensions
             string azureConnectionString = configuration.GetConnectionString("Azure");
 
             services.AddDbContext<BulkDbContext>(options =>
-                options.UseSqlServer(azureConnectionString));
+                options.UseSqlServer(localConnectionString));
         }
 
         public static void AddCorsExtension(this IServiceCollection services)

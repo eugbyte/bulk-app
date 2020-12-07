@@ -5,6 +5,11 @@
       "type": "mssql.azure",
       "connectionId": "Azure",
       "secretStore": "AzureAppSettings"
+    },
+    "mssql2": {
+      "type": "mssql.onprem",
+      "connectionId": "LocalSQL",
+      "secretStore": "AzureAppSettings"
     }
   }
 }

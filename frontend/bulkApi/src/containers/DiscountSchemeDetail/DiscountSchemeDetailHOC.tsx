@@ -1,6 +1,6 @@
 import React from "react";
-import { DiscountSchemeDetailPage } from "./DiscountSchemeDetailPage";
 import { useParams } from "react-router-dom";
+import { DiscountSchemeDetailPage } from "./DiscountSchemeDetailPage";
 
 // Essentially a HOC
 export function DiscountSchemeDetailHOC(): JSX.Element {

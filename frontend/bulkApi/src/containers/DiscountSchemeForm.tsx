@@ -6,16 +6,16 @@ import { Product } from "../models/Product";
 import { RootState } from "../store/rootReducer";
 import { getProductsAsync } from "../store/thunks/productThunk";
 import { SelectListItem } from "../models/SelectListItem";
-import { DatePickerUncontrolledComponent } from "../components/DatePickerComponent";
+import { DatePickerUncontrolledComponent } from "../components/discountSchemeForm/DatePickerComponent";
 import { useForm, Controller } from "react-hook-form";
-import { TextFieldUncontrolledComponent } from "../components/TextFieldComponents";
 import Button from '@material-ui/core/Button';
 import { DiscountScheme } from "../models/DiscountScheme";
-import { TextComponent } from "../components/TextComponent";
+import { TextComponent } from "../components/shared/TextComponent";
 import { createDiscountSchemeAsync } from "../store/thunks/discountSchemeThunk";
 import { ACTIONS } from "../store/actionEnums";
 import { useHistory } from "react-router-dom";
 import { Autocomplete } from "@material-ui/lab";
+import { TextFieldUncontrolledComponent } from "../components/shared/TextFieldComponents";
 
 enum FORM_NAMES {
     productId = "productId",

@@ -5,13 +5,12 @@ import { NavLink, useHistory } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import { Navbar, Nav, NavDropdown, DropdownButton } from 'react-bootstrap';
 import "./NavBar.css";
-import { AuthVM } from '../models/AuthVM';
-import { CLAIMS } from '../enums/Claims';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store/rootReducer';
-import { AuthContext } from '../contexts/AuthContext';
-import { logoutSync } from '../store/thunks/authThunk';
-import { ACTIONS } from '../store/actionEnums';
+import { AuthVM } from '../../models/AuthVM';
+import { CLAIMS } from '../../enums/Claims';
+import { ACTIONS } from '../../store/actionEnums';
+import { RootState } from '../../store/rootReducer';
+import { logoutSync } from '../../store/thunks/authThunk';
 
 
 export function NavBar() {

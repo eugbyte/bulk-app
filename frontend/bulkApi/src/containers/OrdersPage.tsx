@@ -5,7 +5,7 @@ import { Bid } from "../models/Bid";
 import { RootState } from "../store/rootReducer";
 import { getPendingOrSuccessfulBids } from "../store/thunks/bidThunk";
 import { Container } from "@material-ui/core";
-import { DataTable } from "../components/DataTable";
+import { DataTable } from "../components/shared/DataTable";
 
 class Row {
     name: string | undefined;

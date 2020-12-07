@@ -4,14 +4,14 @@ import { Dispatch } from "redux";
 import { useHistory, useParams } from "react-router-dom";
 import { Container, Grid } from "@material-ui/core";
 import { useForm } from "react-hook-form";
-import { TextFieldUncontrolledComponent } from "../components/TextFieldComponents";
 import { Product } from "../models/Product";
 import { createProductsAsync, getProductAsync, updateProductAsync } from "../store/thunks/productThunk";
 import { RootState } from "../store/rootReducer";
 import Button from '@material-ui/core/Button';
 import { ACTIONS } from "../store/actionEnums";
 import { useState } from "react";
-import { SnackbarComponent } from "../components/SnackbarComponent";
+import { SnackbarComponent } from "../components/shared/SnackbarComponent";
+import { TextFieldUncontrolledComponent } from "../components/shared/TextFieldComponents";
 
 enum FORM_NAMES {
     productId = "productId",

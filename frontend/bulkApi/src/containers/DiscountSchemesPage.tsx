@@ -5,13 +5,12 @@ import { getAllDiscountSchemesWithBidsAsync } from "../store/thunks/discountSche
 import { DiscountScheme } from "../models/DiscountScheme"; 
 import { RootState } from "../store/rootReducer"; 
 import Grid from '@material-ui/core/Grid';
-import { CardComponent } from "../components/CardComponent"; 
+import { CardComponent } from "../components/discountSchemePage/CardComponent"; 
 import Typography from '@material-ui/core/Typography';
 import { useHistory } from "react-router-dom";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import { ApiError } from "../models/ApiError";
-import { ErrorNotification } from "../components/ErrorNotification";
-import { InterceptorService } from "../services/InterceptorService";
+import { ErrorNotification } from "../components/shared/ErrorNotification";
  
 export function DiscountSchemesPage(): JSX.Element {
     const dispatch: Dispatch<any> = useDispatch();  
