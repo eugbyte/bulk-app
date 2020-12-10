@@ -33,7 +33,7 @@ export function ProductsPage(): JSX.Element {
         
         const action = getProductsAsync(producerId);
         dispatch(action);        
-    }, []);
+    }, [dispatch]);
 
     const columnNames: string[] = ["Name", "Original Price", "Category",  "Description", "Update","Delete"];
     const accessors: string[] = Object.keys(new Row());
@@ -60,7 +60,7 @@ export function ProductsPage(): JSX.Element {
             const action = getProductsAsync(producerId);
             dispatch(action);
         }
-    }, [httpResponseMessage]); 
+    }, [httpResponseMessage, dispatch]); 
 
     for (let i = 0; i < products.length; i++) {
         let product: Product = products[i];

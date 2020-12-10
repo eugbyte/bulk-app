@@ -1,4 +1,4 @@
-import React, { Dispatch, Fragment, useContext, useEffect, useState } from 'react';
+import React, { Dispatch, Fragment, useEffect } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { NavLink, useHistory } from "react-router-dom";
@@ -38,7 +38,7 @@ export function NavBar() {
     if (logoutMessage === ACTIONS.LOGOUT_SUCCESS) {
       history.push("/login");
     }
-  }, [logoutMessage])
+  }, [logoutMessage, history])
 
   return (
     <div>

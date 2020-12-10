@@ -10,7 +10,7 @@ namespace BulkApi.Extensions
     public static class AddressBidCountExtension
     { 
 
-        public static IDictionary<string, int> _SetAddressBidCountDict(DiscountScheme discountScheme)
+        private static IDictionary<string, int> _SetAddressBidCountDict(DiscountScheme discountScheme)
         {
 
             IDictionary<string, int> addressBidCountDict = new Dictionary<string, int>()

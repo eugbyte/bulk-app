@@ -5,7 +5,6 @@ import { Dispatch } from "redux";
 import { Product } from "../models/Product";
 import { RootState } from "../store/rootReducer";
 import { getProductsAsync } from "../store/thunks/productThunk";
-import { SelectListItem } from "../models/SelectListItem";
 import { DatePickerUncontrolledComponent } from "../components/discountSchemeForm/DatePickerComponent";
 import { useForm, Controller } from "react-hook-form";
 import Button from '@material-ui/core/Button';
@@ -33,13 +32,11 @@ export function DiscountSchemeForm(): JSX.Element {
 
     const products: Product[] = useSelector((action: RootState) => action.productReducer.products as Product[] ) ?? [];  
 
-    let selectListItems: SelectListItem[] = products.map(product => new SelectListItem(product.name, product.productId));
-
     useEffect(() => {
         const producerId: number = 2;
         const action = getProductsAsync(producerId);
         dispatch(action);
-    }, []);  
+    }, [dispatch]);  
 
     // React hook form - uncontrolled state that uses useRef behind the scenes
     const { errors, handleSubmit, control, getValues, watch } = useForm();    
@@ -67,10 +64,10 @@ export function DiscountSchemeForm(): JSX.Element {
         if (apiMessage.includes(ACTIONS.HTTP_CREATE_SUCCESS)) {
             history.push("/producer/discountSchemes");
         }
-    }, [apiMessage]);
+    }, [apiMessage, history]);
 
     // Redirect to product form if user decides to create new product
-    const redirectToProductForm = () => history.push("/producer/product/" + "0");
+    const redirectToProductForm = () => history.push("/producer/product/" + 0);
 
     return <Container maxWidth="md">
         <form onSubmit={handleSubmit(onSubmit)}>

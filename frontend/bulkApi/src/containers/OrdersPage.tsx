@@ -28,7 +28,7 @@ export function OrdersPage(): JSX.Element {
         const customerId: number = 1;
         const action = getPendingOrSuccessfulBids(customerId);
         dispatch(action);
-    }, []);
+    }, [dispatch]);
 
     const columnNames: string[] = ["Name", "Discounted Price Per Item", "Quantity", "Delivery Charge", "Collection Address", "Remaining Bids Required", "Bid Expiry Date", "Bid Status"];
     const accessors: string[] = Object.keys(new Row());

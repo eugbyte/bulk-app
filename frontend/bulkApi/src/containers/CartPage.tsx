@@ -48,8 +48,7 @@ export function CartPage(): JSX.Element {
     const [bids, setBids] = useState<Bid[]>([]);
     useEffect(() => {
         setBids(cloneDeep(bidsInCart));
-    }, [bidsInCart.length])
-    console.log("bids received", bidsInCart);
+    }, [bidsInCart.length, JSON.stringify(bidsInCart)])
 
     // For some reason, useState(bidsInCart.map(bid => bid.quantity)) will produce only an empty array
     // React hooks are always one step behind. On next render, the state variable will have a new value.
@@ -58,7 +57,7 @@ export function CartPage(): JSX.Element {
         const customerId = 1;
         const action = getBidsOfCustomerInCartAsync(customerId);
         dispatch(action);        
-    }, []); 
+    }, [dispatch]); 
 
     // When the user selects the row (Bid) in the datatable
     const [selectedRowBidIds, setSelectedRowBidIds] = useState<number[]>([]);
@@ -72,17 +71,17 @@ export function CartPage(): JSX.Element {
     const apiMessage: string = useSelector( (action: RootState) => action.bidReducer.httpMessage as string ) ?? ""; 
     useEffect(() => {
         // if user successful update quantity or remove from cart, refresh page
-        if (apiMessage.includes(ACTIONS.HTTP_UPDATE_SUCCESS) || apiMessage.includes(ACTIONS.HTTP_DELETE_SUCCESS)) {
-            const customerId = 1;
-            // const action = getBidsOfCustomerInCartAsync(customerId);
-            //dispatch(action); 
-        }
+        // if (apiMessage.includes(ACTIONS.HTTP_UPDATE_SUCCESS) || apiMessage.includes(ACTIONS.HTTP_DELETE_SUCCESS)) {
+        //     const customerId = 1;
+        //     const action = getBidsOfCustomerInCartAsync(customerId);
+        //     dispatch(action); 
+        // }
         // if user successfully makes an order, redirect to orders page
         if (apiMessage.includes(ACTIONS.HTTP_UPDATE_ORDER_SUCCESS)) {
             console.log(apiMessage);
             history.push("/orders");
         }
-    }, [apiMessage]);
+    }, [apiMessage, history]);
 
     // Convert the Bids to Rows to pass to the DataTable
     const rows: Row[] = bids.map(bid => createRowFromBid(bid));    
@@ -129,7 +128,7 @@ export function CartPage(): JSX.Element {
             const deleteAction = deleteBidFromCartAsync(bidId);            
             dispatch(deleteAction);
             handleNotification(true, "item deleted");
-            let newBids = cloneDeep(bids).filter((bid, index) => index != i);
+            let newBids = cloneDeep(bids).filter((bid, index) => index !== i);
             console.log(bids, newBids);
             setBids(newBids);
         } 

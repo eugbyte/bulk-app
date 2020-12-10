@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Iydn0wfnIvO1LZdUNIJxCHu2Ft2M+Lz1AJcqpPT3Z2NocujF73EFbokMx/8WDFssMywdf7sRNlmhd9t18oEYHw==",
+  "dgSpecHash": "HNTXeefEE1Xnj4g0ZjbbSW4Wne+SfqN3ujWcGvOp4rVnCn7z6djtpAPzQItCYkbF+cABa7tRVlnMQcjeOYGi5g==",
   "success": true,
   "projectFilePath": "C:\\Users\\eugen\\Codes\\BulkApi\\backend\\BulkApi\\BulkApi.csproj",
   "expectedPackageFiles": [
@@ -58,6 +58,7 @@
     "C:\\Users\\eugen\\.nuget\\packages\\microsoft.identitymodel.tokens\\5.5.0\\microsoft.identitymodel.tokens.5.5.0.nupkg.sha512",
     "C:\\Users\\eugen\\.nuget\\packages\\microsoft.netcore.platforms\\3.0.0\\microsoft.netcore.platforms.3.0.0.nupkg.sha512",
     "C:\\Users\\eugen\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
+    "C:\\Users\\eugen\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.10.9\\microsoft.visualstudio.azure.containers.tools.targets.1.10.9.nupkg.sha512",
     "C:\\Users\\eugen\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration\\3.1.4\\microsoft.visualstudio.web.codegeneration.3.1.4.nupkg.sha512",
     "C:\\Users\\eugen\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.contracts\\3.1.4\\microsoft.visualstudio.web.codegeneration.contracts.3.1.4.nupkg.sha512",
     "C:\\Users\\eugen\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.core\\3.1.4\\microsoft.visualstudio.web.codegeneration.core.3.1.4.nupkg.sha512",

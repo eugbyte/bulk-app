@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BulkApi.Data;
 using BulkApi.Models;
 using BulkApi.Services.Products;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BulkApi.Controllers
 {
@@ -20,6 +21,14 @@ namespace BulkApi.Controllers
         public ProductsController(IProductService productService)
         {
            this.productService = productService;
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<ActionResult<List<Product>>> GetProducts()
+        {
+            List<Product> products = await productService.GetProducts();
+            return Ok(products);
         }
 
         // GET: api/Products

@@ -44,7 +44,7 @@ export function ProducerDiscountSchemePage(): JSX.Element {
         
         const action = getDiscountSchemesWithBidOfProducer(producerId);
         dispatch(action);
-    }, []);
+    }, [dispatch]);
 
     // For the AutoComplete Filter
     let products: Product[] = immutableDiscountSchemes.map(ds => ds.product ?? new Product());
@@ -55,7 +55,7 @@ export function ProducerDiscountSchemePage(): JSX.Element {
     useEffect(() => {
         console.log(immutableDiscountSchemes);
         setDiscountSchemes(immutableDiscountSchemes);        
-    }, [immutableDiscountSchemes.length]);
+    }, [immutableDiscountSchemes.length, immutableDiscountSchemes]);
 
     const [status, setStatus] = useState<Status>();
     const handleStatusChange = ((event: React.ChangeEvent<any>) => {
@@ -79,7 +79,7 @@ export function ProducerDiscountSchemePage(): JSX.Element {
             .filter(ds => status ? determineStatusOfScheme(ds) === status : true )
             .filter(ds => productName ? ds.product?.name?.toLowerCase()?.includes(productName.toLowerCase()) : true)
         setDiscountSchemes(discountSchemesCopy);
-    }, [status, productName]);
+    }, [status, productName, immutableDiscountSchemes]);
 
     // To display the product as a dialog when user clicks on the link
     const [openProductDialog, setOpenProductDialog] = useState<boolean>(false);
@@ -119,7 +119,7 @@ export function ProducerDiscountSchemePage(): JSX.Element {
             const action = getDiscountSchemesWithBidOfProducer(producerId);
             dispatch(action);
         }
-    }, [httpResponseMessage]);
+    }, [httpResponseMessage, dispatch]);
 
     // Set the rows for the datatable
     for (let ds of discountSchemes) {

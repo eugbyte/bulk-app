@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>3a92a755-41e9-4c95-9ee5-4a8432b45161</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,6 +37,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Z.EntityFramework.Plus.EFCore" Version="3.0.60" />
@@ -49,6 +52,10 @@
     <None Include="wwwroot\static\js\main.262c2a86.chunk.js.map" />
     <None Include="wwwroot\static\js\runtime-main.83c3e0c4.js" />
     <None Include="wwwroot\static\js\runtime-main.83c3e0c4.js.map" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="..\.dockerignore" Link="Docker\.dockerignore" />
   </ItemGroup>
 
 

@@ -11,7 +11,7 @@ interface IPropUncontrolled {
     defaultValue?: string,
     control: Control<Record<string, any>>,
     errors: DeepMap<Record<string, any>, FieldError>,
-    rules?: object
+    rules?: object,
 }
 
 export function DatePickerUncontrolledComponent({ control, errors, label, name, defaultValue="", errorMessage="", rules={}}: IPropUncontrolled): JSX.Element {
@@ -50,9 +50,13 @@ export function DatePickerControlledComponent({label, onChange, value, error=fal
             id={guid()}
             label={label}
             value={value }
+            onBlur={null}
+            onFocus={null}            
             onChange={onChange}
-            KeyboardButtonProps={{
-                'aria-label': 'change date',
-            }} />
+            />
     </MuiPickersUtilsProvider>
 }
+
+// KeyboardButtonProps={{
+//     'aria-label': 'change date',
+// }} 

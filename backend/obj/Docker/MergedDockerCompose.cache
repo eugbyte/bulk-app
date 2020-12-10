@@ -1,0 +1,41 @@
+networks:
+  bulk-network: {}
+services:
+  bulkapi:
+    build:
+      context: C:\Users\eugen\Codes\BulkApi\backend
+      dockerfile: BulkApi/Dockerfile
+    depends_on:
+      mssql:
+        condition: service_started
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: https://+:443;http://+:80
+    image: bulkapi
+    networks:
+      bulk-network: {}
+    ports:
+    - published: 44397
+      target: 80
+    - target: 80
+    - target: 443
+    volumes:
+    - C:\Users\eugen\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+    - C:\Users\eugen\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+  mssql:
+    command:
+    - bash
+    - -c
+    - docker exec -it mssql mkdir var/opt/mssql/backup
+    - 'echo ''World'' '
+    container_name: mssql
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: 28Stratton!
+    image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
+    networks:
+      bulk-network: {}
+    ports:
+    - published: 1433
+      target: 1433
+version: '3.4'

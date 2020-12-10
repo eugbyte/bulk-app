@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Container, Grid } from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import { IdentityUser } from "../models/IdentityUser";
@@ -44,7 +44,7 @@ export function LoginForm(): JSX.Element {
         } else {
             setOpenSnackBar(true);
         }
-    }, [authVM.isAuthenticated]);
+    }, [authVM.isAuthenticated, history]);
   
 
     const { errors, handleSubmit, control } = useForm<FORM_DATA>(); 

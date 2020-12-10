@@ -26,16 +26,9 @@ export class UtilService {
     }
 
     static getApiUrl(): string {
-        let connectiontype: "localhost" | "azure" = "localhost";
-        const localhost: string = "https://localhost:44397/api/";
-        const azure: string = "https://bulkapi20201108130318.azurewebsites.net/api/";
+        const localhost: string = "http://localhost:44397/api/";   // http and not https
+        // const azure: string = "https://bulkapi20201108130318.azurewebsites.net/api/";
 
-        if (connectiontype === "localhost") {
-            return localhost;
-        } else if (connectiontype === "azure") {
-            return azure;
-        } 
-
-        throw new Error("connectionType does not match");
+        return localhost;
     }
 }

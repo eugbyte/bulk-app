@@ -31,9 +31,7 @@ export default function bidReducer(prevState = initialState, action: IBidAction)
         case(ACTIONS.GET_BIDSOFCUSTOMER_INCART_RECEIVED):
             newState.bids = action.bids;
             console.log(newState.bids);
-            return newState;
-        case(ACTIONS.ADD_BID_TO_CART_REQUEST):
-            return newState;    
+            return newState;   
         case(ACTIONS.UPDATE_BID_IN_CART_REQUEST):
             return newState;
         case(ACTIONS.UPDATE_BID_IN_CART_RECEIVED):

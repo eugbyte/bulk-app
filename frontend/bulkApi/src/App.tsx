@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
 import { DiscountSchemesPage } from './containers/DiscountSchemesPage';
 import { Route } from 'react-router-dom';
@@ -11,8 +11,7 @@ import { ProductForm } from './containers/ProductForm';
 import { ProductsPage } from './containers/ProductsPage';
 import { LoginForm } from './containers/LoginForm';
 import { PrivateRoute } from './components/app/PrivateRoute';
-import { AuthContext } from './contexts/AuthContext';
-import { AuthVM, Claims } from './models/AuthVM';
+import { Claims } from './models/AuthVM';
 import { NavBar } from './components/app/NavBar';
 import { DiscountSchemeDetailHOC } from './containers/DiscountSchemeDetail/DiscountSchemeDetailHOC';
 
@@ -24,8 +23,8 @@ function App() {
           <NavBar/>
           <Switch>
             {/* Public Paths */}
-            <Route path="/login" component={ LoginForm } />
             <Route exact path="/" component={ DiscountSchemesPage } />
+            <Route path="/login" component={ LoginForm } />
 
             {/* Consumer paths */}
             <PrivateRoute path="/discountScheme/:discountSchemeId" component= { DiscountSchemeDetailHOC } requiredClaims={[Claims.CONSUMER]} />

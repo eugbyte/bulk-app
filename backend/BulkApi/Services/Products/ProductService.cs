@@ -27,6 +27,12 @@ namespace BulkApi.Services.Products
             return product;
         }
 
+        public async Task<List<Product>> GetProducts()
+        {
+            List<Product> products = await db.Products.ToListAsync();
+            return products;
+        }
+
         public async Task<List<Product>> GetProductsOfProducer(string producerId)
         {
             List<Product> products = await db.Products

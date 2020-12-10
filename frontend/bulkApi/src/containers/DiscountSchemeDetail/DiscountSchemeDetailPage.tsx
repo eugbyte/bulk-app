@@ -46,7 +46,7 @@ export function DiscountSchemeDetailPage({discountSchemeId, MODE, bidIdToUpdate=
         // Note that you cannot pass values obtained from useSelector to the useEffect dependency array
         // Since you are returning a new object (at a different memory address) from the reducer, 
         // useEffect will treat it that vaLue changed when doing shallow comparison
-    }, [discountSchemeId]);  
+    }, [discountSchemeId, dispatch]);  
 
     let ds: DiscountScheme = useSelector((action: RootState) => action.discountSchemeReducer.discountScheme as DiscountScheme ) ?? new DiscountScheme();      
 

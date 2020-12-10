@@ -19,7 +19,6 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
-import UnfoldMore from "@material-ui/icons/UnfoldMore";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 
 

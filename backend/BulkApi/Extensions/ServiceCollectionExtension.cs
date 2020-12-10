@@ -30,9 +30,10 @@ namespace BulkApi.Extensions
             //For local
             string localConnectionString = configuration.GetConnectionString("LocalSQL");
             string azureConnectionString = configuration.GetConnectionString("Azure");
+            string dockerConnectionString = configuration.GetConnectionString("DockerSQL2");
 
             services.AddDbContext<BulkDbContext>(options =>
-                options.UseSqlServer(localConnectionString));
+                options.UseSqlServer(dockerConnectionString));
         }
 
         public static void AddCorsExtension(this IServiceCollection services)

@@ -660,6 +660,8 @@ C:\Users\eugen\Codes\bulkApi-master\backend\BulkApi\obj\Debug\netcoreapp3.1\Bulk
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\appsettings.json
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
+C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.BulkApi20201108130318 - Web Deploy.json
+C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.json
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\BulkApi.exe
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\BulkApi.deps.json
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\BulkApi.runtimeconfig.json
@@ -823,6 +825,3 @@ C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\staticwebas
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.dll
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.pdb
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.genruntimeconfig.cache
-C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.BulkApi20201108130318 - Web Deploy.json
-C:\Users\eugen\Codes\BulkApi\backend\BulkApi\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.json
-C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.csprojAssemblyReference.cache

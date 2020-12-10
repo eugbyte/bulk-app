@@ -26,7 +26,7 @@ export function DiscountSchemesPage(): JSX.Element {
         document.title = "Products"
         let action = getAllDiscountSchemesWithBidsAsync();
         dispatch(action)
-    }, []); 
+    }, [dispatch]); 
 
     let cards: JSX.Element[] = []
     for (let index = 0; index < discountSchemes.length; index ++ ) {

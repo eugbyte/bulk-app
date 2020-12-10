@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux"; 
-import { useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Container, Grid } from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import { Product } from "../models/Product";
@@ -36,7 +36,6 @@ type MODE = "CREATE" | "UPDATE";
 export function ProductForm(): JSX.Element {
     document.title = "Product Form";
     const dispatch: Dispatch<any> = useDispatch();
-    const history = useHistory();
 
     // If creating, route param is set to 0. If update, route param is set to existing productId
     let routeParams: Record<string, string>  = (useParams()) as Record<string, string>;    
@@ -50,9 +49,9 @@ export function ProductForm(): JSX.Element {
             const action = getProductAsync(productId);
             dispatch(action);
         }   
-    }, [productId]);   
+    }, [productId, dispatch, mode]);   
 
-    const { errors, handleSubmit, control, getValues, reset, setValue } = useForm<FORM_DATA>(); 
+    const { errors, handleSubmit, control, reset, setValue } = useForm<FORM_DATA>(); 
 
     useEffect(() => {
         if (mode === "UPDATE") {
@@ -62,7 +61,7 @@ export function ProductForm(): JSX.Element {
             setValue(FORM_NAMES.description, productToUpdate.description);
             setValue(FORM_NAMES.originalPrice, productToUpdate.originalPrice);
         }
-    }, [JSON.stringify(productToUpdate)])
+    }, [JSON.stringify(productToUpdate), mode, setValue])
     
     
 

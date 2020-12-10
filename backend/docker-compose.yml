@@ -1,0 +1,36 @@
+version: '3.4'
+
+networks: 
+    bulk-network: 
+
+
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
+    container_name: mssql
+    environment: 
+        - ACCEPT_EULA=Y
+        - MSSQL_SA_PASSWORD=28Stratton!
+    ports:
+        - 1433:1433
+    command: 
+        - bash 
+        - -c 
+        - "docker exec -it mssql mkdir var/opt/mssql/backup"
+        - "echo 'World' "
+    networks:
+        - bulk-network
+
+
+  bulkapi:
+    image: ${DOCKER_REGISTRY-}bulkapi
+    build:
+      context: .
+      dockerfile: BulkApi/Dockerfile
+    ports:
+        - 44397:80
+    networks:
+        - bulk-network
+    depends_on: 
+        - mssql
+
