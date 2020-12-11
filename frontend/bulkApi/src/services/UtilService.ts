@@ -5,7 +5,6 @@ export class UtilService {
     static getAuthHeader(): Headers | undefined {
 
         const authVMString: string = localStorage.getItem("authVM") as string;
-        console.log("authVMString", authVMString);
 
         if (!authVMString) {
             return;

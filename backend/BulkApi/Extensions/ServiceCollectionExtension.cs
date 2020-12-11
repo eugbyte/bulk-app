@@ -92,7 +92,7 @@ namespace BulkApi.Extensions
         public static void AddJWTAuthenticationExtension(this IServiceCollection services, IConfiguration configuration)
         {
 
-            //string issuerUrl = configuration.GetSection("JWT").GetValue<string>("LocalhostIssuerUrl");
+            string issuerUrl = configuration.GetSection("JWT").GetValue<string>("LocalhostIssuerUrl");
             string jwtKeyString = configuration.GetSection("JWT").GetValue<string>("JwtKey");
             byte[] jwtKey = Encoding.UTF8.GetBytes(jwtKeyString);
 
@@ -103,14 +103,18 @@ namespace BulkApi.Extensions
             }).AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
-                {                    
+                {
                     ValidateAudience = false,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
 
-                    ValidateIssuer = false, // ValidateIssuer requirement is not working as expected. Set to false for now
-                    //ValidIssuer = issuerUrl,  
-                    IssuerSigningKey = new SymmetricSecurityKey(jwtKey)
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(jwtKey),
+
+                    ValidateIssuer = false, // ValidateIssuer requirement is not working as expected when deployed to azure. Set to false for now
+                    ValidIssuer = issuerUrl,
+
+                    ValidateLifetime = false,   // ValidateLifetime requirement is not working as expected when deployed to azure. Set to false for now
+                    ClockSkew = TimeSpan.FromMinutes(60)
+
                 };
             });
         }

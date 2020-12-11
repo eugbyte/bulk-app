@@ -73,8 +73,6 @@ export function getBidsOfCustomerInCartAsync(customerId: number) {
     return async (dispatch: ThunkDispatch<{}, {}, IBidAction | IErrorAction>) => { 
         dispatch({ type: ACTIONS.GET_BIDSOFCUSTOMER_INCART_REQUEST, messages: "Fetching bids in cart for customer " + customerId});
 
-        console.log("header", UtilService.getAuthHeader()?.values().next());
-
         try {
             const response: Response = await fetch(UtilService.getApiUrl() + "bids/cart/" + customerId, {
                 headers: UtilService.getAuthHeader()
