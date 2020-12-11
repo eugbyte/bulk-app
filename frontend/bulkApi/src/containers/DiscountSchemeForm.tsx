@@ -5,7 +5,6 @@ import { Dispatch } from "redux";
 import { Product } from "../models/Product";
 import { RootState } from "../store/rootReducer";
 import { getProductsAsync } from "../store/thunks/productThunk";
-import { DatePickerUncontrolledComponent } from "../components/discountSchemeForm/DatePickerComponent";
 import { useForm, Controller } from "react-hook-form";
 import Button from '@material-ui/core/Button';
 import { DiscountScheme } from "../models/DiscountScheme";
@@ -15,6 +14,7 @@ import { ACTIONS } from "../store/actionEnums";
 import { useHistory } from "react-router-dom";
 import { Autocomplete } from "@material-ui/lab";
 import { TextFieldUncontrolledComponent } from "../components/shared/TextFieldComponents";
+import { DatePickerUncontrolledComponent } from "../components/shared/DatePickerComponent";
 
 enum FORM_NAMES {
     productId = "productId",
