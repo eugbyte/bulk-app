@@ -6,20 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux"; 
 import { DataTable } from "../components/shared/DataTable";
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
-import { CartButtons } from "../components/shared/CartButtons";
 import { SnackbarComponent } from "../components/shared/SnackbarComponent";
-import { Button, Container } from "@material-ui/core";
-import Checkbox from '@material-ui/core/Checkbox';
+import { Container } from "@material-ui/core";
 import { OrderCheckoutComponent } from "../components/cartPage/OrderCheckoutComponent";
 import { ACTIONS } from "../store/actionEnums";
 import { useHistory } from "react-router-dom";
-import { SelectListItem } from "../models/SelectListItem";
-import { SelectControlledComponent } from "../components/shared/SelectComponents";
-import { Grid } from "@material-ui/core";
-import { TextComponent } from "../components/shared/TextComponent";
 import { cloneDeep } from "lodash";
+import { DataTableService } from "../services/DataTableService";
 
-class Row {
+export class Row {
     bidId: number | undefined;
     checkbox: JSX.Element | undefined;
     name: string | undefined;
@@ -70,12 +65,7 @@ export function CartPage(): JSX.Element {
     //Response on update. If update is successful, make another request to get bids in cart
     const apiMessage: string = useSelector( (action: RootState) => action.bidReducer.httpMessage as string ) ?? ""; 
     useEffect(() => {
-        // if user successful update quantity or remove from cart, refresh page
-        // if (apiMessage.includes(ACTIONS.HTTP_UPDATE_SUCCESS) || apiMessage.includes(ACTIONS.HTTP_DELETE_SUCCESS)) {
-        //     const customerId = 1;
-        //     const action = getBidsOfCustomerInCartAsync(customerId);
-        //     dispatch(action); 
-        // }
+
         // if user successfully makes an order, redirect to orders page
         if (apiMessage.includes(ACTIONS.HTTP_UPDATE_ORDER_SUCCESS)) {
             history.push("/orders");
@@ -83,12 +73,12 @@ export function CartPage(): JSX.Element {
     }, [apiMessage, history]);
 
     // Convert the Bids to Rows to pass to the DataTable
-    const rows: Row[] = bids.map(bid => createRowFromBid(bid));    
+    // const rows: Row[] = bids.map(bid => createRowFromBid(bid));
+    let rows: Row[] = [];    
 
     // To add React components to each row
     for (let i = 0; i < bids.length; i++) {
         let bid: Bid = bids[i];       
-        const quantity: number = bid.quantity as number;
 
         // Method reference to POST updated id to pass into CartButtons
         const handleUpdateCart = (newQuantity: number, collectionAddress: string) => {
@@ -131,53 +121,8 @@ export function CartPage(): JSX.Element {
             setBids(newBids);
         } 
 
-        let dateString = "";
-        if (bid.discountScheme?.expiryDate) {
-            let date: Date = new Date(bid.discountScheme.expiryDate.toString());
-            dateString = date.toDateString();        
-        }
-
-        rows[i].updateCartComponent = <CartButtons quantity={quantity} setQuantity={handleChangeQuantity} size={"small"}/>
-        rows[i].checkbox = <Checkbox size="small" onChange={toggleCheckedRowId} />
-        rows[i].deleteButton = <Button size={"small"} variant={"contained"} color={"primary"} onClick={deleteBid}>Delete</Button>
-
-        // Collection Address
-        const addressBidCountDict = bid.addressBidCountDict as Record<string, number>;   // { collectionAddress: number of bids} 
-        const selectListItems: SelectListItem[] = [];
-        for (let address in addressBidCountDict) {
-            let selectListItem: SelectListItem = new SelectListItem(address, address);
-            selectListItem.selected = bid.collectionAddress === address;
-            selectListItems.push(selectListItem);
-        }        
-        rows[i].collectionAddress = <SelectControlledComponent title={"Delivery"} state={bid.collectionAddress?.toString()} 
-            selectListItems={selectListItems} handleChange={handleChangeAddress} />
-
-        // Detail Panel
-        let descriptionDict: Record<string, any> = {
-            "Description": bid.discountScheme?.product?.description,
-            "Bid Expiry Date": dateString
-        }  
-
-        let quantityDict: Record<string, any> = {
-            "Min Order Quantity": bid.discountScheme?.minOrderQnty,
-            "Current total bids": bid.currentTotalBids,
-            "Remaining bids required": bid.discountScheme?.minOrderQnty as number - (bid.currentTotalBids as number)
-        }
-
-        let deliveryDict: Record<string, any> = {
-            "Delivery Charge": "$" + bid.discountScheme?.deliveryCharge
-        }
-        rows[i].detailPanel = <Grid container>
-            <Grid item xs={4}>
-                <TextComponent textDict={descriptionDict}/>
-            </Grid>
-            <Grid item xs={4}>
-                <TextComponent textDict={quantityDict}/>
-            </Grid>
-            <Grid item xs={4}>
-                <TextComponent textDict={deliveryDict}/>
-            </Grid>
-        </Grid>
+        let row: Row = DataTableService.createRowFromBid_CartPage(bid, handleChangeQuantity, toggleCheckedRowId, deleteBid, handleChangeAddress);
+        rows.push(row);
         
     }
 
@@ -195,33 +140,5 @@ export function CartPage(): JSX.Element {
             enabledDetailPanel={true} detailPanelFieldName={detailPanelName} />
         <SnackbarComponent open={open} setOpen={setOpen} message={notificationMessage} severity={"success"}/>        
     </Container>
-}
-
-
-function createRowFromBid(bid: Bid): Row {   
-
-    let discountedPrice = bid.discountScheme?.discountedPrice as number;
-    let originalPrice = bid.discountScheme?.product?.originalPrice as number;
-
-    let row: Row = new Row();
-    row.bidId = bid.bidId;
-    row.discountedPrice = `$${discountedPrice} (Save $${originalPrice - discountedPrice})`;
-    row.name = bid.discountScheme?.product?.name;
-
-    const addressBidCountDict = bid.addressBidCountDict as Record<string, number>; 
-    const numBidsAtAddress: number = addressBidCountDict[bid.collectionAddress];
-    const deliveryCharge: number = bid?.discountScheme?.deliveryCharge ?? 0;
-    const avgDeliveryCharge: number = (!numBidsAtAddress) ? deliveryCharge : deliveryCharge / (numBidsAtAddress + 1);
-    row.deliveryCharge = <Grid container>
-        <Grid item xs={6}>
-            <span>{`$${avgDeliveryCharge}`}</span>
-        </Grid>
-        <Grid item xs={6}>
-            <span style={{borderBottom:"1px solid black", display:"block", fontSize:"12px"}}>${deliveryCharge}</span>
-            <span style={{fontSize:"12px"}}>{numBidsAtAddress} other bids here</span>
-        </Grid>
-    </Grid>
-    
-    return row;
 }
  

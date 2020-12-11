@@ -92,7 +92,7 @@ namespace BulkApi.Extensions
         public static void AddJWTAuthenticationExtension(this IServiceCollection services, IConfiguration configuration)
         {
 
-            string issuerUrl = configuration.GetSection("JWT").GetValue<string>("LocalhostIssuerUrl");
+            //string issuerUrl = configuration.GetSection("JWT").GetValue<string>("LocalhostIssuerUrl");
             string jwtKeyString = configuration.GetSection("JWT").GetValue<string>("JwtKey");
             byte[] jwtKey = Encoding.UTF8.GetBytes(jwtKeyString);
 
@@ -109,7 +109,7 @@ namespace BulkApi.Extensions
                     ValidateIssuerSigningKey = true,
 
                     ValidateIssuer = false, // ValidateIssuer requirement is not working as expected. Set to false for now
-                    ValidIssuer = issuerUrl,  
+                    //ValidIssuer = issuerUrl,  
                     IssuerSigningKey = new SymmetricSecurityKey(jwtKey)
                 };
             });

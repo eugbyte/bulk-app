@@ -30,12 +30,12 @@ namespace BulkApi
             services.AddCorsExtension();
             services.AddDbContextExtension(Configuration);
             services.AddIdentityExtension();
+            services.AddJWTAuthenticationExtension(Configuration);
             services.AddAuthorizationExtension();
             services.AddServicesExtension();
             services.AddCorsExtension();
             services.AddControllersExtension();
             services.AddErrorFilterExtension();
-            services.AddJWTAuthenticationExtension(Configuration);
 
             services.AddControllersWithGlobalAuthorizationExtension();
 

@@ -17,10 +17,11 @@ import { TextComponent } from "../components/shared/TextComponent";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import { ACTIONS } from "../store/actionEnums";
+import { DataTableService } from "../services/DataTableService";
+import { DiscountSchemeService, Status } from "../services/DiscountSchemeService";
 
-type Status = "SUCCESS" | "PENDING" | "FAILED" | undefined;
 
-class Row {
+export class Row {
     name: JSX.Element | undefined;
     discountedPrice: JSX.Element | undefined;
     deliveryCharge: string | undefined = "0";
@@ -74,7 +75,7 @@ export function ProducerDiscountSchemePage(): JSX.Element {
     useEffect(() => {
         let discountSchemesCopy: DiscountScheme[] = cloneDeep(immutableDiscountSchemes);
         discountSchemesCopy = discountSchemesCopy
-            .filter(ds => status ? determineStatusOfScheme(ds) === status : true )
+            .filter(ds => status ? DiscountSchemeService.determineStatusOfScheme(ds) === status : true )
             .filter(ds => productName ? ds.product?.name?.toLowerCase()?.includes(productName.toLowerCase()) : true)
         setDiscountSchemes(discountSchemesCopy);
     }, [status, productName, immutableDiscountSchemes]);
@@ -119,7 +120,6 @@ export function ProducerDiscountSchemePage(): JSX.Element {
 
     // Set the rows for the datatable
     for (let ds of discountSchemes) {
-        let row: Row = createRowFromScheme(ds);
         const onNameClick = () => {
             let product: Product = discountSchemes
                 .map(ds => ds.product)
@@ -133,17 +133,7 @@ export function ProducerDiscountSchemePage(): JSX.Element {
             setOpenDeleteDialog(true);
         }
 
-        // Disallow deleting of schemes which have bids
-        const isDisableDelete: boolean = ds.bids.length > 0;
-        let tooltipMessage: string = isDisableDelete ? "Cannot delete scheme as it has dependent bids" : "";
-
-        row.name = <Button onClick={onNameClick} size="small" variant="outlined">{ds.product?.name}</Button> ;
-        row.delete = <div className="tooltip__div-visible">
-            <Button size="small" variant="outlined" color="secondary" disabled={isDisableDelete}
-                onClick={onDeleteClick}>Delete
-                    <span className="tooltiptext">{tooltipMessage}</span>
-                </Button>
-        </div> ;
+        let row: Row = DataTableService.createRowFromScheme_ProducerDiscountSchemePage(ds, onNameClick, onDeleteClick);
         rows.push(row);
     }
 
@@ -183,40 +173,3 @@ export function ProducerDiscountSchemePage(): JSX.Element {
     </Container>
 }
 
-function createRowFromScheme(ds: DiscountScheme): Row {
-    let row: Row = new Row();
-    if (ds == null) {
-        return row;
-    }
-    
-    const discountedPrice = ds.discountedPrice;
-    const originalPrice = ds.product?.originalPrice;
-    row.discountedPrice = <span>${discountedPrice} <del>${originalPrice}</del></span>
-
-    const expiryDate: Date = new Date(ds.expiryDate as Date);
-    row.bidExpiryDate = expiryDate.toDateString();
-    row.deliveryCharge = "$" + ds.deliveryCharge;
-    row.currentBids =  ds.bids
-        .filter(bid => !bid.isInCart)
-        .reduce((accum, bid) => accum + bid.quantity, 0);
-
-    row.minOrderQnty = ds.minOrderQnty;
-    row.bidStatus = determineStatusOfScheme(ds);
-
-    return row;    
-}
-
-function determineStatusOfScheme(ds: DiscountScheme): Status {
-    const expiryDate: Date = new Date(ds.expiryDate as Date);
-
-    const isSchemeSuccess: boolean = ds.bids.some(bid => bid.bidSuccessDate != null);
-    const hasBidExpired: boolean = expiryDate < new Date();
-
-    if (isSchemeSuccess) {
-        return "SUCCESS"
-    } else if (!isSchemeSuccess && hasBidExpired ) {
-        return "FAILED";
-    } else {
-        return "PENDING";
-    }
-}

@@ -11,9 +11,10 @@ import { DialogComponent } from "../components/shared/DialogComponent";
 import { DataTable } from "../components/shared/DataTable";
 import "./toolTip.css";
 import { ACTIONS } from "../store/actionEnums";
+import { DataTableService } from "../services/DataTableService";
 
 
-class Row {
+export class Row {
     name: string | undefined;
     originalPrice: string | undefined;
     category: string | undefined;
@@ -62,7 +63,6 @@ export function ProductsPage(): JSX.Element {
 
     for (let i = 0; i < products.length; i++) {
         let product: Product = products[i];
-        let row: Row = createRow(product);
 
         const updateProduct = () => history.push("/producer/product/" + product.productId);
         const onDeleteClick = () => {
@@ -70,18 +70,7 @@ export function ProductsPage(): JSX.Element {
             setTargetProduct(product);
         }
 
-        // If product already has schemes, disallow delete
-        const isDisableDelete: boolean = product.discountSchemes.length > 0;
-        let tooltipMessage: string = isDisableDelete ? "Cannot delete product as it has dependent discount schemes" : "";
-
-        row.update = <Button size="small" variant="outlined" onClick={updateProduct}>Update</Button>
-        row.delete = <div className="tooltip__div-visible">
-            <Button color="secondary" size="small" variant="outlined"  
-                disabled={isDisableDelete} 
-                onClick={onDeleteClick}>Delete
-                <span className="tooltiptext">{tooltipMessage}</span>
-            </Button> 
-        </div> 
+        let row: Row = DataTableService.createRowFromProduct_ProductsPage(product, updateProduct, onDeleteClick);
         rows.push(row);
     }    
 
@@ -101,11 +90,3 @@ export function ProductsPage(): JSX.Element {
     </Container>
 }
 
-function createRow(product: Product): Row {
-    let row: Row = new Row();
-    row.name = product.name;
-    row.originalPrice = "$" + product.originalPrice;
-    row.category = product.category;
-    row.description = product.description;
-    return row;
-}
