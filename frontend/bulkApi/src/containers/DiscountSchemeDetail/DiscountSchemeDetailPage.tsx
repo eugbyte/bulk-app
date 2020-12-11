@@ -50,8 +50,6 @@ export function DiscountSchemeDetailPage({discountSchemeId, MODE, bidIdToUpdate=
 
     let ds: DiscountScheme = useSelector((action: RootState) => action.discountSchemeReducer.discountScheme as DiscountScheme ) ?? new DiscountScheme();      
 
-    console.log("in DiscountSchemeDetailPage", ds);
-
     // Collection Address
     const addressBidCountDict = ds.addressBidCountDict as Record<string, number>;   // { collectionAddress: number of bids} 
     const selectListItems: SelectListItem[] = [];
@@ -63,7 +61,6 @@ export function DiscountSchemeDetailPage({discountSchemeId, MODE, bidIdToUpdate=
     const [address, setAddress] = useState<string>("");
     const handleChangeAddress = (event: React.ChangeEvent<any>) => {
         let selectedAddress: string = event.target.value;
-        console.log(selectedAddress);
         setAddress(selectedAddress);
     }
     const numBidsAtAddress: number = addressBidCountDict?.address;

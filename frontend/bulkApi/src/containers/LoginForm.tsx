@@ -50,7 +50,6 @@ export function LoginForm(): JSX.Element {
     const { errors, handleSubmit, control } = useForm<FORM_DATA>(); 
 
     const onSubmit = (data: FORM_DATA) => {
-        console.log(data);
         let identityUser: IdentityUser = new IdentityUser();
         identityUser.userName = data.userName;
         identityUser.passwordHash = data.passwordHash;

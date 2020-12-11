@@ -13,8 +13,6 @@ interface IProp {
 
 export function OrderCheckoutComponent({bids, rowIds, handleOrder}: IProp) {
 
-    console.log("in orderCheckOut", bids);
-
     const selectedBids: Bid[] = bids.filter(bid =>  rowIds.includes(bid.bidId));
 
     const totalDeliveryCharge = selectedBids.map(bid => {

@@ -78,7 +78,6 @@ export function CartPage(): JSX.Element {
         // }
         // if user successfully makes an order, redirect to orders page
         if (apiMessage.includes(ACTIONS.HTTP_UPDATE_ORDER_SUCCESS)) {
-            console.log(apiMessage);
             history.push("/orders");
         }
     }, [apiMessage, history]);
@@ -129,7 +128,6 @@ export function CartPage(): JSX.Element {
             dispatch(deleteAction);
             handleNotification(true, "item deleted");
             let newBids = cloneDeep(bids).filter((bid, index) => index !== i);
-            console.log(bids, newBids);
             setBids(newBids);
         } 
 
@@ -151,7 +149,7 @@ export function CartPage(): JSX.Element {
             selectListItem.selected = bid.collectionAddress === address;
             selectListItems.push(selectListItem);
         }        
-        rows[i].collectionAddress = <SelectControlledComponent title={"Delivery"} state={bid.collectionAddress + ""} 
+        rows[i].collectionAddress = <SelectControlledComponent title={"Delivery"} state={bid.collectionAddress?.toString()} 
             selectListItems={selectListItems} handleChange={handleChangeAddress} />
 
         // Detail Panel

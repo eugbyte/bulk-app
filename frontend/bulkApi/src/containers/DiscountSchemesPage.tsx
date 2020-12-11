@@ -18,7 +18,6 @@ export function DiscountSchemesPage(): JSX.Element {
     const classes = useStyles();
 
     let discountSchemes: DiscountScheme[] = useSelector((action: RootState) => action.discountSchemeReducer.discountSchemes as DiscountScheme[]) ?? []; 
-    console.log(discountSchemes);
 
     const error: ApiError = useSelector((action: RootState) => action.errorReducer.error as ApiError) ?? null;
 

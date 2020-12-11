@@ -23,7 +23,6 @@ export function PrivateRoute({component, path, requiredClaims=[]}: IProp): JSX.E
     let history = useHistory();
 
     if (!isAuthenticated) {
-        console.log("not authenticated");
         history.push("/login");
     }
 
@@ -38,7 +37,6 @@ export function PrivateRoute({component, path, requiredClaims=[]}: IProp): JSX.E
 
     useEffect(() => {
         if (!isAuthorized) {
-            console.log("not authorized");
             setOpenSnackBar(true);
             return;
             // history.push("/login");

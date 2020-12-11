@@ -70,7 +70,6 @@ export function ProductForm(): JSX.Element {
         const {productId, name, category, description, originalPrice} = data;        
         //getValues([FORM_NAMES.productId, FORM_NAMES.name, FORM_NAMES.category, FORM_NAMES.description, FORM_NAMES.originalPrice]);
         const product = initializeProduct(productId, name, category, description, originalPrice);
-        console.log("submitting product", product);
         if (mode === "CREATE") {
             const action = createProductsAsync(product);
             dispatch(action);

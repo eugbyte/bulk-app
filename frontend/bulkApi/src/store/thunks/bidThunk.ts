@@ -46,7 +46,6 @@ export function addBidToCartAsync(bid: Bid): ThunkAction<Promise<void>, {}, {}, 
 
 export function updateBidInCartAsync(bid: Bid): ThunkAction<Promise<void>, {}, {}, IBidAction | IErrorAction> {
     return async (dispatch: ThunkDispatch<{}, {}, IBidAction | IErrorAction>) => {
-        console.log("in thunk. bid to update", bid.bidId)
         dispatch({ type: ACTIONS.UPDATE_BID_IN_CART_REQUEST, messages: "Request to update bid in cart" });
 
         try {
@@ -73,6 +72,8 @@ export function updateBidInCartAsync(bid: Bid): ThunkAction<Promise<void>, {}, {
 export function getBidsOfCustomerInCartAsync(customerId: number) {
     return async (dispatch: ThunkDispatch<{}, {}, IBidAction | IErrorAction>) => { 
         dispatch({ type: ACTIONS.GET_BIDSOFCUSTOMER_INCART_REQUEST, messages: "Fetching bids in cart for customer " + customerId});
+
+        console.log("header", UtilService.getAuthHeader()?.values().next());
 
         try {
             const response: Response = await fetch(UtilService.getApiUrl() + "bids/cart/" + customerId, {
@@ -150,7 +151,6 @@ export function getPendingOrSuccessfulBids(customerId: number) {
             }
 
             const bids: Bid[] = await response.json();
-            console.log("in thunk", bids);
 
             dispatch({type: ACTIONS.GET_PENDING_OR_SUCCESSFUL_BIDS_RECEIVED, bids: bids, message: response.statusText, httpMessage: ACTIONS.HTTP_READ_SUCCESS });
         } catch(error) {

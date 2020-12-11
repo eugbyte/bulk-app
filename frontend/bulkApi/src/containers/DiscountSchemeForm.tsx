@@ -47,10 +47,8 @@ export function DiscountSchemeForm(): JSX.Element {
         "Original Price": "$" + selectedProduct.originalPrice,
         "Description": selectedProduct.description
     }
-    console.log("watchProductId", watchProductId);    
 
     const onSubmit = (data: any) => {
-        //console.log(data, errors);
         const {productId, discountedPrice, minOrderQnty, deliveryCharge, expiryDate} = getValues([FORM_NAMES.productId, FORM_NAMES.discountedPrice, 
             FORM_NAMES.minOrderQnty, FORM_NAMES.deliveryCharge, FORM_NAMES.expiryDate]);
         const discountScheme: DiscountScheme = createDiscountScheme(productId, minOrderQnty, discountedPrice, expiryDate, deliveryCharge);

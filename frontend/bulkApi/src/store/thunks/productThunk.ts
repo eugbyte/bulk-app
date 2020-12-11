@@ -52,7 +52,6 @@ export function getProductAsync(productId: number): ThunkAction<Promise<void>, {
             }
             
             let product: Product = (await response.json());
-            console.log("In productThunk", product)
             dispatch({ type: ACTIONS.GET_PRODUCT_RECEIVED, product: product, message: response.statusText,  httpMessage: ACTIONS.HTTP_READ_SUCCESS });
         } catch(error) {
             dispatch(errorAction(ACTIONS.ERROR, error));
@@ -74,7 +73,6 @@ export function createProductsAsync(product: Product): ThunkAction<Promise<void>
 
             if (!response.ok) {
                 let apiError: ApiError = await response.json();
-                console.log("apiError in createProductAsync", apiError);
                 throw apiError;
             }
             
@@ -104,7 +102,6 @@ export function updateProductAsync(productId: number, product: Product): ThunkAc
             }
             
             let updatedProduct: Product = (await response.json());
-            console.log("updatedProduct", updatedProduct);
             dispatch({ type: ACTIONS.GET_PRODUCTS_RECEIVED, product: updatedProduct, message: response.statusText,  httpMessage: ACTIONS.HTTP_UPDATE_SUCCESS });
         } catch(error) {
             dispatch(errorAction(ACTIONS.ERROR, error));
@@ -129,7 +126,6 @@ export function deleteProductAsync(productId: number): ThunkAction<Promise<void>
             }
             
             let deletedProduct: Product = (await response.json());
-            console.log("deletedProduct", deletedProduct);
             dispatch({ type: ACTIONS.DELETE_PRODUCT_RECEIVED, product: deletedProduct, message: response.statusText,  httpMessage: ACTIONS.HTTP_DELETE_SUCCESS });
         } catch(error) {
             dispatch(errorAction(ACTIONS.ERROR, error));

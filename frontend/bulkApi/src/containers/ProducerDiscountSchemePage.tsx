@@ -53,7 +53,6 @@ export function ProducerDiscountSchemePage(): JSX.Element {
     // DiscountSchemes to dispaly to the data table, subject to filtering
     const [discountSchemes, setDiscountSchemes] = useState<DiscountScheme[]>([]);
     useEffect(() => {
-        console.log(immutableDiscountSchemes);
         setDiscountSchemes(immutableDiscountSchemes);        
     }, [immutableDiscountSchemes.length, immutableDiscountSchemes]);
 
@@ -69,7 +68,6 @@ export function ProducerDiscountSchemePage(): JSX.Element {
     // Product name filtering
     const [productName, setProductName] = useState<string>("");
     const handleChangeProductName = (name: string) => {
-        console.log(name);
         setProductName(name);
     }
 
@@ -105,14 +103,12 @@ export function ProducerDiscountSchemePage(): JSX.Element {
         if (targetDiscountScheme.bids.length > 0) {
             return;
         }
-        console.log("discountSchemeId", targetDiscountScheme.discountSchemeId);
         const deleteAction = deleteDiscountSchemeAsync(targetDiscountScheme.discountSchemeId);
         dispatch(deleteAction);
         setOpenDeleteDialog(false);
     } 
 
     let httpResponseMessage: string = useSelector((action: RootState) => action.discountSchemeReducer.httpMessage as string) ?? "";
-    console.log("in ProductPage", httpResponseMessage);
     useEffect(() => {
         if (httpResponseMessage.includes(ACTIONS.HTTP_DELETE_SUCCESS)) {
             

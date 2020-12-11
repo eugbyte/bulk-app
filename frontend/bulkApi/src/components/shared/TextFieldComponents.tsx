@@ -22,7 +22,6 @@ export function TextFieldUncontrolledComponent({ label, name, defaultValue="",
     adornment=null,
     control, errors, 
     errorMessage="", rules={}}: IProp): JSX.Element {
-    console.log("errors", errors);
     let isError: boolean = errors[name] != null;
     let helperText: string = isError ? errorMessage : "";
 

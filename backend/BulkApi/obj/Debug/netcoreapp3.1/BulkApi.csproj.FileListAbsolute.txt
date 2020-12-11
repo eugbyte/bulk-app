@@ -825,3 +825,4 @@ C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\staticwebas
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.dll
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.pdb
 C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.genruntimeconfig.cache
+C:\Users\eugen\Codes\BulkApi\backend\BulkApi\obj\Debug\netcoreapp3.1\BulkApi.csprojAssemblyReference.cache

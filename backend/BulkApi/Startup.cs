@@ -32,13 +32,7 @@ namespace BulkApi
             services.AddIdentityExtension();
             services.AddAuthorizationExtension();
             services.AddServicesExtension();
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(builder =>
-                {
-                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-                });
-            });
+            services.AddCorsExtension();
             services.AddControllersExtension();
             services.AddErrorFilterExtension();
             services.AddJWTAuthenticationExtension(Configuration);

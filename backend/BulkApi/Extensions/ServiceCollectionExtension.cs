@@ -30,20 +30,29 @@ namespace BulkApi.Extensions
             //For local
             string localConnectionString = configuration.GetConnectionString("LocalSQL");
             string azureConnectionString = configuration.GetConnectionString("Azure");
-            string dockerConnectionString = configuration.GetConnectionString("DockerSQL2");
+            string dockerConnectionString2 = configuration.GetConnectionString("DockerSQL2");
 
             services.AddDbContext<BulkDbContext>(options =>
-                options.UseSqlServer(dockerConnectionString));
+                options.UseSqlServer(localConnectionString));
         }
 
         public static void AddCorsExtension(this IServiceCollection services)
         {
-            services.AddCors(c =>
-                c.AddPolicy("CorsPolicy", options => options
-                    .AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()                    
-                ));
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                });
+            });
+
+            //services.AddCors(c =>
+            //    c.AddPolicy("CorsPolicy", options => options
+            //        .AllowAnyOrigin()
+            //        .AllowAnyMethod()
+            //        .AllowAnyHeader()                    
+            //    ));
 
             // Then on the controller, annotate like so:
             // [EnableCors("CorsPolicy")]
@@ -83,7 +92,7 @@ namespace BulkApi.Extensions
         public static void AddJWTAuthenticationExtension(this IServiceCollection services, IConfiguration configuration)
         {
 
-            string issuerUrl = configuration.GetSection("JWT").GetValue<string>("IssuerUrl");
+            string issuerUrl = configuration.GetSection("JWT").GetValue<string>("LocalhostIssuerUrl");
             string jwtKeyString = configuration.GetSection("JWT").GetValue<string>("JwtKey");
             byte[] jwtKey = Encoding.UTF8.GetBytes(jwtKeyString);
 
@@ -94,13 +103,13 @@ namespace BulkApi.Extensions
             }).AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
+                {                    
                     ValidateAudience = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
 
-                    ValidIssuer = issuerUrl,
+                    ValidateIssuer = false, // ValidateIssuer requirement is not working as expected. Set to false for now
+                    ValidIssuer = issuerUrl,  
                     IssuerSigningKey = new SymmetricSecurityKey(jwtKey)
                 };
             });

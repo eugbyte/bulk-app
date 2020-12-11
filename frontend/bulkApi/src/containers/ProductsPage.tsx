@@ -44,7 +44,6 @@ export function ProductsPage(): JSX.Element {
 
     const [targetProduct, setTargetProduct] = useState<Product>(new Product());
     const deleteProduct = () => {
-        console.log("productId", targetProduct.productId);
         if (targetProduct.discountSchemes.length > 0) {
             return;
         }
@@ -56,7 +55,6 @@ export function ProductsPage(): JSX.Element {
     let httpResponseMessage: string = useSelector((action: RootState) => action.productReducer.httpMessage as string);
     useEffect(() => {
         if (httpResponseMessage.includes(ACTIONS.HTTP_DELETE_SUCCESS)) {
-            console.log("in productsPage", httpResponseMessage);
             const action = getProductsAsync(producerId);
             dispatch(action);
         }

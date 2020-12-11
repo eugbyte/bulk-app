@@ -94,7 +94,6 @@ export function DataTable({title, data, columnNames, accessors, handleChecked=de
   // There is a bug with Material Table where the table is fully rerendered on parent state update since 1.53.0
   // https://github.com/mbrn/material-table/issues/1265 
 function returnDetailTable(rowData: any, detailPanelFielddName: string): JSX.Element {
-  console.log(rowData);
   return rowData[detailPanelFielddName] as JSX.Element;
 }
 

@@ -45,7 +45,6 @@ function createRowFromBid(bid: Bid): Row {
     let originalPrice: number = bid.discountScheme?.product?.originalPrice as number;
     let minOrderQnty: number = bid.discountScheme?.minOrderQnty as number;
     let currentTotalBids: number = bid.currentTotalBids as number;
-    console.log("remainingBidsRequired", minOrderQnty, currentTotalBids, minOrderQnty - currentTotalBids, "bidId: " + bid.bidId);
 
     let row: Row = new Row();
     row.quantity = bid.quantity + "";
