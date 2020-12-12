@@ -1,4 +1,0 @@
-export enum CLAIMS {
-    PRODUCER = "PRODUCER",
-    CONSUMER = "CONSUMER"
-}

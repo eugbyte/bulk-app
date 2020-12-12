@@ -92,7 +92,7 @@ namespace BulkApi.Extensions
         public static void AddJWTAuthenticationExtension(this IServiceCollection services, IConfiguration configuration)
         {
 
-            string issuerUrl = configuration.GetSection("JWT").GetValue<string>("AzureIssuerUrl");
+            string issuerUrl = configuration.GetSection("JWT").GetValue<string>("AzureIssuerUrl2");
             string jwtKeyString = configuration.GetSection("JWT").GetValue<string>("JwtKey");
             byte[] jwtKey = Encoding.UTF8.GetBytes(jwtKeyString);
 

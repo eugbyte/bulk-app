@@ -1,0 +1,8 @@
+a:hover {
+    color: grey;
+ }
+
+.btn-primary {
+    background-color: #3f51b5;
+    border: #3f51b5;
+}

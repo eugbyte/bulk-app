@@ -63,7 +63,7 @@ namespace BulkApi.Services.Auth
             IdentityUser authUser = await userManager.FindByNameAsync(username);
             List<Claim> userClaims = await userManager.GetClaimsAsync(authUser) as List<Claim> ?? new List<Claim>();
 
-            string issuerUrl = configuration.GetSection("JWT").GetValue<string>("AzureIssuerUrl");
+            string issuerUrl = configuration.GetSection("JWT").GetValue<string>("AzureIssuerUrl2");
             string jwtKeyString = configuration.GetSection("JWT").GetValue<string>("JwtKey");
             byte[] jwtKey = Encoding.UTF8.GetBytes(jwtKeyString);
 
