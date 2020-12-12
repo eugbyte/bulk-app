@@ -13,8 +13,8 @@ services:
       - ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS=true
       #- NUGET_FALLBACK_PACKAGES=$container_paths_to_fallback_packages_bulkapi$
     volumes:
-      - C:\Users\eugen\Codes\BulkApi\backend\BulkApi:/app
-      - C:\Users\eugen\Codes\BulkApi\backend:/src
+      - C:\Users\eugen\Codes\bulkApi\backend\BulkApi:/app
+      - C:\Users\eugen\Codes\bulkApi\backend:/src
       - C:\Users\eugen\vsdbg\vs2017u5:/remote_debugger:rw
 #$nuget_volume_mapping_bulkapi$
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro

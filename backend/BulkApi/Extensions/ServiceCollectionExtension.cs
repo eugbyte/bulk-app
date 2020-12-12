@@ -33,7 +33,7 @@ namespace BulkApi.Extensions
             string dockerConnectionString2 = configuration.GetConnectionString("DockerSQL2");
 
             services.AddDbContext<BulkDbContext>(options =>
-                options.UseSqlServer(localConnectionString));
+                options.UseSqlServer(azureConnectionString));
         }
 
         public static void AddCorsExtension(this IServiceCollection services)
@@ -92,7 +92,7 @@ namespace BulkApi.Extensions
         public static void AddJWTAuthenticationExtension(this IServiceCollection services, IConfiguration configuration)
         {
 
-            string issuerUrl = configuration.GetSection("JWT").GetValue<string>("LocalhostIssuerUrl");
+            string issuerUrl = configuration.GetSection("JWT").GetValue<string>("AzureIssuerUrl");
             string jwtKeyString = configuration.GetSection("JWT").GetValue<string>("JwtKey");
             byte[] jwtKey = Encoding.UTF8.GetBytes(jwtKeyString);
 
@@ -109,10 +109,12 @@ namespace BulkApi.Extensions
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(jwtKey),
 
-                    ValidateIssuer = false, // ValidateIssuer requirement is not working as expected when deployed to azure. Set to false for now
+                    // ValidateIssuer requirement is not working as expected when deployed to azure. Set to false for now
+                    ValidateIssuer = true,
                     ValidIssuer = issuerUrl,
 
-                    ValidateLifetime = false,   // ValidateLifetime requirement is not working as expected when deployed to azure. Set to false for now
+                    // ValidateLifetime requirement is not working as expected when deployed to azure. Set to false for now
+                    ValidateLifetime = true,   
                     ClockSkew = TimeSpan.FromMinutes(60)
 
                 };

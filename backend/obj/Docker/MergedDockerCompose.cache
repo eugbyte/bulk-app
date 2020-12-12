@@ -3,7 +3,7 @@ networks:
 services:
   bulkapi:
     build:
-      context: C:\Users\eugen\Codes\BulkApi\backend
+      context: C:\Users\eugen\Codes\bulkApi\backend
       dockerfile: BulkApi/Dockerfile
     depends_on:
       mssql:

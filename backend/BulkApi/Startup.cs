@@ -27,13 +27,14 @@ namespace BulkApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCorsExtension();
             services.AddDbContextExtension(Configuration);
             services.AddIdentityExtension();
+
+            services.AddCorsExtension();
             services.AddJWTAuthenticationExtension(Configuration);
             services.AddAuthorizationExtension();
+
             services.AddServicesExtension();
-            services.AddCorsExtension();
             services.AddControllersExtension();
             services.AddErrorFilterExtension();
 
@@ -49,7 +50,7 @@ namespace BulkApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.LoadStaticFiles();
+            // app.LoadStaticFiles();
 
             app.UseHttpsRedirection();
 
