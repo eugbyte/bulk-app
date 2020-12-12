@@ -23,8 +23,8 @@ Go to https://bulk-aspnet.azurewebsites.net
 3. **Frontend:** Run `npm install` and then `npm start`
 
 # Tech stack and features
-1. React, Redux Thunk, JS, Typescript for the front end
-2. ASP.NET Core, C# for the backend
+1. React, Redux Thunk, JS, Typescript, Material UI for the front end
+2. ASP.NET Core, Identity, C# for the backend
 3. SQL Server for the database
 4. JWT Authentication and Authorization
 5. REST API for CRUD operations
