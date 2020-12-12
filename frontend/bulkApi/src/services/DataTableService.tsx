@@ -42,7 +42,7 @@ export class DataTableService {
         const avgDeliveryCharge: number = (!numBidsAtAddress) ? deliveryCharge : deliveryCharge / (numBidsAtAddress + 1);
         row.deliveryCharge = <Grid container>
             <Grid item xs={6}>
-                <span>{`$${avgDeliveryCharge}`}</span>
+                <span>{`$${avgDeliveryCharge.toString().slice(0, 4)}`}</span>
             </Grid>
             <Grid item xs={6}>
                 <span style={{borderBottom:"1px solid black", display:"block", fontSize:"12px"}}>${deliveryCharge}</span>

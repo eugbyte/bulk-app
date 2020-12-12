@@ -29,10 +29,11 @@ export class UtilService {
     }
 
     static getApiUrl(): string {
-        const localhost: string = "https://localhost:44397/api/";   
-        const docker: string = "http://localhost:44397/api/"; // http and not https
+        //const localhost: string = "https://localhost:44397/api/";   
+        //const docker: string = "http://localhost:44397/api/"; // http and not https
         const azure: string = "https://bulkapi20201108130318.azurewebsites.net/api/";
+        //const bulkApiAspnet: string = "https://bulk-api-aspnet.azurewebsites.net/api/";
 
-        return localhost;
+        return azure;
     }
 }

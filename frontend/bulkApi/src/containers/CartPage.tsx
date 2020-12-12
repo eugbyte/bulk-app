@@ -13,6 +13,7 @@ import { ACTIONS } from "../store/actionEnums";
 import { useHistory } from "react-router-dom";
 import { cloneDeep } from "lodash";
 import { DataTableService } from "../services/DataTableService";
+import useDeepCompareEffect from "use-deep-compare-effect";
 
 export class Row {
     bidId: number | undefined;
@@ -41,9 +42,10 @@ export function CartPage(): JSX.Element {
     // The Bids received from the GET request
     const bidsInCart: Bid[] = useSelector((action: RootState) => action.bidReducer.bids as Bid[] ) ?? [];  
     const [bids, setBids] = useState<Bid[]>([]);
-    useEffect(() => {
+    useDeepCompareEffect(() => {
         setBids(cloneDeep(bidsInCart));
-    }, [bidsInCart.length, JSON.stringify(bidsInCart)])
+        
+    }, [bidsInCart]);  
 
     // For some reason, useState(bidsInCart.map(bid => bid.quantity)) will produce only an empty array
     // React hooks are always one step behind. On next render, the state variable will have a new value.

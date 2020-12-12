@@ -110,11 +110,11 @@ namespace BulkApi.Extensions
                     IssuerSigningKey = new SymmetricSecurityKey(jwtKey),
 
                     // ValidateIssuer requirement is not working as expected when deployed to azure. Set to false for now
-                    ValidateIssuer = true,
+                    ValidateIssuer = false,
                     ValidIssuer = issuerUrl,
 
                     // ValidateLifetime requirement is not working as expected when deployed to azure. Set to false for now
-                    ValidateLifetime = true,   
+                    ValidateLifetime = false,   
                     ClockSkew = TimeSpan.FromMinutes(60)
 
                 };

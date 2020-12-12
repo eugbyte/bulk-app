@@ -12,6 +12,7 @@ import { ACTIONS } from "../store/actionEnums";
 import { useState } from "react";
 import { SnackbarComponent } from "../components/shared/SnackbarComponent";
 import { TextFieldUncontrolledComponent } from "../components/shared/TextFieldComponents";
+import useDeepCompareEffect from "use-deep-compare-effect";
 
 enum FORM_NAMES {
     productId = "productId",
@@ -53,7 +54,7 @@ export function ProductForm(): JSX.Element {
 
     const { errors, handleSubmit, control, reset, setValue } = useForm<FORM_DATA>(); 
 
-    useEffect(() => {
+    useDeepCompareEffect(() => {
         if (mode === "UPDATE") {
             setValue(FORM_NAMES.productId, productToUpdate.productId);
             setValue(FORM_NAMES.name, productToUpdate.name);
@@ -61,7 +62,7 @@ export function ProductForm(): JSX.Element {
             setValue(FORM_NAMES.description, productToUpdate.description);
             setValue(FORM_NAMES.originalPrice, productToUpdate.originalPrice);
         }
-    }, [JSON.stringify(productToUpdate), mode, setValue])
+    }, [productToUpdate, mode, setValue])
     
     
 
