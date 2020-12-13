@@ -31,4 +31,4 @@ Go to https://bulk-aspnet.azurewebsites.net
 
 # Docker support
 Navigate to the docker folder  
-See [DOCKER_README](DOCKER_README.md)
+See [DOCKER_README](https://github.com/eugbyte/bulk-app/blob/master/docker/DOCKER_README.md)
