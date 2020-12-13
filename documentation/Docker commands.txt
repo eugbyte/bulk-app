@@ -1,0 +1,62 @@
+# Create the network for the db container, aspnet container and react container to communicate with each other
+
+docker network create bulk-network --driver=bridge
+
+
+# Create the MSSQL container
+
+docker run -e 'ACCEPT_EULA=Y' -e 'MSSQL_SA_PASSWORD=28Stratton!' --name 'mssql' -p 1433:1433 -v bulk-vol:/var/opt/mssql --network=bulk-network -d mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
+
+
+# Verify that the container is running
+docker ps 
+
+
+# Create directory in the container, for the .bak files or .sql files to be persisted in the volume specified above
+winpty docker exec -it mssql mkdir var/opt/mssql/backup
+
+# Copy .bak file
+docker cp Bulk.bak mssql:/var/opt/mssql/backup 
+
+# Copy .sql file
+docker cp mssql.sql mssql:/var/opt/mssql/backup
+
+
+# Restore the .bak file 
+
+# To get the path directory of the .ndf and .ldf files
+winpty docker exec -it mssql opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '28Stratton!' -Q "RESTORE FILELISTONLY FROM DISK = '/var/opt/mssql/backup/Bulk.bak' "  
+
+# Execute the RESTORE
+winpty docker exec -it mssql opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '28Stratton!' -Q "RESTORE DATABASE [Bulk] FROM DISK = '/var/opt/mssql/backup/Bulk.bak' WITH MOVE 'Bulk' TO '/var/opt/mssql/data/Bulk.ndf', MOVE 'Bulk_Log' TO '/var/opt/mssql/data/Bulk_log.ldf' "
+
+
+# Another option is to re-create the sql database from .sql file
+winpty docker exec -it mssql opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '28Stratton!' -i var/opt/mssql/backup/mssql.sql
+winpty docker exec -it mssql opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '28Stratton!' -Q "CREATE DATABASE [Bulk]"
+
+
+# Verify that the table is created
+winpty docker exec -it mssql opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '28Stratton!' -Q "SELECT * FROM [Bulk].sys.tables"
+
+# To launch the sqlcmd and work from there instead
+winpty docker exec -it mssql opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '28Stratton!'
+EXEC sp_databases 
+GO
+
+# Create the network so that the web api container can communicate with the mssql container
+docker network create bulk-network --driver=bridge
+
+# Add the mssql container to the network
+docker network connect bulk-network mssql
+
+# Now, to containerize the web api
+docker image build --tag bulkapi .
+docker container run --name bulkapi -p 44397:80 -d --network=bulk-network bulkapi
+
+# Note that the port has been changed from https to http
+curl "http://localhost:44397/api/products"
+
+# To containerize the react app
+docker image build --tag bulk-react-app .
+docker container run --name bulk-react-app -p 3000:80 -d --network=bulk-network bulk-react-app 

@@ -28,3 +28,6 @@ Go to https://bulk-aspnet.azurewebsites.net
 3. SQL Server for the database
 4. JWT Authentication and Authorization
 5. REST API for CRUD operations
+
+# Docker support
+See [README](DOCKER_README.MD)

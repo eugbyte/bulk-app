@@ -30,7 +30,7 @@ namespace BulkApi.Extensions
             //For local
             string localConnectionString = configuration.GetConnectionString("LocalSQL");
             string azureConnectionString = configuration.GetConnectionString("Azure");
-            string dockerConnectionString2 = configuration.GetConnectionString("DockerSQL2");
+            string dockerConnectionString = configuration.GetConnectionString("DockerSQL");
 
             services.AddDbContext<BulkDbContext>(options =>
                 options.UseSqlServer(azureConnectionString));
@@ -92,7 +92,7 @@ namespace BulkApi.Extensions
         public static void AddJWTAuthenticationExtension(this IServiceCollection services, IConfiguration configuration)
         {
 
-            string issuerUrl = configuration.GetSection("JWT").GetValue<string>("AzureIssuerUrl2");
+            string issuerUrl = configuration.GetSection("JWT").GetValue<string>("AzureIssuerUrl");
             string jwtKeyString = configuration.GetSection("JWT").GetValue<string>("JwtKey");
             byte[] jwtKey = Encoding.UTF8.GetBytes(jwtKeyString);
 

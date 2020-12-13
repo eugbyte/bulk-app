@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "HNTXeefEE1Xnj4g0ZjbbSW4Wne+SfqN3ujWcGvOp4rVnCn7z6djtpAPzQItCYkbF+cABa7tRVlnMQcjeOYGi5g==",
+  "dgSpecHash": "sb+lJSJdFCupSLKUSB7It315ZIuTX3CF3UjbhT1lgNhf9e+StOHSSEKJbDwfVQ+mIUoFmgyeZnvnUmUhLwamDw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\eugen\\Codes\\BulkApi\\backend\\BulkApi\\BulkApi.csproj",
+  "projectFilePath": "C:\\Users\\eugen\\Codes\\bulkApi\\backend\\BulkApi\\BulkApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\eugen\\.nuget\\packages\\identitymodel\\4.4.0\\identitymodel.4.4.0.nupkg.sha512",
     "C:\\Users\\eugen\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\3.1.9\\microsoft.aspnetcore.authentication.jwtbearer.3.1.9.nupkg.sha512",
