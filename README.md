@@ -30,4 +30,5 @@ Go to https://bulk-aspnet.azurewebsites.net
 5. REST API for CRUD operations
 
 # Docker support
-See [README](DOCKER_README.MD)
+Navigate to the docker folder
+See [DOCKER_README](DOCKER_README.md)
