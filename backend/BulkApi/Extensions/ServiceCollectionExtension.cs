@@ -33,7 +33,7 @@ namespace BulkApi.Extensions
             string dockerConnectionString = configuration.GetConnectionString("DockerSQL");
 
             services.AddDbContext<BulkDbContext>(options =>
-                options.UseSqlServer(azureConnectionString));
+                options.UseSqlServer(dockerConnectionString));
         }
 
         public static void AddCorsExtension(this IServiceCollection services)
