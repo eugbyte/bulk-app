@@ -17,11 +17,6 @@ Go to https://bulk-aspnet.azurewebsites.net
 * **username:** TestProducer  
 * **password:** TestPassword  
 
-# How to run locally
-1. **Database:** Run the latest sql script
-2. **Backend Api:** Run the ASP.NET Core application
-3. **Frontend:** Run `npm install` and then `npm start`
-
 # Tech stack and features
 1. React, Redux Thunk, JS, Typescript, Material UI for the front end
 2. ASP.NET Core, Identity, C# for the backend
@@ -30,6 +25,36 @@ Go to https://bulk-aspnet.azurewebsites.net
 5. REST API for CRUD operations
 6. Docker support
 
-# Docker support
-Navigate to the docker folder  
-See [DOCKER_README](https://github.com/eugbyte/bulk-app/blob/master/docker/DOCKER_README.md)
+---
+
+# Docker-Compose support
+## Run Docker Compose
+```
+cd docker
+docker-compose build
+docker-compose up -d
+docker ps
+```
+
+## Restore the .bak file in the Mssql container
+```
+# omit the "winpty" if you are not using git bash
+winpty docker exec -it mssql opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '28DockerPass!' -Q "RESTORE DATABASE [Bulk] FROM DISK = '/var/opt/mssql/backup/Bulk.bak' WITH MOVE 'Bulk' TO '/var/opt/mssql/data/Bulk.ndf', MOVE 'Bulk_Log' TO '/var/opt/mssql/data/Bulk_log.ldf' "
+```
+
+Unfortunately, the above command cannot be integrated into the Dockerfile or the docker-compose file. The command would have been executed before the mssql server is up.
+
+## Access the website
+In your browser, go to <http://localhost:3000>
+
+---
+
+# Local set up
+1. **Database:** Run the latest sql script
+2. **Backend Api:** Run the ASP.NET Core application
+   * Check that ```Extensions/ServiceCollectionExtensions.AddDbContextExtension()``` uses the variable ```localConnectionString```
+3. **Frontend:** Run `npm install` and then `npm start`
+   * Check that ```services/UtilService.getApiUrl()``` returns the variable ```localhost```
+
+
+

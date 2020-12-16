@@ -1,3 +1,8 @@
+## Navigate to the docker folder
+```
+cd bulkapi/docker
+```
+
 ## Install git bash
 Git bash will be used as the shell to execute the docker commands
 
@@ -51,7 +56,7 @@ winpty docker exec -it mssql opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '2
 ## Create the aspnet core container
 ### Change directory to aspnet folder
 ```
-cd ./../backend
+cd bulkapi/backend
 ```
 
 ### Make sure that the db connection string refers to the mssql container

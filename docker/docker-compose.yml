@@ -1,0 +1,53 @@
+version: "3.9"
+
+volumes:
+  bulk-vol:
+
+networks:
+  bulk-network:
+
+services:
+  mssql:
+    container_name: mssql
+    build: 
+      context: .
+      dockerfile: Mssql.Dockerfile    
+    environment: 
+      ACCEPT_EULA: 'Y'
+      SA_PASSWORD: '28DockerPass!'
+      DATABASE: 'MyDb'
+    ports:
+      - 1433:1433
+    volumes: 
+      - "bulk-vol:/var/opt/mssql"
+    networks: 
+      - "bulk-network"
+    
+  bulkapi:
+    container_name: bulkapi
+    build:
+      context: ./../backend
+      dockerfile: Dockerfile
+    ports:
+      - 44397:80
+    networks: 
+      - "bulk-network"
+    depends_on: 
+      - mssql
+
+  bulk-react-app:
+      container_name: bulk-react-app
+      build:
+        context: ./../frontend
+        dockerfile: Dockerfile
+      ports:
+        - 3000:80
+      networks: 
+        - "bulk-network"
+      depends_on: 
+        - bulkapi
+
+
+
+
+
